@@ -9,6 +9,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener{
     // Attributs
     private final Balle balle;
     protected Timer timer;
+    Musique musique;
 
     // Constructeur
     public PanelJeu(){
@@ -16,6 +17,8 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener{
         int fps = 60;
         timer = new Timer(1000/ fps, this);
 
+        musique = new Musique("8bitWildBattle.wav");
+        musique.clip.start();
         addMouseListener(this);
     }
 
