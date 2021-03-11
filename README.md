@@ -11,7 +11,7 @@
 
 **Description du commit** :
 - Si détails nécessaires, explications
-- Faire référence à l'***Issue*** concernée par le commit. Par exemple : Issue #3 [ajouter un bouton "recommencer"]
+- Faire référence à l'***Issue*** concernée par le commit si il y en a une. Par exemple : Issue #3 [ajouter un bouton "recommencer"]
 dans la description du commit il faut alors penser à ajouter : `résout #3`
 
 # Cheatsheet utilisation de github avec IntelliJJ
