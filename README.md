@@ -11,15 +11,17 @@
 
 **Description du commit** :
 - Si détails nécessaires, explications
+- Faire référence à l'***Issue*** concernée par le commit. Par exemple : Issue #3 [ajouter un bouton "recommencer"]
+dans la description du commit il faut alors penser à ajouter : `résouds #3`
 
-# Cheatsheet utilisation de github avec InteliJ
-- Au début d'une session de codage, pull du remote (récupérer les modifications des autres, update project) : Crtl+T <br /> 
-  **!!!** Lorsque vous le faites utilisez "merge incomming changes" et PAS "Rebase the current…"
+# Cheatsheet utilisation de github avec IntelliJJ
+- Au début d'une session de codage, pull du remote (récupérer les modifications des autres, update project) : Crtl+T
+  **!!!** Lorsque vous le faites, utilisez "merge incoming changes" et PAS "Rebase the current…"
 - Actualiser son projet avant de push sur le remote
 - Commit souvent, un adage dirait : *si tu as besoin du mot **"et"** dans tes commit, c'est que tu ne commit pas assez souvent"*
 - Commit selon les conventions
 
-Pour implémenter une nouvelle fonctionnalité créez une nouvelle branche :
+## Pour implémenter une nouvelle fonctionnalité créez une nouvelle branche :
 - Tout en haut (File, Edit, View etc…) Choisir le menu `git -> branches -> new branch`
 - ou Tout en bas (Git, TODO, Terminal), choisir le panel **git**, puis `clic droit` sur le master et sélectionner `new branch from selected `
 
