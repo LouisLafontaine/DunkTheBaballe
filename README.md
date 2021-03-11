@@ -12,7 +12,7 @@
 **Description du commit** :
 - Si détails nécessaires, explications
 - Faire référence à l'***Issue*** concernée par le commit. Par exemple : Issue #3 [ajouter un bouton "recommencer"]
-dans la description du commit il faut alors penser à ajouter : `résouds #3`
+dans la description du commit il faut alors penser à ajouter : `résout #3`
 
 # Cheatsheet utilisation de github avec IntelliJJ
 - Au début d'une session de codage, pull du remote (récupérer les modifications des autres, update project) : Crtl+T
