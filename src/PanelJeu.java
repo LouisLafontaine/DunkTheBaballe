@@ -12,15 +12,14 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener{
 
     // Constructeur
     public PanelJeu(){
-        balle = new Balle(100,250,20,5);
-
+        balle = new Balle(100,250,20,0, 0);
         int fps = 60;
         timer = new Timer(1000/ fps, this);
 
         addMouseListener(this);
     }
 
-    // Méthodes
+    // Dessin
     @Override
     public void paintComponent(Graphics g){
         super.paintComponent(g);
@@ -29,28 +28,34 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener{
         balle.drawBalle(g);
     }
 
+    // Animation
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == timer){
-            balle.updatePosBalle(this.getWidth(), this.getHeight());
+            balle.updatePosBalle(this.getWidth(), this.getHeight(), timer);
             repaint();
         }
     }
 
-    // Mouse Listener interface method
+    // Mouse Listener interface methods
     @Override
     public void mouseClicked(MouseEvent e) {
-
+        timer.stop();
+        balle.resetPosBalle();
+        repaint();
     }
-
     @Override
     public void mousePressed(MouseEvent e) {
-        timer.start();
+
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        timer.stop();
+        double mouseSensibility = 0.1;
+        balle.vx = (balle.x - e.getX()) * mouseSensibility;
+        balle.vy = (balle.y - e.getY()) * mouseSensibility;
+        timer.start();
+        repaint();
     }
 
     @Override

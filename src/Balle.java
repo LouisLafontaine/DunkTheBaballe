@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.awt.*;
 
 public class Balle {
@@ -7,17 +8,19 @@ public class Balle {
     protected int xInit ; // pos x initiale
     protected int yInit ; // pos y initiale
     protected int r; // rayon
-    protected double v; // vitesse
+    protected double vx; // vitesse selon x
+    protected double vy; // vitesse selon y
     protected Color maCouleur; // couleur
 
     // Constructeur
-    public Balle(int x, int y, int r, double v) {
+    public Balle(int x, int y, int r, double vx, double vy) {
         this.x = x;
         this.y = y;
         this.xInit = x;
         this.yInit = y;
+        this.vx = vx;
+        this.vy = vy;
         this.r = r;
-        this.v = v;
         maCouleur = new Color(100, 200,200);
     }
 
@@ -27,10 +30,11 @@ public class Balle {
         g.fillOval(x, y, r,r);
     }
 
-    public void updatePosBalle(int largeurFenetre, int hauteurFenetre){
-        x = (int) (x+v);
-//        y = (int) (y+v);
+    public void updatePosBalle(int largeurFenetre, int hauteurFenetre, Timer timer){
+        x = (int) (x+vx);
+        y = (int) (y+vy);
         if(notInBounds(largeurFenetre,hauteurFenetre)){
+            timer.stop();
             resetPosBalle();
         }
     }
@@ -41,6 +45,6 @@ public class Balle {
     }
 
     public boolean notInBounds(int largeurFenetre, int hauteurFenetre) { // true si hors dans la fenetre
-        return (this.x > largeurFenetre || this.y > hauteurFenetre);
+        return ((x < 0) || (x > largeurFenetre) || (y < 0) || (y > hauteurFenetre));
     }
 }
