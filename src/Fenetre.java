@@ -2,13 +2,13 @@ import javax.swing.*;
 
 public class Fenetre extends JFrame {
     // Attribut
-    protected JPanelJeu mainPanel;
+    protected PanelJeu mainPanel;
 
     // Constructeur
     public Fenetre(){
         super("Vise le trou");
 
-        mainPanel = new JPanelJeu();
+        mainPanel = new PanelJeu();
         add(mainPanel);
 
         setSize(500, 500);
