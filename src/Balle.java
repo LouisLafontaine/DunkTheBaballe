@@ -45,7 +45,7 @@ public class Balle {
     }
 
     public boolean notInBounds(int largeurFenetre, int hauteurFenetre) { // true si hors dans la fenetre
-        return ((x < 0) || (x > largeurFenetre) || (y < 0) || (y > hauteurFenetre));
+        return ((x <= 0) || (x >= largeurFenetre) || (y <= 0) || (y >= hauteurFenetre));
     }
 
     public int distanceBalle(int x, int y){
@@ -53,6 +53,6 @@ public class Balle {
     }
 
     public boolean toucheBalle(int x, int y){
-        return (distanceBalle(x,y) < r);
+        return (distanceBalle(x,y) < 100);
     }
 }
