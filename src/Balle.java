@@ -53,6 +53,6 @@ public class Balle {
     }
 
     public boolean toucheBalle(int x, int y){
-        return (distanceBalle(x,y) < 100);
+        return (distanceBalle(x,y) < r);
     }
 }

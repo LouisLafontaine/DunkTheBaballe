@@ -9,22 +9,18 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     Musique musique;
     protected int lastClickX; // enregistre la pos x du dernier click
     protected int lastClickY; // enregistre la pos y du dernier click
-    protected int clickX;
-    protected int clickY;
-    boolean clicking;
+    protected int clickX; // enregistre la pos x actuelle du click
+    protected int clickY; // enregistre la pos x actuelle du click
+    boolean clicking; // true si en train de clicker
 
     // Constructeur
     public PanelJeu(){
-        balle = new Balle(100,250,20,0, 0);
+        balle = new Balle(100,250,30,0, 0);
         int fps = 60;
         timer = new Timer(1000/ fps, this);
 
         musique = new Musique("8bitWildBattle.wav");
         musique.clip.start();
-
-        lastClickX = 0;
-        lastClickY = 0;
-        clicking = false;
 
         addMouseListener(this);
         addMouseMotionListener(this);
@@ -40,15 +36,11 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         g.fillRect(0,0, this.getWidth(), this.getHeight());
 
         // Trait force
-        if(clicking && balle.toucheBalle(lastClickX, lastClickY)){
-            System.out.println("test"); // TEST
-            g.setColor(Color.green);
-            g.drawLine(clickX, clickY, balle.x, balle.y);
-        }
+        tracerSegment(g);
 
         // Balle
         balle.drawBalle(g);
-    }
+        }
 
     // Animation
     @Override
@@ -62,23 +54,18 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     // Mouse Listener interface methods
     @Override
     public void mouseClicked(MouseEvent e) {
-        setLastClickOn(e.getX(),e.getY());
-        System.out.println("hello");
+
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        System.out.println("mouse pressed " + lastClickX + "-" + lastClickY + " " +balle.toucheBalle(lastClickX, lastClickY)); // TEST
+        setLastClickOn(e.getX(),e.getY());
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
         setLastClickOff();
-        double mouseSensibility = 0.1;
-        balle.vx = (balle.x - e.getX()) * mouseSensibility;
-        balle.vy = (balle.y - e.getY()) * mouseSensibility;
-        timer.start();
-        repaint();
+        ifClikedThrowBalle(e);
     }
 
     @Override
@@ -93,17 +80,12 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
 
     @Override
     public void mouseDragged(MouseEvent e) {
-
+        draggingOnBalle(e);
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        clickX = e.getX();
-        clickY = e.getY();
-        if(balle.toucheBalle(lastClickX, lastClickY) && clicking){
-            System.out.println("curx : " + clickX + " cury : " +clickY);
-            repaint();
-        }
+
     }
 
     public void setLastClickOn(int x, int y) {
@@ -114,5 +96,31 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
 
     public void setLastClickOff() {
         clicking = false;
+    }
+
+    public void draggingOnBalle(MouseEvent e) {
+        if(balle.toucheBalle(lastClickX, lastClickY) && clicking){
+            clickX = e.getX();
+            clickY = e.getY();
+            repaint();
+        }
+    }
+    public void tracerSegment(Graphics g) {
+        if(clicking && balle.toucheBalle(lastClickX, lastClickY)) {
+            Graphics2D g2d = (Graphics2D) g;
+            g2d.setStroke(new BasicStroke(3));
+            g2d.setColor(Color.green);
+            g2d.drawLine(clickX, clickY, balle.x, balle.y);
+        }
+    }
+
+    public void ifClikedThrowBalle(MouseEvent e) {
+        if(balle.toucheBalle(lastClickX,lastClickY)){
+            double mouseSensibility = 0.1;
+            balle.vx = (balle.x - e.getX()) * mouseSensibility;
+            balle.vy = (balle.y - e.getY()) * mouseSensibility;
+            timer.start();
+            repaint();
+        }
     }
 }
