@@ -51,4 +51,8 @@ public class Balle {
     public int distanceBalle(int x, int y){
         return(Math.abs(x-this.x) + Math.abs(y-this.y));
     }
+
+    public boolean toucheBalle(int x, int y){
+        return (distanceBalle(x,y) < r);
+    }
 }
