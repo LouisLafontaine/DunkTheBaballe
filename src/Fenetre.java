@@ -5,9 +5,11 @@ import java.awt.event.ComponentListener;
 
 public class Fenetre extends JFrame implements ComponentListener {
     // Attributs
+    //======================================================================
     protected PanelJeu mainPanel;
 
     // Constructeur
+    //======================================================================
     public Fenetre(boolean playMusic){
         super("Vise le trou");
 
@@ -24,6 +26,7 @@ public class Fenetre extends JFrame implements ComponentListener {
     }
 
     // ComponentListener interface methods
+    //======================================================================
     @Override
     public void componentResized(ComponentEvent e) {
         int W = mainPanel.img.getWidth(null);
@@ -34,16 +37,13 @@ public class Fenetre extends JFrame implements ComponentListener {
 
     @Override
     public void componentMoved(ComponentEvent e) {
-
     }
 
     @Override
     public void componentShown(ComponentEvent e) {
-
     }
 
     @Override
     public void componentHidden(ComponentEvent e) {
-
     }
 }

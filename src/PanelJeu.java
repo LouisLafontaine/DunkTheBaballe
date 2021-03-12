@@ -10,12 +10,14 @@ import java.io.IOException;
 
 public class PanelJeu extends JPanel implements ActionListener, MouseListener{
     // Attributs
+    //======================================================================
     private final Balle balle;
     protected Timer timer;
     Musique musique;
     Image img;
 
     // Constructeur
+    //======================================================================
     public PanelJeu(){
         balle = new Balle(100,250,20,0, 0);
         int fps = 60;
@@ -30,6 +32,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener{
     }
 
     // Dessin
+    //======================================================================
     @Override
     public void paintComponent(Graphics g){
         super.paintComponent(g);
@@ -40,6 +43,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener{
     }
 
     // Animation
+    //======================================================================
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == timer){
@@ -49,15 +53,16 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener{
     }
 
     // Mouse Listener interface methods
+    //======================================================================
     @Override
     public void mouseClicked(MouseEvent e) {
         timer.stop();
         balle.resetPosBalle();
         repaint();
     }
+
     @Override
     public void mousePressed(MouseEvent e) {
-
     }
 
     @Override
@@ -69,14 +74,14 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener{
         repaint();
     }
 
+    // Méthodes
+    //======================================================================
     @Override
     public void mouseEntered(MouseEvent e) {
-
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-
     }
 
     public void setBackgroundImage(String backgroundFileName){

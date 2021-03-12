@@ -3,6 +3,7 @@ import java.awt.*;
 
 public class Balle {
     // Attributs
+    //======================================================================
     protected int x; // pos x
     protected int y; // pos y
     protected int xInit ; // pos x initiale
@@ -13,6 +14,7 @@ public class Balle {
     protected Color maCouleur; // couleur
 
     // Constructeur
+    //======================================================================
     public Balle(int x, int y, int r, double vx, double vy) {
         this.x = x;
         this.y = y;
@@ -25,6 +27,7 @@ public class Balle {
     }
 
     // Méthodes
+    //======================================================================
     public void drawBalle(Graphics g) {
         g.setColor(maCouleur);
         g.fillOval(x-r, y-r, r,r);

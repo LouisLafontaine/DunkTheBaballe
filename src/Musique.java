@@ -8,10 +8,14 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class Musique {
+    // Attributs
+    //======================================================================
     Clip clip;
     AudioInputStream audioInputStream;
     final String pathInFolder = "Ressources/Musique/";
 
+    // Constructeur
+    //======================================================================
     public Musique(String fileName){
         try {
             audioInputStream = AudioSystem.getAudioInputStream(new File(pathInFolder + fileName).getAbsoluteFile());
