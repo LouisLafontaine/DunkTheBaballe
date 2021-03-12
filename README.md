@@ -2,6 +2,8 @@
 
 # Conventions de nommage des commit
 
+***Commit souvent, régulièrement, fréquement***
+
 **Titre du commit** :
 - Si c'est un ajout écrire ***Ajout*** puis ce qui a été ajouté
 - Si c'est une modification simplement écrire ***Modif*** puis ce qui a été modifié
@@ -19,7 +21,6 @@ dans la description du commit il faut alors penser à ajouter : `résout #3`
   **!!!** Lorsque vous le faites, utilisez "merge incoming changes" et PAS "Rebase the current…"
 - Actualiser son projet avant de push sur le remote
 - Commit souvent, un adage dirait : *si tu as besoin du mot **"et"** dans tes commit, c'est que tu ne commit pas assez souvent"*
-- Commit selon les conventions
 
 ## Pour implémenter une nouvelle fonctionnalité créez une nouvelle branche :
 - Tout en haut (File, Edit, View etc…) Choisir le menu `git -> branches -> new branch`
