@@ -30,7 +30,8 @@ public class Balle {
     //======================================================================
     public void drawBalle(Graphics g) {
         g.setColor(maCouleur);
-        g.fillOval(x-r, y-r, r,r);
+        g.fillOval(x-r/2, y-r/2, r,r);
+
     }
 
     public void updatePosBalle(int largeurFenetre, int hauteurFenetre, Timer timer){
@@ -48,6 +49,14 @@ public class Balle {
     }
 
     public boolean notInBounds(int largeurFenetre, int hauteurFenetre) { // true si hors dans la fenetre
-        return ((x < 0) || (x > largeurFenetre) || (y < 0) || (y > hauteurFenetre));
+        return ((x <= 0) || (x >= largeurFenetre) || (y <= 0) || (y >= hauteurFenetre));
+    }
+
+    public int distanceBalle(int x, int y){
+        return(Math.abs(x-this.x) + Math.abs(y-this.y));
+    }
+
+    public boolean toucheBalle(int x, int y){
+        return (distanceBalle(x,y) < r);
     }
 }
