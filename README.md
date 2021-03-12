@@ -2,6 +2,8 @@
 
 # Conventions de nommage des commit
 
+***Commit souvent, régulièrement, fréquement***
+
 **Titre du commit** :
 - Si c'est un ajout écrire ***Ajout*** puis ce qui a été ajouté
 - Si c'est une modification simplement écrire ***Modif*** puis ce qui a été modifié
