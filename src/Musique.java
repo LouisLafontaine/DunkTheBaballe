@@ -12,9 +12,9 @@ public class Musique {
     AudioInputStream audioInputStream;
     final String pathInFolder = "Ressources/Musique/";
 
-    public Musique(String filePath){
+    public Musique(String fileName){
         try {
-            audioInputStream = AudioSystem.getAudioInputStream(new File(pathInFolder + filePath).getAbsoluteFile());
+            audioInputStream = AudioSystem.getAudioInputStream(new File(pathInFolder + fileName).getAbsoluteFile());
             clip = AudioSystem.getClip();
             clip.open(audioInputStream);
         } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
