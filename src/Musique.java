@@ -10,7 +10,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 public class Musique {
     Clip clip;
     AudioInputStream audioInputStream;
-    final String pathInFolder = "Musique/";
+    final String pathInFolder = "Ressources/Musique/";
 
     public Musique(String filePath){
         try {
