@@ -7,6 +7,9 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     private final Balle balle;
     protected Timer timer;
     Musique musique;
+    protected int lastClickX; // enregistre la pos x du dernier click
+    protected int lastClickY; // enregistre la pos y du dernier click
+    boolean clicking;
 
     // Constructeur
     public PanelJeu(){
@@ -16,15 +19,31 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
 
         musique = new Musique("8bitWildBattle.wav");
         musique.clip.start();
+
+        lastClickX = 0;
+        lastClickY = 0;
+        clicking = false;
+
         addMouseListener(this);
+        addMouseMotionListener(this);
     }
 
     // Dessin
     @Override
     public void paintComponent(Graphics g){
         super.paintComponent(g);
+
+        // Background
         g.setColor(Color.red);
         g.fillRect(0,0, this.getWidth(), this.getHeight());
+
+        // Trait force
+        g.setColor(Color.BLACK);
+        if(clicking && balle.toucheBalle(lastClickX, lastClickY)){
+            g.drawLine(lastClickX, lastClickY, balle.x, balle.y);
+        }
+
+        // Balle
         balle.drawBalle(g);
     }
 
@@ -40,6 +59,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     // Mouse Listener interface methods
     @Override
     public void mouseClicked(MouseEvent e) {
+        setLastClickOn(e.getX(),e.getY());
         timer.stop();
         balle.resetPosBalle();
         repaint();
@@ -51,6 +71,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        setLastClickOff();
         double mouseSensibility = 0.1;
         balle.vx = (balle.x - e.getX()) * mouseSensibility;
         balle.vy = (balle.y - e.getY()) * mouseSensibility;
@@ -76,5 +97,14 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     @Override
     public void mouseMoved(MouseEvent e) {
 
+    }
+
+    public void setLastClickOn(int x, int y) {
+        lastClickX = x;
+        lastClickY = y;
+    }
+
+    public void setLastClickOff() {
+        clicking = false;
     }
 }
