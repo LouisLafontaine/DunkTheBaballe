@@ -27,7 +27,7 @@ public class Balle {
     // Méthodes
     public void drawBalle(Graphics g) {
         g.setColor(maCouleur);
-        g.fillOval(x, y, r,r);
+        g.fillOval(x-r, y-r, r,r);
     }
 
     public void updatePosBalle(int largeurFenetre, int hauteurFenetre, Timer timer){
