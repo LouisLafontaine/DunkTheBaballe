@@ -1,10 +1,7 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -19,7 +16,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     protected int clickX; // enregistre la pos x actuelle du click
     protected int clickY; // enregistre la pos x actuelle du click
     boolean clicking; // true si en train de clicker
-    Image img;
+    Image background;
 
     // Constructeur
     //======================================================================
@@ -47,12 +44,13 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         g.setColor(Color.red);
         g.fillRect(0,0, this.getWidth(), this.getHeight());
 
+        // Background
+        g.drawImage(background,0,0, this.getWidth(), this.getHeight(), null);
+
         // Trait force
         tracerSegment(g);
 
         // Balle
-        g.drawImage(img,0,0, this.getWidth(), this.getHeight(), null);
-
         balle.drawBalle(g);
         }
 
@@ -97,7 +95,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     public void setBackgroundImage(String backgroundFileName){
         String pathInFolder = "Ressources/BackgroundImage/";
         try {
-            img = ImageIO.read(new File(pathInFolder + backgroundFileName).getAbsoluteFile());
+            background = ImageIO.read(new File(pathInFolder + backgroundFileName).getAbsoluteFile());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -130,6 +128,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             repaint();
         }
     }
+
     public void tracerSegment(Graphics g) {
         if(clicking && balle.toucheBalle(lastClickX, lastClickY)) {
             Graphics2D g2d = (Graphics2D) g;

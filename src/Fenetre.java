@@ -29,8 +29,8 @@ public class Fenetre extends JFrame implements ComponentListener {
     //======================================================================
     @Override
     public void componentResized(ComponentEvent e) {
-        int W = mainPanel.img.getWidth(null);
-        int H = mainPanel.img.getHeight(null);
+        int W = mainPanel.background.getWidth(null);
+        int H = mainPanel.background.getHeight(null);
         Rectangle b = e.getComponent().getBounds();
         e.getComponent().setBounds(b.x, b.y, b.width, b.width*H/W);
     }

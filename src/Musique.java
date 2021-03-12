@@ -17,7 +17,7 @@ public class Musique {
     //======================================================================
     public Musique(String fileName){
         try {
-            audioInputStream = AudioSystem.getAudioInputStream(new File(pathInFolder + fileName).getAbsoluteFile());
+            audioInputStream = AudioSystem.getAudioInputStream(new File(pathInFile + fileName).getAbsoluteFile());
             clip = AudioSystem.getClip();
             clip.open(audioInputStream);
         } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
