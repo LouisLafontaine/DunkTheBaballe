@@ -7,13 +7,17 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class Musique {
+    // Attributs
+    //======================================================================
     Clip clip;
     AudioInputStream audioInputStream;
     final String pathInFile = "Ressources/Musique/";
 
-    public Musique(String filePath){
+    // Constructeur
+    //======================================================================
+    public Musique(String fileName){
         try {
-            audioInputStream = AudioSystem.getAudioInputStream(new File(pathInFile + filePath).getAbsoluteFile());
+            audioInputStream = AudioSystem.getAudioInputStream(new File(pathInFolder + fileName).getAbsoluteFile());
             clip = AudioSystem.getClip();
             clip.open(audioInputStream);
         } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
