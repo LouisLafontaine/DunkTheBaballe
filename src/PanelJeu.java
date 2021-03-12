@@ -1,11 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 
-public class PanelJeu extends JPanel implements ActionListener, MouseListener{
+public class PanelJeu extends JPanel implements ActionListener, MouseListener, MouseMotionListener {
     // Attributs
     private final Balle balle;
     protected Timer timer;
@@ -68,6 +65,16 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener{
 
     @Override
     public void mouseExited(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
 
     }
 }
