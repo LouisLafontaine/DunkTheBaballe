@@ -21,7 +21,7 @@ public class Balle {
         this.vx = vx;
         this.vy = vy;
         this.r = r;
-        maCouleur = new Color(100, 200,200);
+        maCouleur = Color.yellow;
     }
 
     // Méthodes
