@@ -19,7 +19,7 @@ public class Fenetre extends JFrame implements ComponentListener {
 
         addComponentListener(this);
 
-        setSize(500,500);
+        setSize(600,600);
         setLocation(300, 200);
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -29,10 +29,7 @@ public class Fenetre extends JFrame implements ComponentListener {
     //======================================================================
     @Override
     public void componentResized(ComponentEvent e) {
-        int W = mainPanel.background.getWidth(null);
-        int H = mainPanel.background.getHeight(null);
-        Rectangle b = e.getComponent().getBounds();
-        e.getComponent().setBounds(b.x, b.y, b.width, b.width*H/W);
+        maintainProportion(e);
     }
 
     @Override
@@ -45,5 +42,14 @@ public class Fenetre extends JFrame implements ComponentListener {
 
     @Override
     public void componentHidden(ComponentEvent e) {
+    }
+
+    // Méthodes
+    //======================================================================
+    public void maintainProportion(ComponentEvent e) {
+        int W = mainPanel.background.getWidth(null);
+        int H = mainPanel.background.getHeight(null);
+        Rectangle r = e.getComponent().getBounds();
+        e.getComponent().setBounds(r.x, r.y, r.width, r.width*H/W);
     }
 }
