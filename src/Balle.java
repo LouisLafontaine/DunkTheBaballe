@@ -19,7 +19,7 @@ public class Balle {
 
     // Constructeur
     //======================================================================
-    public Balle(int x, int y, int r, double vx, double vy) {
+    public Balle(int x, int y, int r, double vx, double vy, String characterIamgeFileName) {
         this.x = x;
         this.y = y;
         this.xInit = x;
@@ -28,14 +28,14 @@ public class Balle {
         this.vy = vy;
         this.r = r;
         maCouleur = Color.yellow; // OBSOLETE
-        initializeCharacterImage("blueBall.png");
+        initializeCharacterImage(characterIamgeFileName);
     }
 
     // Méthodes initialisation
-    private void initializeCharacterImage(String fileName) {
+    private void initializeCharacterImage(String imageFileName) {
         String nameInFolder = "Ressources/Character/";
         try {
-            characterImage = ImageIO.read(new File( nameInFolder + fileName).getAbsoluteFile());
+            characterImage = ImageIO.read(new File( nameInFolder + imageFileName).getAbsoluteFile());
         } catch (IOException e) {
             e.printStackTrace();
         }

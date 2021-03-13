@@ -8,7 +8,7 @@ import java.io.IOException;
 public class PanelJeu extends JPanel implements ActionListener, MouseListener, MouseMotionListener {
     // Attributs
     //======================================================================
-    private final Balle balle;
+    protected final Balle balle;
     protected Timer timer;
     Musique musique;
     protected int lastClickX; // enregistre la pos x du dernier click
@@ -21,7 +21,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     // Constructeur
     //======================================================================
     public PanelJeu(){
-        balle = new Balle(100,250,30,0, 0);
+        balle = new Balle(150,250,25,0, 0, "fireBall.png");
         int fps = 60;
         timer = new Timer(1000/ fps, this);
 
@@ -40,11 +40,11 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     public void paintComponent(Graphics g){
         super.paintComponent(g);
 
-        // Background
-        g.setColor(Color.red);
-        g.fillRect(0,0, this.getWidth(), this.getHeight());
+//        // Background Solid Color
+//        g.setColor(Color.red);
+//        g.fillRect(0,0, this.getWidth(), this.getHeight());
 
-        // Background
+        // Background Image
         g.drawImage(background,0,0, this.getWidth(), this.getHeight(), null);
 
         // Trait force
@@ -64,7 +64,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         }
     }
 
-    // Mouse Listener interface methods
+    // MouseListener interface methods
     //======================================================================
     @Override
     public void mouseClicked(MouseEvent e) {
@@ -79,11 +79,9 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     @Override
     public void mouseReleased(MouseEvent e) {
         setLastClickOff();
-        ifClikedThrowBalle(e);
+        ifClickedThrowBalle(e);
     }
 
-    // Méthodes
-    //======================================================================
     @Override
     public void mouseEntered(MouseEvent e) {
     }
@@ -92,15 +90,8 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     public void mouseExited(MouseEvent e) {
     }
 
-    public void setBackgroundImage(String backgroundFileName){
-        String pathInFolder = "Ressources/BackgroundImage/";
-        try {
-            background = ImageIO.read(new File(pathInFolder + backgroundFileName).getAbsoluteFile());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
+    // MouseMotionListener interface methods
+    //======================================================================
     @Override
     public void mouseDragged(MouseEvent e) {
         draggingOnBalle(e);
@@ -109,6 +100,17 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     @Override
     public void mouseMoved(MouseEvent e) {
 
+    }
+
+    // Méthodes
+    //======================================================================
+    public void setBackgroundImage(String backgroundFileName){
+        String pathInFolder = "Ressources/BackgroundImage/";
+        try {
+            background = ImageIO.read(new File(pathInFolder + backgroundFileName).getAbsoluteFile());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void setLastClickOn(int x, int y) {
@@ -132,13 +134,13 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     public void tracerSegment(Graphics g) {
         if(clicking && balle.toucheBalle(lastClickX, lastClickY)) {
             Graphics2D g2d = (Graphics2D) g;
-            g2d.setStroke(new BasicStroke(3));
+            g2d.setStroke(new BasicStroke(2));
             g2d.setColor(Color.green);
             g2d.drawLine(clickX, clickY, balle.x, balle.y);
         }
     }
 
-    public void ifClikedThrowBalle(MouseEvent e) {
+    public void ifClickedThrowBalle(MouseEvent e) {
         if(balle.toucheBalle(lastClickX,lastClickY)){
             double mouseSensibility = 0.1;
             balle.vx = (balle.x - e.getX()) * mouseSensibility;
