@@ -11,6 +11,8 @@
 - Être succin, pour les détails il y a la description
 - Commencer par une majuscule
 
+Après je dois vous avouer que c'est pas si facil à respecter, mais bon c'est un peu l'objectif à atteindre
+
 **Description du commit** :
 - Si détails nécessaires, explications
 - Faire référence à l'***Issue*** concernée par le commit si il y en a une. Par exemple : Issue #3 [ajouter un bouton "recommencer"]
