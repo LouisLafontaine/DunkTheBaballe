@@ -16,7 +16,7 @@
 - Faire référence à l'***Issue*** concernée par le commit si il y en a une. Par exemple : Issue #3 [ajouter un bouton "recommencer"]
 dans la description du commit il faut alors penser à ajouter : `résout #3`
 
-# Cheatsheet utilisation de github avec IntelliJJ
+# Cheatsheet utilisation de github avec IntelliJ
 - Au début d'une session de codage, pull du remote (récupérer les modifications des autres, update project) : Crtl+T
   **!!!** Lorsque vous le faites, utilisez "merge incoming changes" et PAS "Rebase the current…"
 - Actualiser son projet avant de push sur le remote
