@@ -16,12 +16,11 @@ public class Balle {
     protected double vx; // vitesse selon x
     protected double vy; // vitesse selon y
     protected int t;
-    protected Color maCouleur; // couleur
     Image characterImage;
 
     // Constructeur
     //======================================================================
-    public Balle(int x, int y, int r, double vx, double vy, String characterIamgeFileName) {
+    public Balle(int x, int y, int r, double vx, double vy, String characterImageFileName) {
         this.x = x;
         this.y = y;
         this.xInit = x;
@@ -30,8 +29,7 @@ public class Balle {
         this.vy = vy;
         this.d = r;
         this.t = 0;
-        maCouleur = Color.yellow; // OBSOLETE
-        initializeCharacterImage(characterIamgeFileName);
+        initializeCharacterImage(characterImageFileName);
     }
 
     // Méthodes initialisation
@@ -47,8 +45,6 @@ public class Balle {
     // Méthodes
     //======================================================================
     public void drawBalle(Graphics g) {
-//        g.setColor(maCouleur);
-//        g.fillOval(x-r/2, y-r/2, r,r);
         g.drawImage(characterImage, x-d/2, y-d/2,d,d,null);
     }
 

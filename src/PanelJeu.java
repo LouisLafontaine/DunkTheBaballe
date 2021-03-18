@@ -10,7 +10,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     //======================================================================
     protected final Balle balle;
     protected Timer timer;
-    Musique musique;
+    Son musique;
     protected int lastClickX; // enregistre la pos x du dernier click
     protected int lastClickY; // enregistre la pos y du dernier click
     protected int clickX; // enregistre la pos x actuelle du click
@@ -25,7 +25,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         int fps = 120;
         timer = new Timer(1000/ fps, this);
 
-        musique = new Musique("8bitWildBattle.wav");
+        musique = new Son("8bitWildBattle.wav");
 
         setBackgroundImage("FantasyForest.png");
 
@@ -38,10 +38,6 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     @Override
     public void paintComponent(Graphics g){
         super.paintComponent(g);
-
-//        // Background Solid Color
-//        g.setColor(Color.red);
-//        g.fillRect(0,0, this.getWidth(), this.getHeight());
 
         // Background Image
         g.drawImage(background,0,0, this.getWidth(), this.getHeight(), null);
@@ -67,7 +63,6 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     //======================================================================
     @Override
     public void mouseClicked(MouseEvent e) {
-
     }
 
     @Override

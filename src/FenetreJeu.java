@@ -3,19 +3,19 @@ import java.awt.*;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 
-public class Fenetre extends JFrame implements ComponentListener {
+public class FenetreJeu extends JFrame implements ComponentListener {
     // Attributs
     //======================================================================
     protected PanelJeu mainPanel;
 
     // Constructeur
     //======================================================================
-    public Fenetre(boolean playMusic){
+    public FenetreJeu(boolean playMusic){
         super("Vise le trou");
 
         mainPanel = new PanelJeu();
         add(mainPanel);
-        if(playMusic) mainPanel.musique.clip.start();
+        if(!playMusic) mainPanel.musique.clip.stop();
 
         addComponentListener(this);
 

@@ -6,7 +6,7 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-public class Musique {
+public class Son {
     // Attributs
     //======================================================================
     Clip clip;
@@ -15,7 +15,7 @@ public class Musique {
 
     // Constructeur
     //======================================================================
-    public Musique(String fileName){
+    public Son(String fileName){
         try {
             audioInputStream = AudioSystem.getAudioInputStream(new File(pathInFile + fileName).getAbsoluteFile());
             clip = AudioSystem.getClip();
