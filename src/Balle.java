@@ -1,3 +1,4 @@
+import javax.crypto.spec.PSource;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -5,17 +6,20 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 
-public class Balle {
+public class Balle{
     // Attributs
     //======================================================================
-    protected int x; // pos x
-    protected int y; // pos y
-    protected int xInit ; // pos x initiale
-    protected int yInit ; // pos y initiale
+    protected double x; // pos x
+    protected double y; // pos y
+    protected double xCollision; // pos x de la dernière collision
+    protected double yCollision; // pos y de la dernière collision
+    protected double xInit ; // pos x initiale
+    protected double yInit ; // pos y initiale
     protected int d; // diamètre
     protected double vx; // vitesse selon x
     protected double vy; // vitesse selon y
     protected int t;
+    protected double g;
     Image characterImage;
 
     // Constructeur
@@ -29,6 +33,9 @@ public class Balle {
         this.vy = vy;
         this.d = r;
         this.t = 0;
+        xCollision = xInit;
+        yCollision = yInit;
+        g = 0.1;
         initializeCharacterImage(characterImageFileName);
     }
 
@@ -45,14 +52,13 @@ public class Balle {
     // Méthodes
     //======================================================================
     public void drawBalle(Graphics g) {
-        g.drawImage(characterImage, x-d/2, y-d/2,d,d,null);
+        g.drawImage(characterImage, (int)(x)-d/2, (int)(y)-d/2,d,d,null);
     }
 
     public void updatePosBalle(int largeurFenetre, int hauteurFenetre, Timer timer){
-        double g = 0.1;
         t++;
-        x = (int) (xInit+vx*t);
-        y = (int) (0.5*g*t*t + vy*t + yInit);
+        x = xCollision+vx*t;
+        y = 0.5*g*t*t + vy*t + yCollision;
         if(notInBounds(largeurFenetre,hauteurFenetre)){
             timer.stop();
             resetPosBalle();
@@ -62,6 +68,8 @@ public class Balle {
     public void resetPosBalle(){
         x = xInit;
         y = yInit;
+        xCollision = xInit;
+        yCollision = yInit;
         t = 0;
     }
 
@@ -85,6 +93,28 @@ public class Balle {
             vx = (x - e.getX()) * mouseSensibility;
             vy = (y - e.getY()) * mouseSensibility;
             timer.start();
+        }
+    }
+
+    // Méthodes Collisions
+    public boolean hasCollided(Obstacle o) {
+        boolean xOverlap = (this.x+d/2.0 > o.x) && (this.x-d/2.0 < o.x + o.largeur);
+        boolean yOverlap = (this.y > o.y) && (this.y < o.y + o.hauteur);
+        return (xOverlap && yOverlap);
+    }
+
+    public void solveCollision(Obstacle o) {
+        double prevStep = 15;
+        double xPrev = xCollision+vx*(t-prevStep);
+        double yPrev = 0.5*g*t*t + vy*(t-prevStep) + yCollision;
+        if (xPrev < o.x && yPrev > o.y && yPrev < o.y+o.hauteur) { // face de gauche
+            double coefficientDirecteur = (y - yPrev)/(x - xPrev);
+            double ordonneOrigine = y  - ( (y - yPrev)/(x - xPrev) ) * x;
+
+            xCollision = o.x;
+            yCollision = ( coefficientDirecteur * o.x + ordonneOrigine);
+            vx = - vx;
+            t = 1;
         }
     }
 }

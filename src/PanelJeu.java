@@ -18,12 +18,14 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     protected int clickY; // enregistre la pos x actuelle du click
     boolean clicking; // true si en train de clicker
     Image background;
+    Obstacle obstacle;
 
     // Constructeur
     //======================================================================
     public PanelJeu(){
         balle = new Balle(150,250,25,0, 0, "fireBall.png");
-        int fps = 120;
+        obstacle = new Obstacle(200,50, 20, 300);
+        int fps = 60;
         timer = new Timer(1000/ fps, this);
 
         musique = new Son("Musique_pokemon.wav");
@@ -49,6 +51,9 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
 
         // Balle
         balle.drawBalle(g);
+
+        // Obstacle
+        obstacle.drawObstacle(g);
         }
 
     // Animation
@@ -57,6 +62,9 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == timer){
             balle.updatePosBalle(this.getWidth(), this.getHeight(), timer);
+            if (balle.hasCollided(obstacle)){
+                balle.solveCollision(obstacle);
+            }
             repaint();
         }
     }
@@ -133,7 +141,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             Graphics2D g2d = (Graphics2D) g;
             g2d.setStroke(new BasicStroke(2));
             g2d.setColor(Color.green);
-            g2d.drawLine(clickX, clickY, balle.x, balle.y);
+            g2d.drawLine(clickX, clickY, (int)balle.x, (int)balle.y);
         }
     }
 }
