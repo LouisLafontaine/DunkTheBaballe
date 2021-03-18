@@ -22,11 +22,10 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     //======================================================================
     public PanelJeu(){
         balle = new Balle(150,250,25,0, 0, "fireBall.png");
-        int fps = 60;
+        int fps = 120;
         timer = new Timer(1000/ fps, this);
 
         musique = new Musique("8bitWildBattle.wav");
-        musique.clip.start();
 
         setBackgroundImage("FantasyForest.png");
 
@@ -79,7 +78,8 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     @Override
     public void mouseReleased(MouseEvent e) {
         setLastClickOff();
-        ifClickedThrowBalle(e);
+        balle.ifClickedThrowBalle(e, timer,lastClickX, lastClickY);
+        repaint();
     }
 
     @Override
@@ -137,16 +137,6 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             g2d.setStroke(new BasicStroke(2));
             g2d.setColor(Color.green);
             g2d.drawLine(clickX, clickY, balle.x, balle.y);
-        }
-    }
-
-    public void ifClickedThrowBalle(MouseEvent e) {
-        if(balle.toucheBalle(lastClickX,lastClickY)){
-            double mouseSensibility = 0.1;
-            balle.vx = (balle.x - e.getX()) * mouseSensibility;
-            balle.vy = (balle.y - e.getY()) * mouseSensibility;
-            timer.start();
-            repaint();
         }
     }
 }

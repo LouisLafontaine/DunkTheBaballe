@@ -1,6 +1,7 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 
@@ -11,7 +12,7 @@ public class Balle {
     protected int y; // pos y
     protected int xInit ; // pos x initiale
     protected int yInit ; // pos y initiale
-    protected int r; // rayon
+    protected int d; // diamètre
     protected double vx; // vitesse selon x
     protected double vy; // vitesse selon y
     protected Color maCouleur; // couleur
@@ -26,7 +27,7 @@ public class Balle {
         this.yInit = y;
         this.vx = vx;
         this.vy = vy;
-        this.r = r;
+        this.d = r;
         maCouleur = Color.yellow; // OBSOLETE
         initializeCharacterImage(characterIamgeFileName);
     }
@@ -44,9 +45,9 @@ public class Balle {
     // Méthodes
     //======================================================================
     public void drawBalle(Graphics g) {
-        g.setColor(maCouleur);
+//        g.setColor(maCouleur);
 //        g.fillOval(x-r/2, y-r/2, r,r);
-        g.drawImage(characterImage, x-r/2, y-r/2,r,r,null);
+        g.drawImage(characterImage, x-d/2, y-d/2,d,d,null);
     }
 
     public void updatePosBalle(int largeurFenetre, int hauteurFenetre, Timer timer){
@@ -72,6 +73,15 @@ public class Balle {
     }
 
     public boolean toucheBalle(int x, int y){
-        return (distanceBalle(x,y) < r);
+        return (distanceBalle(x,y) < d/2);
+    }
+
+    public void ifClickedThrowBalle(MouseEvent e, Timer timer, int lastClickX, int lastClickY) {
+        if(toucheBalle(lastClickX,lastClickY)){
+            double mouseSensibility = 0.1;
+            vx = (x - e.getX()) * mouseSensibility;
+            vy = (y - e.getY()) * mouseSensibility;
+            timer.start();
+        }
     }
 }

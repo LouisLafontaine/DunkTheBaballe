@@ -2,7 +2,7 @@
 
 # Conventions de nommage des commit
 
-***Commit souvent, régulièrement, fréquement***
+***Commit souvent, régulièrement, fréquemment***
 
 **Titre du commit** :
 - Si c'est un ajout écrire ***Ajout*** puis ce qui a été ajouté
