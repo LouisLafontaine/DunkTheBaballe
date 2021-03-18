@@ -23,6 +23,5 @@ public class Son {
         } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
             e.printStackTrace();
         }
-        clip.loop(Clip.LOOP_CONTINUOUSLY);
     }
 }

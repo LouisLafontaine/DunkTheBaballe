@@ -1,4 +1,5 @@
 import javax.imageio.ImageIO;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -26,6 +27,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         timer = new Timer(1000/ fps, this);
 
         musique = new Son("Musique_pokemon.wav");
+        musique.clip.loop(Clip.LOOP_CONTINUOUSLY);
 
         setBackgroundImage("FantasyForest.png");
 
