@@ -25,7 +25,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         int fps = 120;
         timer = new Timer(1000/ fps, this);
 
-        musique = new Musique("8bitWildBattle.wav");
+        musique = new Musique("Musique pokemon.wav");
 
         setBackgroundImage("FantasyForest.png");
 
