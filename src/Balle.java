@@ -15,6 +15,7 @@ public class Balle {
     protected int d; // diamètre
     protected double vx; // vitesse selon x
     protected double vy; // vitesse selon y
+    protected int t;
     protected Color maCouleur; // couleur
     Image characterImage;
 
@@ -28,6 +29,7 @@ public class Balle {
         this.vx = vx;
         this.vy = vy;
         this.d = r;
+        this.t = 0;
         maCouleur = Color.yellow; // OBSOLETE
         initializeCharacterImage(characterIamgeFileName);
     }
@@ -51,8 +53,10 @@ public class Balle {
     }
 
     public void updatePosBalle(int largeurFenetre, int hauteurFenetre, Timer timer){
-        x = (int) (x+vx);
-        y = (int) (y+vy);
+        double g = 0.1;
+        t++;
+        x = (int) (xInit+vx*t);
+        y = (int) (0.5*g*t*t + vy*t + yInit);
         if(notInBounds(largeurFenetre,hauteurFenetre)){
             timer.stop();
             resetPosBalle();
@@ -62,6 +66,7 @@ public class Balle {
     public void resetPosBalle(){
         x = xInit;
         y = yInit;
+        t = 0;
     }
 
     public boolean notInBounds(int largeurFenetre, int hauteurFenetre) { // true si hors dans la fenetre
@@ -78,7 +83,7 @@ public class Balle {
 
     public void ifClickedThrowBalle(MouseEvent e, Timer timer, int lastClickX, int lastClickY) {
         if(toucheBalle(lastClickX,lastClickY)){
-            double mouseSensibility = 0.1;
+            double mouseSensibility = 0.03;
             vx = (x - e.getX()) * mouseSensibility;
             vy = (y - e.getY()) * mouseSensibility;
             timer.start();
