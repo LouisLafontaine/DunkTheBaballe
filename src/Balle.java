@@ -70,7 +70,9 @@ public class Balle {
     }
 
     public int distanceBalle(int x, int y){
-        return(Math.abs(x-this.x) + Math.abs(y-this.y));
+        double dX = x - this.x;
+        double dY = y - this.y;
+        return (int)(Math.sqrt(dX*dX + dY*dY));
     }
 
     public boolean toucheBalle(int x, int y){
