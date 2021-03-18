@@ -98,13 +98,13 @@ public class Balle{
 
     // Méthodes Collisions
     public boolean hasCollided(Obstacle o) {
-        boolean xOverlap = (this.x+d/2.0 > o.x) && (this.x-d/2.0 < o.x + o.largeur);
+        boolean xOverlap = (this.x > o.x) && (this.x < o.x + o.largeur);
         boolean yOverlap = (this.y > o.y) && (this.y < o.y + o.hauteur);
         return (xOverlap && yOverlap);
     }
 
     public void solveCollision(Obstacle o) {
-        double prevStep = 15;
+        double prevStep = 5;
         double xPrev = xCollision+vx*(t-prevStep);
         double yPrev = 0.5*g*t*t + vy*(t-prevStep) + yCollision;
         if (xPrev < o.x && yPrev > o.y && yPrev < o.y+o.hauteur) { // face de gauche

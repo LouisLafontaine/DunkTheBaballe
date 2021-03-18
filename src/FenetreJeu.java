@@ -52,10 +52,10 @@ public class FenetreJeu extends JFrame implements ComponentListener {
         Rectangle r = e.getComponent().getBounds();
         e.getComponent().setBounds(r.x, r.y, r.width, r.width*H/W);
 
-        //Maintenir position de la balle
-        mainPanel.balle.xInit = r.width/5.0;
-        mainPanel.balle.yInit = r.height/2.0;
-        mainPanel.balle.resetPosBalle();
-        mainPanel.repaint();
+//        //Maintenir position de la balle
+//        mainPanel.balle.xInit = r.width/5.0;
+//        mainPanel.balle.yInit = r.height/2.0;
+//        mainPanel.balle.resetPosBalle();
+//        mainPanel.repaint();
     }
 }

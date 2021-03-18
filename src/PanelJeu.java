@@ -23,8 +23,8 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     // Constructeur
     //======================================================================
     public PanelJeu(){
-        balle = new Balle(150,250,25,0, 0, "fireBall.png");
-        obstacle = new Obstacle(200,50, 20, 300);
+        balle = new Balle(100,250,25,0, 0, "fireBall.png");
+        obstacle = new Obstacle(400,50, 20, 300);
         int fps = 60;
         timer = new Timer(1000/ fps, this);
 
