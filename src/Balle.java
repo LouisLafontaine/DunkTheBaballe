@@ -104,9 +104,10 @@ public class Balle{
     }
 
     public void solveCollision(Obstacle o) {
-        double prevStep = 5;
+        double prevStep = 1;
         double xPrev = xCollision+vx*(t-prevStep);
         double yPrev = 0.5*g*t*t + vy*(t-prevStep) + yCollision;
+
         if (xPrev < o.x && yPrev > o.y && yPrev < o.y+o.hauteur) { // face de gauche
             double coefficientDirecteur = (y - yPrev)/(x - xPrev);
             double ordonneOrigine = y  - ( (y - yPrev)/(x - xPrev) ) * x;
@@ -114,7 +115,31 @@ public class Balle{
             xCollision = o.x;
             yCollision = ( coefficientDirecteur * o.x + ordonneOrigine);
             vx = - vx;
-            t = 1;
         }
+        else if (xPrev > o.x && yPrev > o.y && yPrev < o.y+o.hauteur) { // face de droite
+            double coefficientDirecteur = (y - yPrev)/(x - xPrev);
+            double ordonneOrigine = y  - ( (y - yPrev)/(x - xPrev) ) * x;
+
+            xCollision = o.x + o.largeur;
+            yCollision = ( coefficientDirecteur * (o.x+ o.largeur) + ordonneOrigine);
+            vx = - vx;
+        }
+//        else if (yPrev > o.y && xPrev > o.x && xPrev < o.x+o.largeur) { // face du haut
+//            double coefficientDirecteur = (y - yPrev)/(x - xPrev);
+//            double ordonneOrigine = y  - ( (y - yPrev)/(x - xPrev) ) * x;
+//
+//            xCollision = o.x + o.largeur;
+//            yCollision = ( coefficientDirecteur * (o.x+ o.largeur) + ordonneOrigine);
+//            vy = - vy;
+//        }
+//        else if (yPrev > o.y && yPrev > o.y && yPrev < o.y+o.largeur) { // face du bas
+//            double coefficientDirecteur = (y - yPrev)/(x - xPrev);
+//            double ordonneOrigine = y  - ( (y - yPrev)/(x - xPrev) ) * x;
+//
+//            xCollision = o.x + o.largeur;
+//            yCollision = ( coefficientDirecteur * (o.x + o.largeur) + ordonneOrigine);
+//            vy = - vy;
+//        }
+        t = 1;
     }
 }
