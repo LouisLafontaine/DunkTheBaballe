@@ -20,14 +20,18 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     Image background;
     Obstacle obstacle;
     Obstacle obstacle2;
+    Obstacle obstacle3;
+    Obstacle obstacle4;
 
     // Constructeur
     //======================================================================
     public PanelJeu(){
-        balle = new Balle(300,300,25,0, 0, "fireBall.png");
-        obstacle = new Obstacle(100,50, 20, 300);
-        obstacle2 = new Obstacle(500,50, 20, 300);
-        int fps = 60;
+        balle = new Balle(300,250,25,0, 0, "fireBall.png");
+        obstacle = new Obstacle(100,50, 300, 20);
+        obstacle2 = new Obstacle(400,50, 20, 300);
+        obstacle3 = new Obstacle(100,350, 320, 20);
+        obstacle4 = new Obstacle(100,50, 20, 300);
+        int fps = 120;
         timer = new Timer(1000/ fps, this);
 
         musique = new Son("Musique_pokemon.wav");
@@ -57,6 +61,8 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         // Obstacle
         obstacle.drawObstacle(g);
         obstacle2.drawObstacle(g);
+        obstacle3.drawObstacle(g);
+        obstacle4.drawObstacle(g);
         }
 
     // Animation
@@ -69,6 +75,12 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
                 balle.solveCollision(obstacle);
             }else if (balle.hasCollided(obstacle2)){
                 balle.solveCollision(obstacle2);
+            }else if (balle.hasCollided(obstacle3)){
+                System.out.println("hasCollided");
+                balle.solveCollision(obstacle3);
+            }else if (balle.hasCollided(obstacle4)){
+                System.out.println("hasCollided");
+                balle.solveCollision(obstacle4);
             }
             repaint();
         }

@@ -58,7 +58,7 @@ public class Balle{
     public void updatePosBalle(int largeurFenetre, int hauteurFenetre, Timer timer){
         t++;
         x = xCollision+vx*t;
-        y = 0.5*g*t*t + vy*t + yCollision;
+        y = 0.5*g*t*t +vy*t + yCollision;
         if(notInBounds(largeurFenetre,hauteurFenetre)){
             timer.stop();
             resetPosBalle();
@@ -106,40 +106,55 @@ public class Balle{
     public void solveCollision(Obstacle o) {
         double prevStep = 1;
         double xPrev = xCollision+vx*(t-prevStep);
-        double yPrev = 0.5*g*t*t + vy*(t-prevStep) + yCollision;
+        double yPrev = 0.5*g*t*t +vy*(t-prevStep) + yCollision;
+
+        double coefficientDirecteur = (y - yPrev)/(x - xPrev);
+        double ordonneOrigine = y  - ( (y - yPrev)/(x - xPrev) ) * x;
+
 
         if (xPrev < o.x && yPrev > o.y && yPrev < o.y+o.hauteur) { // face de gauche
-            double coefficientDirecteur = (y - yPrev)/(x - xPrev);
-            double ordonneOrigine = y  - ( (y - yPrev)/(x - xPrev) ) * x;
-
             xCollision = o.x;
             yCollision = ( coefficientDirecteur * o.x + ordonneOrigine);
-            vx = - vx;
+            vx = -4.0/5.0*vx;
+            System.out.println("gauche"); // TEST
+            t = 1;
         }
-        else if (xPrev > o.x && yPrev > o.y && yPrev < o.y+o.hauteur) { // face de droite
-            double coefficientDirecteur = (y - yPrev)/(x - xPrev);
-            double ordonneOrigine = y  - ( (y - yPrev)/(x - xPrev) ) * x;
-
+        else if (xPrev > o.x + o.largeur && yPrev > o.y && yPrev < o.y+o.hauteur) { // face de droite
             xCollision = o.x + o.largeur;
             yCollision = ( coefficientDirecteur * (o.x+ o.largeur) + ordonneOrigine);
-            vx = - vx;
+            vx = -4.0/5.0* vx;
+            System.out.println("droite"); // TEST
+            t = 1;
+
+        } else if(Math.abs(vy) > 3){
+            if (yPrev < o.y && xPrev > o.x && xPrev < o.x+o.largeur) { // face du haut
+                xCollision = (o.y - ordonneOrigine) / coefficientDirecteur;
+                yCollision = o.y;
+                System.out.println("dessus"); // TEST
+                vy = -4.0/5.0* vy;
+                t = 1;
+            }
+            else if (yPrev > o.y + o.hauteur && xPrev > o.x && xPrev < o.x+o.largeur) { // face du bas
+                xCollision = (o.y + o.hauteur - ordonneOrigine) / coefficientDirecteur;
+                yCollision = o.y + o.hauteur;
+                System.out.println("dessous"); // TEST
+                t = 1;
+                vy = -4.0/5.0* vy;
+            }
+        } else{
+            y = o.y;
+            xCollision = x;
+            yCollision = o.y;
+            t=0;
         }
-//        else if (yPrev > o.y && xPrev > o.x && xPrev < o.x+o.largeur) { // face du haut
-//            double coefficientDirecteur = (y - yPrev)/(x - xPrev);
-//            double ordonneOrigine = y  - ( (y - yPrev)/(x - xPrev) ) * x;
-//
-//            xCollision = o.x + o.largeur;
-//            yCollision = ( coefficientDirecteur * (o.x+ o.largeur) + ordonneOrigine);
-//            vy = - vy;
-//        }
-//        else if (yPrev > o.y && yPrev > o.y && yPrev < o.y+o.largeur) { // face du bas
-//            double coefficientDirecteur = (y - yPrev)/(x - xPrev);
-//            double ordonneOrigine = y  - ( (y - yPrev)/(x - xPrev) ) * x;
-//
-//            xCollision = o.x + o.largeur;
-//            yCollision = ( coefficientDirecteur * (o.x + o.largeur) + ordonneOrigine);
-//            vy = - vy;
-//        }
-        t = 1;
+
+        // TEST
+        System.out.println(vy);
+        System.out.println(y);
+        System.out.println(yPrev);
+        System.out.println(o.y);
+        System.out.println(yPrev < o.y);
+        System.out.println(xPrev > o.x);
+        System.out.println(xPrev < o.x+o.largeur);
     }
 }
