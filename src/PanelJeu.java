@@ -81,8 +81,6 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             balle.updatePosBalle(this.getWidth(), this.getHeight(), timer);
             for (Obstacle o : obstacles){
                 if (balle.hasCollided(o)) {
-                    Son impactSound = new Son("Sound/8bitImpact.wav");
-                    impactSound.clip.start();
                     balle.solveCollision(o);
                     break;
                 }

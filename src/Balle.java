@@ -74,6 +74,8 @@ public class Balle {
         xCollision = xInit;
         yCollision = yInit;
         t = 0;
+        Son resetSound = new Son("Sound/8bitBlipBlip.wav");
+        resetSound.clip.start();
     }
 
     public boolean notInBounds(int largeurFenetre, int hauteurFenetre) { // true si hors dans la fenetre
@@ -107,6 +109,10 @@ public class Balle {
     }
 
     public void solveCollision(Obstacle o) {
+
+        Son impactSound = new Son("Sound/8bitImpactGround.wav");
+        impactSound.clip.start();
+
         double damping = 1; // mettre <1 pour un amortissement
 
         if(x - xPrev != 0){
