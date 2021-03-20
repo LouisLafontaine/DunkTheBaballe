@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class PanelJeu extends JPanel implements ActionListener, MouseListener, MouseMotionListener {
     // Attributs
@@ -18,19 +19,26 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     protected int clickY; // enregistre la pos x actuelle du click
     boolean clicking; // true si en train de clicker
     Image background;
-    Obstacle obstacle;
-    Obstacle obstacle2;
-    Obstacle obstacle3;
-    Obstacle obstacle4;
+    ArrayList<Obstacle> obstacles;
 
     // Constructeur
     //======================================================================
     public PanelJeu(){
         balle = new Balle(300,250,25,0, 0, "fireBall.png");
-        obstacle = new Obstacle(100,50, 300, 20);
-        obstacle2 = new Obstacle(400,50, 20, 300);
-        obstacle3 = new Obstacle(100,350, 320, 20);
-        obstacle4 = new Obstacle(100,50, 20, 300);
+
+        Obstacle obstacle1 = new Obstacle(100,50, 300, 20);
+        Obstacle obstacle2 = new Obstacle(380,90, 20, 200);
+        Obstacle obstacle3 = new Obstacle(100,90, 20, 200);
+        Obstacle obstacle4 = new Obstacle(100,310, 300, 20);
+        Obstacle obstacle5 = new Obstacle(220,150, 80, 80);
+
+        obstacles = new ArrayList<>();
+        obstacles.add(obstacle1);
+        obstacles.add(obstacle2);
+        obstacles.add(obstacle3);
+        obstacles.add(obstacle4);
+        obstacles.add(obstacle5);
+
         int fps = 120;
         timer = new Timer(1000/ fps, this);
 
@@ -59,11 +67,10 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         balle.drawBalle(g);
 
         // Obstacle
-        obstacle.drawObstacle(g);
-        obstacle2.drawObstacle(g);
-        obstacle3.drawObstacle(g);
-        obstacle4.drawObstacle(g);
+        for(Obstacle o : obstacles){
+            o.drawObstacle(g);
         }
+    }
 
     // Animation
     //======================================================================
@@ -71,16 +78,11 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == timer){
             balle.updatePosBalle(this.getWidth(), this.getHeight(), timer);
-            if (balle.hasCollided(obstacle)){
-                balle.solveCollision(obstacle);
-            }else if (balle.hasCollided(obstacle2)){
-                balle.solveCollision(obstacle2);
-            }else if (balle.hasCollided(obstacle3)){
-                System.out.println("hasCollided");
-                balle.solveCollision(obstacle3);
-            }else if (balle.hasCollided(obstacle4)){
-                System.out.println("hasCollided");
-                balle.solveCollision(obstacle4);
+            for (Obstacle o : obstacles){
+                if (balle.hasCollided(o)) {
+                    balle.solveCollision(o);
+                    break;
+                }
             }
             repaint();
         }
