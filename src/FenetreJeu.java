@@ -14,6 +14,7 @@ public class FenetreJeu extends JFrame implements ComponentListener {
         super("Vise le trou");
 
         mainPanel = new PanelJeu();
+        mainPanel.setFocusable(true);
         add(mainPanel);
         if(!playMusic) mainPanel.musique.clip.stop();
 

@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class PanelJeu extends JPanel implements ActionListener, MouseListener, MouseMotionListener {
+public class PanelJeu extends JPanel implements ActionListener, MouseListener, MouseMotionListener, KeyListener{
     // Attributs
     //======================================================================
     protected final Balle balle;
@@ -49,6 +49,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
 
         addMouseListener(this);
         addMouseMotionListener(this);
+        addKeyListener(this);
     }
 
     // Dessin
@@ -123,6 +124,26 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
 
     @Override
     public void mouseMoved(MouseEvent e) {
+
+    }
+
+    // KeyListener interface methods
+    //======================================================================
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if(e.getKeyCode() == KeyEvent.VK_SPACE) {
+            balle.resetPosBalle(timer);
+            repaint();
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
 
     }
 

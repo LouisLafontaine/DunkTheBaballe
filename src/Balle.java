@@ -63,12 +63,12 @@ public class Balle{
         x = xCollision+vx*t;
         y = vy*t + yCollision; // 0.5*g*t*t + <- terme pour rendre la trajectoire parabolique
         if(notInBounds(largeurFenetre,hauteurFenetre)){
-            timer.stop();
-            resetPosBalle();
+            resetPosBalle(timer);
         }
     }
 
-    public void resetPosBalle(){
+    public void resetPosBalle(Timer timer){
+        timer.stop();
         x = xInit;
         y = yInit;
         xCollision = xInit;
