@@ -11,7 +11,7 @@ public class Son {
     //======================================================================
     Clip clip;
     AudioInputStream audioInputStream;
-    final String pathInFile = "Ressources/Musique/";
+    final String pathInFile = "Ressources/";
 
     // Constructeur
     //======================================================================

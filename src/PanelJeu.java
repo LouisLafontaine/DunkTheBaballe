@@ -5,8 +5,9 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
-public class PanelJeu extends JPanel implements ActionListener, MouseListener, MouseMotionListener {
+public class PanelJeu extends JPanel implements ActionListener, MouseListener, MouseMotionListener, KeyListener{
     // Attributs
     //======================================================================
     protected final Balle balle;
@@ -18,21 +19,37 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     protected int clickY; // enregistre la pos x actuelle du click
     boolean clicking; // true si en train de clicker
     Image background;
+    ArrayList<Obstacle> obstacles;
 
     // Constructeur
     //======================================================================
     public PanelJeu(){
-        balle = new Balle(150,250,25,0, 0, "fireBall.png");
+        balle = new Balle(300,250,25,0, 0, "fireBall.png");
+
+        Obstacle obstacle1 = new Obstacle(100,50, 300, 20);
+        Obstacle obstacle2 = new Obstacle(380,90, 20, 200);
+        Obstacle obstacle3 = new Obstacle(100,90, 20, 200);
+        Obstacle obstacle4 = new Obstacle(100,310, 300, 20);
+        Obstacle obstacle5 = new Obstacle(220,150, 80, 80);
+
+        obstacles = new ArrayList<>();
+        obstacles.add(obstacle1);
+        obstacles.add(obstacle2);
+        obstacles.add(obstacle3);
+        obstacles.add(obstacle4);
+        obstacles.add(obstacle5);
+
         int fps = 120;
         timer = new Timer(1000/ fps, this);
 
-        musique = new Son("Musique_pokemon.wav");
+        musique = new Son("Musique/Pokemon.wav");
         musique.clip.loop(Clip.LOOP_CONTINUOUSLY);
 
         setBackgroundImage("FantasyForest.png");
 
         addMouseListener(this);
         addMouseMotionListener(this);
+        addKeyListener(this);
     }
 
     // Dessin
@@ -49,7 +66,12 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
 
         // Balle
         balle.drawBalle(g);
+
+        // Obstacle
+        for(Obstacle o : obstacles){
+            o.drawObstacle(g);
         }
+    }
 
     // Animation
     //======================================================================
@@ -57,6 +79,14 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == timer){
             balle.updatePosBalle(this.getWidth(), this.getHeight(), timer);
+            for (Obstacle o : obstacles){
+                if (balle.hasCollided(o)) {
+                    Son impactSound = new Son("Sound/8bitImpact.wav");
+                    impactSound.clip.start();
+                    balle.solveCollision(o);
+                    break;
+                }
+            }
             repaint();
         }
     }
@@ -99,6 +129,26 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
 
     }
 
+    // KeyListener interface methods
+    //======================================================================
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if(e.getKeyCode() == KeyEvent.VK_SPACE) {
+            balle.resetPosBalle(timer);
+            repaint();
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
+    }
+
     // Méthodes
     //======================================================================
     public void setBackgroundImage(String backgroundFileName){
@@ -133,7 +183,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             Graphics2D g2d = (Graphics2D) g;
             g2d.setStroke(new BasicStroke(2));
             g2d.setColor(Color.green);
-            g2d.drawLine(clickX, clickY, balle.x, balle.y);
+            g2d.drawLine(clickX, clickY, (int)balle.x, (int)balle.y);
         }
     }
 }

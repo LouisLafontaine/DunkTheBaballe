@@ -8,14 +8,19 @@ import java.io.IOException;
 public class Balle {
     // Attributs
     //======================================================================
-    protected int x; // pos x
-    protected int y; // pos y
-    protected int xInit ; // pos x initiale
-    protected int yInit ; // pos y initiale
+    protected double x; // pos x
+    protected double y; // pos y
+    protected double xCollision; // pos x de la dernière collision
+    protected double yCollision; // pos y de la dernière collision
+    protected double xPrev;
+    protected double yPrev;
+    protected double xInit ; // pos x initiale
+    protected double yInit ; // pos y initiale
     protected int d; // diamètre
     protected double vx; // vitesse selon x
     protected double vy; // vitesse selon y
     protected int t;
+    protected double g;
     Image characterImage;
 
     // Constructeur
@@ -29,6 +34,9 @@ public class Balle {
         this.vy = vy;
         this.d = r;
         this.t = 0;
+        xCollision = xInit;
+        yCollision = yInit;
+        g = 0.1;
         initializeCharacterImage(characterImageFileName);
     }
 
@@ -45,28 +53,31 @@ public class Balle {
     // Méthodes
     //======================================================================
     public void drawBalle(Graphics g) {
-        g.drawImage(characterImage, x-d/2, y-d/2,d,d,null);
+        g.drawImage(characterImage, (int)(x)-d/2, (int)(y)-d/2,d,d,null);
     }
 
     public void updatePosBalle(int largeurFenetre, int hauteurFenetre, Timer timer){
-        double g = 0.1;
+        xPrev =  x;
+        yPrev = y;
         t++;
-        x = (int) (xInit+vx*t);
-        y = (int) (0.5*g*t*t + vy*t + yInit);
+        x = xCollision+vx*t;
+        y = vy*t + yCollision; // 0.5*g*t*t + <- terme pour rendre la trajectoire parabolique
         if(notInBounds(largeurFenetre,hauteurFenetre)){
-            timer.stop();
-            resetPosBalle();
+            resetPosBalle(timer);
         }
     }
 
-    public void resetPosBalle(){
+    public void resetPosBalle(Timer timer){
+        timer.stop();
         x = xInit;
         y = yInit;
+        xCollision = xInit;
+        yCollision = yInit;
         t = 0;
     }
 
     public boolean notInBounds(int largeurFenetre, int hauteurFenetre) { // true si hors dans la fenetre
-        return ((x <= 0) || (x >= largeurFenetre) || (y >= hauteurFenetre));
+        return ((x <= 0) || (x >= largeurFenetre) || (y<-hauteurFenetre/2.0) || (y >= hauteurFenetre));
     }
 
     public int distanceBalle(int x, int y){
@@ -86,5 +97,57 @@ public class Balle {
             vy = (y - e.getY()) * mouseSensibility;
             timer.start();
         }
+    }
+
+    // Méthodes Collisions
+    public boolean hasCollided(Obstacle o) {
+        boolean xOverlap = (this.x >= o.x) && (this.x <= o.x + o.largeur);
+        boolean yOverlap = (this.y >= o.y) && (this.y <= o.y + o.hauteur);
+        return (xOverlap && yOverlap);
+    }
+
+    public void solveCollision(Obstacle o) {
+        double damping = 1; // mettre <1 pour un amortissement
+
+        if(x - xPrev != 0){
+            double coefficientDirecteur = (y - yPrev)/(x - xPrev);
+            double ordonneOrigine = y  - ( (y - yPrev)/(x - xPrev) ) * x;
+
+            if (xPrev < o.x && yPrev > o.y && yPrev < o.y+o.hauteur) { // face de gauche
+                xCollision = o.x;
+                yCollision = ( coefficientDirecteur * o.x + ordonneOrigine);
+                vx = - damping * vx;
+                vy = damping * vy;
+            }
+            else if (xPrev > o.x + o.largeur && yPrev > o.y && yPrev < o.y+o.hauteur) { // face de droite
+                xCollision = o.x + o.largeur;
+                yCollision = ( coefficientDirecteur * (o.x+ o.largeur) + ordonneOrigine);
+                vx = - damping * vx;
+                vy = damping * vy;
+
+            }
+            else if (yPrev < o.y && xPrev > o.x && xPrev < o.x+o.largeur) { // face du haut
+                xCollision = (o.y - ordonneOrigine) / coefficientDirecteur;
+                yCollision = o.y;
+                vx = damping * vx;
+                vy = - damping * vy;
+            }
+            else if (yPrev > o.y + o.hauteur && xPrev > o.x && xPrev < o.x+o.largeur) { // face du bas
+                xCollision = (o.y + o.hauteur - ordonneOrigine) / coefficientDirecteur;
+                yCollision = o.y + o.hauteur;
+                vx = damping * vx;
+                vy = - damping * vy;
+            }
+        }
+        else {
+            if(yPrev > o.y && xPrev > o.x && xPrev < o.x+o.largeur){ // face du haut
+                yCollision = o.y + o.hauteur;
+            }
+            else{ // Face du bas
+                yCollision = o.y;
+            }
+            vy = - damping * vy;
+        }
+        t = 0;
     }
 }
