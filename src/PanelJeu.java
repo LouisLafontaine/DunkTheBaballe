@@ -42,7 +42,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         int fps = 120;
         timer = new Timer(1000/ fps, this);
 
-        musique = new Son("Musique_pokemon.wav");
+        musique = new Son("Musique/Pokemon.wav");
         musique.clip.loop(Clip.LOOP_CONTINUOUSLY);
 
         setBackgroundImage("FantasyForest.png");
@@ -81,6 +81,8 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             balle.updatePosBalle(this.getWidth(), this.getHeight(), timer);
             for (Obstacle o : obstacles){
                 if (balle.hasCollided(o)) {
+                    Son impactSound = new Son("Sound/8bitImpact.wav");
+                    impactSound.clip.start();
                     balle.solveCollision(o);
                     break;
                 }

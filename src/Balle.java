@@ -5,7 +5,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 
-public class Balle{
+public class Balle {
     // Attributs
     //======================================================================
     protected double x; // pos x
@@ -107,7 +107,7 @@ public class Balle{
     }
 
     public void solveCollision(Obstacle o) {
-        double damping = 0.9;
+        double damping = 1; // mettre <1 pour un amortissement
 
         if(x - xPrev != 0){
             double coefficientDirecteur = (y - yPrev)/(x - xPrev);
