@@ -12,26 +12,29 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     //======================================================================
     protected final Balle balle;
     protected Timer timer;
-    Son musique;
+    protected Son musique;
     protected int lastClickX; // enregistre la pos x du dernier click
     protected int lastClickY; // enregistre la pos y du dernier click
-    protected int clickX; // enregistre la pos x actuelle du click
-    protected int clickY; // enregistre la pos x actuelle du click
-    boolean clicking; // true si en train de clicker
-    Image background;
-    ArrayList<Obstacle> obstacles;
+    protected int clickX; // enregistre la pos x actuelle du click si la souris est en train de clicker sur la balle
+    protected int clickY; // enregistre la pos x actuelle du click si la souris est en train de clicker sur la balle
+    protected boolean clicking; // true si en train de clicker
+    protected Image background; // image de fond
+    protected ArrayList<Obstacle> obstacles; // tableau d'obstacle
 
     // Constructeur
     //======================================================================
     public PanelJeu(){
+        // Initialisation de la balle
         balle = new Balle(300,250,25,0, 0, "fireBall.png");
 
+        // Initialisation des obstacles
         Obstacle obstacle1 = new Obstacle(100,50, 300, 20);
         Obstacle obstacle2 = new Obstacle(380,90, 20, 200);
         Obstacle obstacle3 = new Obstacle(100,90, 20, 200);
         Obstacle obstacle4 = new Obstacle(100,310, 300, 20);
         Obstacle obstacle5 = new Obstacle(200,150, 80, 80);
 
+        // Ajout des obstacles au tableau d'obstacles
         obstacles = new ArrayList<>();
         obstacles.add(obstacle1);
         obstacles.add(obstacle2);
@@ -39,14 +42,18 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         obstacles.add(obstacle4);
         obstacles.add(obstacle5);
 
+        // Initialisation timer pour animation
         int fps = 120;
         timer = new Timer(1000/ fps, this);
 
+        // Initialisation musique de fond
         musique = new Son("Music/8bitWildBattle.wav");
         musique.clip.loop(Clip.LOOP_CONTINUOUSLY);
 
+        // Initialisation image de fond
         setBackgroundImage("FantasyForest.png");
 
+        // Ajout interface
         addMouseListener(this);
         addMouseMotionListener(this);
         addKeyListener(this);
@@ -58,16 +65,16 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     public void paintComponent(Graphics g){
         super.paintComponent(g);
 
-        // Background Image
+        // Image de found
         g.drawImage(background,0,0, this.getWidth(), this.getHeight(), null);
 
-        // Trait force
+        // Trait entre la balle et la souris au moment du lancer
         tracerSegment(g);
 
         // Balle
         balle.drawBalle(g);
 
-        // Obstacle
+        // Obstacles
         for(Obstacle o : obstacles){
             o.drawObstacle(g);
         }
@@ -78,7 +85,10 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == timer){
-            balle.updatePosBalle(this.getWidth(), this.getHeight(), timer);
+            balle.updatePosBalle();
+            if(balle.notInBounds(getWidth(),getHeight())){
+                balle.resetPosBalle(timer);
+            }
             for (Obstacle o : obstacles){
                 if (balle.hasCollided(o)) {
                     balle.solveCollision(o);
@@ -103,8 +113,10 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     @Override
     public void mouseReleased(MouseEvent e) {
         setLastClickOff();
-        balle.ifClickedThrowBalle(e, timer,lastClickX, lastClickY);
-        repaint();
+        if(balle.toucheBalle(lastClickX,lastClickY)) {
+            balle.throwBalle(e, timer);
+            repaint();
+        }
     }
 
     @Override
@@ -133,7 +145,6 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     public void keyTyped(KeyEvent e) {
 
     }
-
     @Override
     public void keyPressed(KeyEvent e) {
         if(e.getKeyCode() == KeyEvent.VK_SPACE) {
@@ -141,7 +152,6 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             repaint();
         }
     }
-
     @Override
     public void keyReleased(KeyEvent e) {
 
@@ -169,7 +179,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     }
 
     public void draggingOnBalle(MouseEvent e) {
-        if(balle.toucheBalle(lastClickX, lastClickY) && clicking){
+        if(clicking && balle.toucheBalle(lastClickX, lastClickY)){
             clickX = e.getX();
             clickY = e.getY();
             repaint();
