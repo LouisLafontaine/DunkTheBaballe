@@ -12,8 +12,8 @@ public class Balle {
     protected double yInit ; // pos y initiale
     protected double x; // pos x
     protected double y; // pos y
-    protected double xPrev;
-    protected double yPrev;
+    protected double xPrev; // pos x une étape plus tot
+    protected double yPrev; // pos y une étape plus tot
     protected double xCollision; // pos x de la dernière collision
     protected double yCollision; // pos y de la dernière collision
     protected int d; // diamètre
@@ -68,6 +68,8 @@ public class Balle {
         timer.stop();
         x = xInit;
         y = yInit;
+        xPrev =  xInit;
+        yPrev = yInit;
         xCollision = xInit;
         yCollision = yInit;
         t = 0;
@@ -121,7 +123,7 @@ public class Balle {
          * alors on aurait une division par 0 dans le calcul du coefficient directeur.
          * D'où une séparation des cas où (x - xPrev != 0) et (x - xPrev = 0)
          */
-
+        t = 0; // On recommence la trajectoire à partir du point de collision
         if(x - xPrev != 0){
             // Approximation affine de la trajectoire
             double coefficientDirecteur = (y - yPrev)/(x - xPrev);
@@ -145,7 +147,7 @@ public class Balle {
             // face du haut
             else if (yPrev < o.y && xPrev > o.x && xPrev < o.x+o.largeur) {
                 xCollision = (o.y - ordonneOrigine) / coefficientDirecteur;
-                yCollision = o.y-1;
+                yCollision = o.y-1; // -1 car sinon la balle traverse l'obstacle
                 vx = amortissement * vx;
                 vy = -amortissement * Math.abs(vy);
                 /* Du fait de la gravité, la balle peut toucher une surface horizontale même si vy est dirigé vers le
@@ -170,9 +172,8 @@ public class Balle {
             // Face du bas
             else{
                 yCollision = o.y -1 ;
-                vy = - amortissement * Math.abs(vy); // meme raison que ci-dessus pour face du haut lorsque x-xPrev != 0
+                vy = -amortissement * Math.abs(vy); // meme raison que ci-dessus pour face du haut lorsque x-xPrev != 0
             }
         }
-        t = 0;
     }
 }
