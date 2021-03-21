@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Balle {
     // Attributs
@@ -64,7 +65,7 @@ public class Balle {
         y = 0.5*g*t*t + vy*t + yCollision;
     }
 
-    public void resetPosBalle(Timer timer){
+    public void resetPosBalle(Timer timer, boolean sound){
         timer.stop();
         x = xInit;
         y = yInit;
@@ -75,8 +76,10 @@ public class Balle {
         t = 0;
 
         // Son de reset
-        Son resetSound = new Son("Sound/8bitBlipBlip.wav");
-        resetSound.clip.start();
+        if(sound){
+            Son resetSound = new Son("Sound/8bitBlipBlip.wav");
+            resetSound.clip.start();
+        }
     }
 
     public boolean notInBounds(int largeurFenetre, int hauteurFenetre) {
@@ -105,6 +108,10 @@ public class Balle {
         boolean xOverlap = (this.x >= o.x) && (this.x <= o.x + o.largeur);
         boolean yOverlap = (this.y >= o.y) && (this.y <= o.y + o.hauteur);
         return (xOverlap && yOverlap);
+    }
+
+    public boolean hasCollided(Panier p) {
+        return (distanceBalle(p.x,p.y) < (this.d/2) + (p.d/2));
     }
 
     public void solveCollision(Obstacle o) {
@@ -174,6 +181,21 @@ public class Balle {
                 yCollision = o.y -1 ;
                 vy = -amortissement * Math.abs(vy); // meme raison que ci-dessus pour face du haut lorsque x-xPrev != 0
             }
+        }
+    }
+
+    public void checkSolveCollisions(ArrayList<Obstacle> obstacles) {
+        for (Obstacle o : obstacles){
+            if (hasCollided(o)) {
+                solveCollision(o);
+                break;
+            }
+        }
+    }
+
+    public void checkSolveNotInBounds(int largueur, int hauteur, Timer timer) {
+        if(notInBounds(largueur, hauteur)){
+            resetPosBalle(timer, true);
         }
     }
 }

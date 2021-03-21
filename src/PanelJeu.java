@@ -20,6 +20,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     protected boolean clicking; // true si en train de clicker
     protected Image background; // image de fond
     protected ArrayList<Obstacle> obstacles; // tableau d'obstacle
+    protected Panier p;
 
     // Constructeur
     //======================================================================
@@ -27,9 +28,12 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         // Initialisation de la balle
         balle = new Balle(300,250,25,0, 0, "fireBall.png");
 
+        // Initialisation zone d'arrivée
+        p = new Panier(700, 300, 60);
+
         // Initialisation des obstacles
         Obstacle obstacle1 = new Obstacle(100,50, 300, 20);
-        Obstacle obstacle2 = new Obstacle(380,90, 20, 200);
+//        Obstacle obstacle2 = new Obstacle(380,90, 20, 200);
         Obstacle obstacle3 = new Obstacle(100,90, 20, 200);
         Obstacle obstacle4 = new Obstacle(100,310, 300, 20);
         Obstacle obstacle5 = new Obstacle(200,150, 80, 80);
@@ -37,7 +41,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         // Ajout des obstacles au tableau d'obstacles
         obstacles = new ArrayList<>();
         obstacles.add(obstacle1);
-        obstacles.add(obstacle2);
+//        obstacles.add(obstacle2);
         obstacles.add(obstacle3);
         obstacles.add(obstacle4);
         obstacles.add(obstacle5);
@@ -74,6 +78,9 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         // Balle
         balle.drawBalle(g);
 
+        // Panier
+        p.drawPanier(g);
+
         // Obstacles
         for(Obstacle o : obstacles){
             o.drawObstacle(g);
@@ -86,15 +93,9 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == timer){
             balle.updatePosBalle();
-            if(balle.notInBounds(getWidth(),getHeight())){
-                balle.resetPosBalle(timer);
-            }
-            for (Obstacle o : obstacles){
-                if (balle.hasCollided(o)) {
-                    balle.solveCollision(o);
-                    break;
-                }
-            }
+            balle.checkSolveNotInBounds(getWidth(),getHeight(), timer);
+            checkSolveWin();
+            balle.checkSolveCollisions(obstacles);
             repaint();
         }
     }
@@ -148,7 +149,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     @Override
     public void keyPressed(KeyEvent e) {
         if(e.getKeyCode() == KeyEvent.VK_SPACE) {
-            balle.resetPosBalle(timer);
+            balle.resetPosBalle(timer, true);
             repaint();
         }
     }
@@ -192,6 +193,16 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             g2d.setStroke(new BasicStroke(2));
             g2d.setColor(Color.green);
             g2d.drawLine(clickX, clickY, (int)balle.x, (int)balle.y);
+        }
+    }
+
+    public void checkSolveWin() {
+        if(balle.hasCollided(p)){
+            System.out.println("gagné");
+            balle.resetPosBalle(timer, false);
+            Son winSound = new Son("Sound/8bitWin.wav");
+            musique.clip.stop();
+            winSound.clip.start();
         }
     }
 }

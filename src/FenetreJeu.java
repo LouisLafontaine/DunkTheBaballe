@@ -20,8 +20,8 @@ public class FenetreJeu extends JFrame implements ComponentListener {
 
         addComponentListener(this);
 
-        setSize(600,600);
-        setLocation(300, 200);
+        setSize(1000,1000);
+        setLocation(200, 150);
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
