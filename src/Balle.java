@@ -61,7 +61,7 @@ public class Balle {
         yPrev = y;
         t++;
         x = xCollision+vx*t;
-        y = vy*t + yCollision; // 0.5*g*t*t + <- terme pour rendre la trajectoire parabolique
+        y = 0.5*g*t*t + vy*t + yCollision; // 0.5*g*t*t + <- terme pour rendre la trajectoire parabolique
         if(notInBounds(largeurFenetre,hauteurFenetre)){
             resetPosBalle(timer);
         }
@@ -113,7 +113,7 @@ public class Balle {
         Son impactSound = new Son("Sound/8bitImpactGround.wav");
         impactSound.clip.start();
 
-        double damping = 1; // mettre <1 pour un amortissement
+        double damping = 0.9; // mettre <1 pour un amortissement
 
         if(x - xPrev != 0){
             double coefficientDirecteur = (y - yPrev)/(x - xPrev);
@@ -134,9 +134,9 @@ public class Balle {
             }
             else if (yPrev < o.y && xPrev > o.x && xPrev < o.x+o.largeur) { // face du haut
                 xCollision = (o.y - ordonneOrigine) / coefficientDirecteur;
-                yCollision = o.y;
+                yCollision = o.y-1;
                 vx = damping * vx;
-                vy = - damping * vy;
+                vy = - damping * Math.abs(vy);
             }
             else if (yPrev > o.y + o.hauteur && xPrev > o.x && xPrev < o.x+o.largeur) { // face du bas
                 xCollision = (o.y + o.hauteur - ordonneOrigine) / coefficientDirecteur;

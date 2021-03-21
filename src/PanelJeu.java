@@ -30,7 +30,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         Obstacle obstacle2 = new Obstacle(380,90, 20, 200);
         Obstacle obstacle3 = new Obstacle(100,90, 20, 200);
         Obstacle obstacle4 = new Obstacle(100,310, 300, 20);
-        Obstacle obstacle5 = new Obstacle(220,150, 80, 80);
+        Obstacle obstacle5 = new Obstacle(200,150, 80, 80);
 
         obstacles = new ArrayList<>();
         obstacles.add(obstacle1);
@@ -42,7 +42,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         int fps = 120;
         timer = new Timer(1000/ fps, this);
 
-        musique = new Son("Music/Pokemon.wav");
+        musique = new Son("Music/8bitWildBattle.wav");
         musique.clip.loop(Clip.LOOP_CONTINUOUSLY);
 
         setBackgroundImage("FantasyForest.png");
