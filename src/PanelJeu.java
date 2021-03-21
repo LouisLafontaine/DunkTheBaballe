@@ -15,12 +15,13 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     protected Son musique;
     protected int lastClickX; // enregistre la pos x du dernier click
     protected int lastClickY; // enregistre la pos y du dernier click
-    protected int clickX; // enregistre la pos x actuelle du click si la souris est en train de clicker sur la balle
-    protected int clickY; // enregistre la pos x actuelle du click si la souris est en train de clicker sur la balle
+    protected int clickX; // enregistre la pos x actuelle du click quand dragged
+    protected int clickY; // enregistre la pos x actuelle du click quand dragged
     protected boolean clicking; // true si en train de clicker
     protected Image background; // image de fond
     protected ArrayList<Obstacle> obstacles; // tableau d'obstacle
     protected Panier p;
+    protected boolean pressingKey_Q;
 
     // Constructeur
     //======================================================================
@@ -85,6 +86,11 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         for(Obstacle o : obstacles){
             o.drawObstacle(g);
         }
+
+        g.setColor(Color.black);
+        if(pressingKey_Q) g.fillRect(lastClickX, lastClickY, Math.abs(clickX-lastClickX), Math.abs(clickY-lastClickY));
+
+
     }
 
     // Animation
@@ -132,7 +138,10 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     //======================================================================
     @Override
     public void mouseDragged(MouseEvent e) {
-        draggingOnBalle(e);
+        draggingOnBalle();
+        clickX = e.getX();
+        clickY = e.getY();
+        repaint();
     }
 
     @Override
@@ -148,14 +157,30 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     }
     @Override
     public void keyPressed(KeyEvent e) {
-        if(e.getKeyCode() == KeyEvent.VK_SPACE) {
-            balle.resetPosBalle(timer, true);
+        pressingSpaceBarToReset(e);
+        ifSetPressingKey_Q_On(e);
+        if(e.getKeyCode() == KeyEvent.VK_W){
+            obstacles.clear();
             repaint();
         }
+        if(e.getKeyCode() == KeyEvent.VK_A){
+            balle.xInit = clickX;
+            balle.yInit = clickY;
+            balle.x = balle.xInit;
+            balle.y = balle.yInit;
+            repaint();
+        }
+        if(e.getKeyCode() == KeyEvent.VK_P) {
+            obstacles.remove(obstacles.size()-1);
+            repaint();
+        }
+        if(e.getKeyCode() == KeyEvent.VK_R) musique.clip.start();
     }
+
     @Override
     public void keyReleased(KeyEvent e) {
-
+        if(pressingKey_Q) addNewObstacle();
+        ifSetPressingKey_Q_Off(e);
     }
 
     // Méthodes
@@ -179,10 +204,15 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         clicking = false;
     }
 
-    public void draggingOnBalle(MouseEvent e) {
+    private void pressingSpaceBarToReset(KeyEvent e) {
+        if(e.getKeyCode() == KeyEvent.VK_SPACE) {
+            balle.resetPosBalle(timer, true);
+            repaint();
+        }
+    }
+
+    public void draggingOnBalle() {
         if(clicking && balle.toucheBalle(lastClickX, lastClickY)){
-            clickX = e.getX();
-            clickY = e.getY();
             repaint();
         }
     }
@@ -204,5 +234,18 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             musique.clip.stop();
             winSound.clip.start();
         }
+    }
+
+    private void addNewObstacle() {
+        obstacles.add(new Obstacle(lastClickX,lastClickY,Math.abs(clickX - lastClickX),Math.abs(clickY-lastClickY)));
+    }
+
+    // Key pressed tracking
+    public void ifSetPressingKey_Q_On(KeyEvent e) {
+        if(e.getKeyCode() == KeyEvent.VK_Q) pressingKey_Q = true;
+    }
+
+    public void ifSetPressingKey_Q_Off(KeyEvent e) {
+        if(e.getKeyCode() == KeyEvent.VK_Q) pressingKey_Q = false;
     }
 }
