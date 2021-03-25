@@ -37,7 +37,7 @@ public class Balle {
         this.t = 0;
         xCollision = xInit;
         yCollision = yInit;
-        g = 0.1;
+        g = 0.08;
         initializeCharacterImage(characterImageFileName);
     }
 
@@ -121,7 +121,7 @@ public class Balle {
         impactSound.clip.start();
 
         // Coefficient d'amortissement
-        double amortissement = 0.9;
+        double amortissement = 0.95;
 
         /*
          * Afin de Résoudre une collision on a besoin de calculer le point où celle-ci a eu lieu.
@@ -140,23 +140,23 @@ public class Balle {
             if (xPrev < o.x && yPrev > o.y && yPrev < o.y+o.hauteur) {
                 xCollision = o.x;
                 yCollision = ( coefficientDirecteur * o.x + ordonneOrigine);
-                vx = -amortissement * vx;
-                vy = amortissement * vy;
+                vx = -amortissement * (x - xPrev);
+                vy = amortissement * (y - yPrev);
             }
             // face de droite
             else if (xPrev > o.x + o.largeur && yPrev > o.y && yPrev < o.y+o.hauteur) {
                 xCollision = o.x + o.largeur;
                 yCollision = ( coefficientDirecteur * (o.x+ o.largeur) + ordonneOrigine);
-                vx = -amortissement * vx;
-                vy = amortissement * vy;
+                vx = -amortissement * (x - xPrev);
+                vy = amortissement * (y - yPrev);
 
             }
             // face du haut
             else if (yPrev < o.y && xPrev > o.x && xPrev < o.x+o.largeur) {
                 xCollision = (o.y - ordonneOrigine) / coefficientDirecteur;
                 yCollision = o.y-1; // -1 car sinon la balle traverse l'obstacle
-                vx = amortissement * vx;
-                vy = -amortissement * Math.abs(vy);
+                vx = amortissement * (x - xPrev);
+                vy = -amortissement * Math.abs((y - yPrev));
                 /* Du fait de la gravité, la balle peut toucher une surface horizontale même si vy est dirigé vers le
                 * haut (négative). Alors, si on inversait vy à l'impact, celle-ci deviendrait positive, ce qui
                 * permettrait à la balle de traverser l'obstacle. D'où la nécessité de - Math.abs() pour s'assurer que
@@ -166,20 +166,20 @@ public class Balle {
             else if (yPrev > o.y + o.hauteur && xPrev > o.x && xPrev < o.x+o.largeur) {
                 xCollision = (o.y + o.hauteur - ordonneOrigine) / coefficientDirecteur;
                 yCollision = o.y + o.hauteur;
-                vx = amortissement * vx;
-                vy = -amortissement * vy;
+                vx = amortissement * (x - xPrev);
+                vy = -amortissement * (y - yPrev);
             }
         }
         else { // (x - xPrev = 0)
             // face du haut
             if(yPrev > o.y && xPrev > o.x && xPrev < o.x+o.largeur){
                 yCollision = o.y + o.hauteur;
-                vy = -amortissement * vy;
+                vy = -amortissement * (y - yPrev);
             }
             // Face du bas
             else{
                 yCollision = o.y -1 ;
-                vy = -amortissement * Math.abs(vy); // meme raison que ci-dessus pour face du haut lorsque x-xPrev != 0
+                vy = -amortissement * Math.abs((y - yPrev)); // meme raison que ci-dessus pour face du haut lorsque x-xPrev != 0
             }
         }
     }

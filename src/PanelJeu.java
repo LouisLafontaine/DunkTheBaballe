@@ -34,7 +34,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
 
         // Initialisation des obstacles
         Obstacle obstacle1 = new Obstacle(100,50, 300, 20);
-//        Obstacle obstacle2 = new Obstacle(380,90, 20, 200);
+        Obstacle obstacle2 = new Obstacle(380,90, 20, 200);
         Obstacle obstacle3 = new Obstacle(100,90, 20, 200);
         Obstacle obstacle4 = new Obstacle(100,310, 300, 20);
         Obstacle obstacle5 = new Obstacle(200,150, 80, 80);
@@ -42,7 +42,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         // Ajout des obstacles au tableau d'obstacles
         obstacles = new ArrayList<>();
         obstacles.add(obstacle1);
-//        obstacles.add(obstacle2);
+        obstacles.add(obstacle2);
         obstacles.add(obstacle3);
         obstacles.add(obstacle4);
         obstacles.add(obstacle5);
