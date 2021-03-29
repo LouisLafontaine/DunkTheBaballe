@@ -43,9 +43,8 @@ public class Balle {
 
     // Méthodes initialisation
     private void initializeCharacterImage(String imageFileName) {
-        String nameInFolder = "Ressources/Character/";
         try {
-            characterImage = ImageIO.read(new File( nameInFolder + imageFileName).getAbsoluteFile());
+            characterImage = ImageIO.read(getClass().getResourceAsStream(imageFileName));
         } catch (IOException e) {
             e.printStackTrace();
         }

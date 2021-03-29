@@ -1,5 +1,7 @@
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -11,13 +13,14 @@ public class Son {
     //======================================================================
     Clip clip;
     AudioInputStream audioInputStream;
-    final String pathInFile = "Ressources/";
 
     // Constructeur
     //======================================================================
     public Son(String fileName){
         try {
-            audioInputStream = AudioSystem.getAudioInputStream(new File(pathInFile + fileName).getAbsoluteFile());
+            InputStream audioSrc = getClass().getResourceAsStream(fileName);
+            BufferedInputStream bufferedIn = new BufferedInputStream(audioSrc);
+            audioInputStream = AudioSystem.getAudioInputStream(bufferedIn);
             clip = AudioSystem.getClip();
             clip.open(audioInputStream);
         } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {

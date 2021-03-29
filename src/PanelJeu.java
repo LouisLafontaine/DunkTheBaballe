@@ -3,7 +3,6 @@ import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -27,7 +26,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     //======================================================================
     public PanelJeu(){
         // Initialisation de la balle
-        balle = new Balle(300,250,25,0, 0, "fireBall.png");
+        balle = new Balle(300,250,25,0, 0, "Character/fireBall.png");
 
         // Initialisation zone d'arrivée
         p = new Panier(700, 300, 60);
@@ -186,9 +185,9 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     // Méthodes
     //======================================================================
     public void setBackgroundImage(String backgroundFileName){
-        String pathInFolder = "Ressources/BackgroundImage/";
+        String pathInFolder = "BackgroundImage/";
         try {
-            background = ImageIO.read(new File(pathInFolder + backgroundFileName).getAbsoluteFile());
+            background = ImageIO.read(getClass().getResourceAsStream(pathInFolder+backgroundFileName));
         } catch (IOException e) {
             e.printStackTrace();
         }
