@@ -2,8 +2,6 @@
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
 /.idea/
-/DunkTheBaballe.iml
-*.iml
 
 # User-specific stuff
 .idea/**/workspace.xml
