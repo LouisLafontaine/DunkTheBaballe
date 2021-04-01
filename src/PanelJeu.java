@@ -10,7 +10,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     // Attributs
     //======================================================================
     protected final Balle balle;
-    protected Timer timer;
+    protected Timer gameLoopTimer;
     protected Son musique;
     protected int lastClickX; // enregistre la pos x du dernier click
     protected int lastClickY; // enregistre la pos y du dernier click
@@ -19,7 +19,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     protected boolean clicking; // true si en train de clicker
     protected Image background; // image de fond
     protected ArrayList<Obstacle> obstacles; // tableau d'obstacle
-    protected Panier p;
+    protected Panier panier;
     protected boolean pressingKey_Q;
 
     // Constructeur
@@ -29,7 +29,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         balle = new Balle(300,250,25,0, 0, "Character/fireBall.png");
 
         // Initialisation zone d'arrivée
-        p = new Panier(700, 300, 60);
+        panier = new Panier(700, 300, 60);
 
         // Initialisation des obstacles
         Obstacle obstacle1 = new Obstacle(100,50, 300, 20);
@@ -46,9 +46,9 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         obstacles.add(obstacle4);
         obstacles.add(obstacle5);
 
-        // Initialisation timer pour animation
+        // Initialisation gameLoopTimer pour animation
         int fps = 120;
-        timer = new Timer(1000/ fps, this);
+        gameLoopTimer = new Timer(1000/ fps, this);
 
         // Initialisation musique de fond
         musique = new Son("Music/Pokemon.wav");
@@ -79,7 +79,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         balle.drawBalle(g);
 
         // Panier
-        p.drawPanier(g);
+        panier.drawPanier(g);
 
         // Obstacles
         for(Obstacle o : obstacles){
@@ -96,9 +96,9 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     //======================================================================
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == timer){
+        if(e.getSource() == gameLoopTimer){
             balle.updatePosBalle();
-            balle.checkSolveNotInBounds(getWidth(),getHeight(), timer);
+            balle.checkSolveNotInBounds(getWidth(),getHeight(), gameLoopTimer);
             checkSolveWin();
             balle.checkSolveCollisions(obstacles);
             repaint();
@@ -120,7 +120,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     public void mouseReleased(MouseEvent e) {
         setLastClickOff();
         if(balle.toucheBalle(lastClickX,lastClickY)) {
-            balle.throwBalle(e, timer);
+            balle.throwBalle(e, gameLoopTimer);
             repaint();
         }
     }
@@ -205,7 +205,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
 
     private void pressingSpaceBarToReset(KeyEvent e) {
         if(e.getKeyCode() == KeyEvent.VK_SPACE) {
-            balle.resetPosBalle(timer, true);
+            balle.resetPosBalle(gameLoopTimer, true);
             repaint();
         }
     }
@@ -226,9 +226,9 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     }
 
     public void checkSolveWin() {
-        if(balle.hasCollided(p)){
+        if(balle.hasCollided(panier)){
             System.out.println("gagné");
-            balle.resetPosBalle(timer, false);
+            balle.resetPosBalle(gameLoopTimer, false);
             Son winSound = new Son("Sound/8bitWin.wav");
             musique.clip.stop();
             winSound.clip.start();
