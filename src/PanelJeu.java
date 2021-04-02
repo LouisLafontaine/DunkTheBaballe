@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class PanelJeu extends JPanel implements ActionListener, MouseListener, MouseMotionListener, KeyListener{
     // Attributs
@@ -21,16 +22,11 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     protected ArrayList<Obstacle> obstacles; // tableau d'obstacle
     protected Panier panier;
     protected boolean pressingKey_Q;
-    ArrayList<Animated> testAnimation;
+    LinkedList<Animated> animatedItems;
 
     // Constructeur
     //======================================================================
     public PanelJeu(){
-        testAnimation = new ArrayList<>();
-        testAnimation.add(new Animated("AnimationTest/blueFire.png", 100, 200));
-        testAnimation.add(new Animated("AnimationTest/fire.png",300, 100));
-        testAnimation.add(new Animated("AnimationTest/flameCircle.png",200,200));
-
         // Initialisation de la balle
         balle = new Balle(300,250,25,0, 0, "Character/fireBall.png");
 
@@ -51,6 +47,12 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         obstacles.add(obstacle3);
         obstacles.add(obstacle4);
         obstacles.add(obstacle5);
+
+        // Initialisation tableau objets animés
+        animatedItems = new LinkedList<>();
+        animatedItems.add(new Animated("AnimationTest/blueFire.png",100,200,9,9,8, 24,true));
+        animatedItems.add(new Animated("AnimationTest/redTornado.png",300, 100,8,8,3,24, true));
+        animatedItems.add(new Animated("AnimationTest/flameCircle.png",200,200,7,7,3,60,true));
 
         // Initialisation gameLoopTimer pour animation
         int fps = 120;
@@ -97,8 +99,8 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         g.setColor(Color.black);
         if(pressingKey_Q) g.fillRect(lastClickX, lastClickY, Math.abs(clickX-lastClickX), Math.abs(clickY-lastClickY));
 
-        for(Animated animation:testAnimation){
-            g.drawImage(animation.currentFrame, animation.posX, animation.posY, null);
+        for(Animated animation : animatedItems){
+            g.drawImage(animation.currentFrame, animation.x, animation.y, null);
         }
 
 
