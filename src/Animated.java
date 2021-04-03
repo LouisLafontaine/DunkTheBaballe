@@ -31,8 +31,8 @@ public class Animated implements ActionListener {
         pointerY = 0;
         W = spriteSheet.getWidth();
         H = spriteSheet.getHeight();
-        oneRow = W/columns;
-        oneColumn = H/rows;
+        oneRow = H/rows;
+        oneColumn = W/columns;
         this.orientation  = orientation;
 
         animationTimer = new Timer(1000/fps,this);
@@ -46,13 +46,13 @@ public class Animated implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == animationTimer){
             if(orientation){
-                pointerX = (pointerX + (oneRow));
+                pointerX = (pointerX + (oneColumn));
                 pointerY = pointerY + ( pointerX/(W) ) * (oneRow);
                 pointerX %= W;
                 pointerY %= H;
             }else {
                 pointerY = (pointerY + (oneRow));
-                pointerX = pointerX + ( pointerY/(W) ) * (oneRow);
+                pointerX = pointerX + ( pointerY/(W) ) * (oneColumn);
                 pointerY %= H;
                 pointerX %= W;
             }
@@ -69,6 +69,6 @@ public class Animated implements ActionListener {
     }
 
     public BufferedImage getCurrentFrame(){
-        return spriteSheet.getSubimage(pointerX, pointerY,oneRow, oneColumn);
+        return spriteSheet.getSubimage(pointerX, pointerY,oneColumn, oneRow);
     }
 }
