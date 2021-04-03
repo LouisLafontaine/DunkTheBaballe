@@ -9,27 +9,35 @@ import java.util.ArrayList;
 public class Animated implements ActionListener {
     int x;
     int y;
-    int pointerCurrentFrame;
-    int numberOfFrames;
+    int pointerX;
+    int pointerY;
+    int W;
+    int H;
+    int oneRow;
+    int oneColumn;
+    boolean orientation;
     int maxPlayCounter;
     BufferedImage spriteSheet; // image contenant les différentes frames
-    BufferedImage currentFrame; // image actuelle de l'objet animé
-    ArrayList<BufferedImage> frames; // tableau contenant l'ensemble des frames de l'animation
     Timer animationTimer; // Timer qui permet d'actualiser l'animation de l'objet
 
     /*noFrames correspond au nombres de frames vide à la fin de la spritesheet*/
     public Animated(String fileName, int x, int y, int rows, int columns, int noFrames, int fps, int maxPlayCounter, boolean orientation){
+
+        initializeSpritesheet(fileName);
+
         this.x = x;
         this.y = y;
+        pointerX = 0;
+        pointerY = 0;
+        W = spriteSheet.getWidth();
+        H = spriteSheet.getHeight();
+        oneRow = W/columns;
+        oneColumn = H/rows;
+        this.orientation  = orientation;
 
         animationTimer = new Timer(1000/fps,this);
 
-        initializeBufferedImage(fileName);
-        initializeFrames(rows, columns, noFrames, orientation);
-        numberOfFrames = frames.size();
-        currentFrame = frames.get(0);
-
-        this.maxPlayCounter = maxPlayCounter * numberOfFrames;
+        this.maxPlayCounter = (maxPlayCounter * rows * columns) - noFrames;
 
         animationTimer.start();
     }
@@ -37,12 +45,22 @@ public class Animated implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == animationTimer){
-            setNextFrame();
+            if(orientation){
+                pointerX = (pointerX + (oneRow));
+                pointerY = pointerY + ( pointerX/(W) ) * (oneRow);
+                pointerX %= W;
+                pointerY %= H;
+            }else {
+                pointerY = (pointerY + (oneRow));
+                pointerX = pointerX + ( pointerY/(W) ) * (oneRow);
+                pointerY %= H;
+                pointerX %= W;
+            }
             maxPlayCounter --;
         }
     }
 
-    private void initializeBufferedImage(String fileName) {
+    private void initializeSpritesheet(String fileName) {
         try {
             spriteSheet = ImageIO.read(getClass().getResourceAsStream(fileName));
         } catch (IOException e) {
@@ -50,33 +68,7 @@ public class Animated implements ActionListener {
         }
     }
 
-    private void initializeFrames(int rows, int columns, int noFrames, boolean orientation){
-        frames = new ArrayList<>();
-        int pointeurX = 0;
-        int pointeurY = 0;
-        int W = spriteSheet.getWidth();
-        int H = spriteSheet.getHeight();
-        int oneRow = W/columns;
-        int oneColumn = H/rows;
-        if(orientation){
-            for(int i=0; i<((rows*columns) - noFrames); i++){
-                frames.add(spriteSheet.getSubimage(pointeurX, pointeurY,oneRow, oneColumn));
-                pointeurX = (pointeurX + (oneRow));
-                pointeurY = pointeurY + ( pointeurX/(W) ) * (oneRow);
-                pointeurX %= W;
-            }
-        }else {
-            for(int i=0; i<((rows*columns) - noFrames); i++){
-                frames.add(spriteSheet.getSubimage(pointeurX, pointeurY,oneRow, oneColumn));
-                pointeurY = (pointeurY + (oneRow));
-                pointeurX = pointeurX + ( pointeurY/(W) ) * (oneRow);
-                pointeurY %= H;
-            }
-        }
-    }
-
-    private void setNextFrame() {
-        pointerCurrentFrame = (pointerCurrentFrame + 1) % numberOfFrames;
-        currentFrame = frames.get(pointerCurrentFrame);
+    public BufferedImage getCurrentFrame(){
+        return spriteSheet.getSubimage(pointerX, pointerY,oneRow, oneColumn);
     }
 }

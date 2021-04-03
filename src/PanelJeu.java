@@ -97,7 +97,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         if(pressingKey_Q) g.fillRect(lastClickX, lastClickY, Math.abs(clickX-lastClickX), Math.abs(clickY-lastClickY));
 
         for(Animated animation : animatedItems){
-            g.drawImage(animation.currentFrame, animation.x, animation.y, null);
+            g.drawImage(animation.getCurrentFrame(), animation.x, animation.y, null);
         }
     }
 
