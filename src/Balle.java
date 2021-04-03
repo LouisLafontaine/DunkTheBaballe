@@ -38,7 +38,7 @@ public class Balle {
         xCollision = xInit;
         yCollision = yInit;
         moving = false;
-        g = 0.08;
+        g = 0.085;
         initializeCharacterImage(characterImageFileName);
     }
 
@@ -121,7 +121,7 @@ public class Balle {
         impactSound.clip.start();
 
         // Coefficient d'amortissement
-        double amortissement = 0.95;
+        double amortissement = 0.9;
 
         /*
          * Afin de Résoudre une collision on a besoin de calculer le point où celle-ci a eu lieu.

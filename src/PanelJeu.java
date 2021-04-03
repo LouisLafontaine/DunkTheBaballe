@@ -106,7 +106,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == gameLoopTimer){
-            animatedItems.removeIf(animation -> animation.maxPlayCounter == 0);
+            animatedItems.removeIf(animation -> animation.maxPlayCounter == 0 );
             if(balle.moving){
                 balle.updatePosBalle();
                 balle.checkSolveNotInBounds(getWidth(),getHeight());
