@@ -19,6 +19,7 @@ public class Balle {
     protected int d; // diamètre
     protected double vx; // vitesse selon x
     protected double vy; // vitesse selon y
+    protected boolean moving;
     protected int t; // variable temps pour calcul de la trajectoire
     protected final double g; // constante gravité
     Image characterImage;
@@ -36,7 +37,8 @@ public class Balle {
         this.t = 0;
         xCollision = xInit;
         yCollision = yInit;
-        g = 0.08;
+        moving = false;
+        g = 0.085;
         initializeCharacterImage(characterImageFileName);
     }
 
@@ -63,8 +65,8 @@ public class Balle {
         y = 0.5*g*t*t + vy*t + yCollision;
     }
 
-    public void resetPosBalle(Timer timer, boolean sound){
-        timer.stop();
+    public void resetPosBalle(boolean sound){
+        moving = false;
         x = xInit;
         y = yInit;
         xPrev =  xInit;
@@ -94,11 +96,11 @@ public class Balle {
         return (distanceBalle(x,y) < d/2);
     }
 
-    public void throwBalle(MouseEvent e, Timer timer) {
+    public void throwBalle(MouseEvent e) {
         double mouseSensibility = 0.03;
         vx = (x - e.getX()) * mouseSensibility;
         vy = (y - e.getY()) * mouseSensibility;
-        timer.start();
+        moving = true;
     }
 
     // Méthodes Collisions
@@ -119,7 +121,7 @@ public class Balle {
         impactSound.clip.start();
 
         // Coefficient d'amortissement
-        double amortissement = 0.95;
+        double amortissement = 0.9;
 
         /*
          * Afin de Résoudre une collision on a besoin de calculer le point où celle-ci a eu lieu.
@@ -191,9 +193,9 @@ public class Balle {
         }
     }
 
-    public void checkSolveNotInBounds(int largueur, int hauteur, Timer timer) {
+    public void checkSolveNotInBounds(int largueur, int hauteur) {
         if(notInBounds(largueur, hauteur)){
-            resetPosBalle(timer, true);
+            resetPosBalle(true);
         }
     }
 }

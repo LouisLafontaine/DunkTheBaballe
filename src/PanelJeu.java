@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class PanelJeu extends JPanel implements ActionListener, MouseListener, MouseMotionListener, KeyListener{
     // Attributs
@@ -21,6 +22,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     protected ArrayList<Obstacle> obstacles; // tableau d'obstacle
     protected Panier panier;
     protected boolean pressingKey_Q;
+    LinkedList<Animated> animatedItems;
 
     // Constructeur
     //======================================================================
@@ -46,12 +48,17 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         obstacles.add(obstacle4);
         obstacles.add(obstacle5);
 
+        // Initialisation tableau objets animés
+        animatedItems = new LinkedList<>();
+
         // Initialisation gameLoopTimer pour animation
         int fps = 120;
         gameLoopTimer = new Timer(1000/ fps, this);
+        gameLoopTimer.start();
+
 
         // Initialisation musique de fond
-        musique = new Son("Music/Pokemon.wav");
+        musique = new Son("Music/8bitMegaBattle.wav");
         musique.clip.loop(Clip.LOOP_CONTINUOUSLY);
 
         // Initialisation image de fond
@@ -89,7 +96,9 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         g.setColor(Color.black);
         if(pressingKey_Q) g.fillRect(lastClickX, lastClickY, Math.abs(clickX-lastClickX), Math.abs(clickY-lastClickY));
 
-
+        for(Animated animation : animatedItems){
+            g.drawImage(animation.getCurrentFrame(), animation.x, animation.y, null);
+        }
     }
 
     // Animation
@@ -97,10 +106,19 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == gameLoopTimer){
-            balle.updatePosBalle();
-            balle.checkSolveNotInBounds(getWidth(),getHeight(), gameLoopTimer);
-            checkSolveWin();
-            balle.checkSolveCollisions(obstacles);
+            animatedItems.removeIf(animation -> animation.maxPlayCounter == 0 );
+            if(balle.moving){
+                balle.updatePosBalle();
+                balle.checkSolveNotInBounds(getWidth(),getHeight());
+                balle.checkSolveCollisions(obstacles);
+                checkSolveWin();
+                for(Obstacle o : obstacles){
+                    if(balle.hasCollided(o)){
+                        animatedItems.add(new Animated("AnimationTest/explosion2.png",(int)balle.x-32,(int)balle.y-64,1,8,0, 16,1,true));
+                        break;
+                    }
+                }
+            }
             repaint();
         }
     }
@@ -114,15 +132,17 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     @Override
     public void mousePressed(MouseEvent e) {
         setLastClickOn(e.getX(),e.getY());
+        chargingAnimation();
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
         setLastClickOff();
         if(balle.toucheBalle(lastClickX,lastClickY)) {
-            balle.throwBalle(e, gameLoopTimer);
+            balle.throwBalle(e);
             repaint();
         }
+        animatedItems.removeLast();
     }
 
     @Override
@@ -174,6 +194,8 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             repaint();
         }
         if(e.getKeyCode() == KeyEvent.VK_R) musique.clip.start();
+
+        if(e.getKeyCode() == KeyEvent.VK_ENTER) animatedItems.clear();
     }
 
     @Override
@@ -205,7 +227,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
 
     private void pressingSpaceBarToReset(KeyEvent e) {
         if(e.getKeyCode() == KeyEvent.VK_SPACE) {
-            balle.resetPosBalle(gameLoopTimer, true);
+            balle.resetPosBalle(true);
             repaint();
         }
     }
@@ -228,7 +250,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     public void checkSolveWin() {
         if(balle.hasCollided(panier)){
             System.out.println("gagné");
-            balle.resetPosBalle(gameLoopTimer, false);
+            balle.resetPosBalle(false);
             Son winSound = new Son("Sound/8bitWin.wav");
             musique.clip.stop();
             winSound.clip.start();
@@ -246,5 +268,11 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
 
     public void ifSetPressingKey_Q_Off(KeyEvent e) {
         if(e.getKeyCode() == KeyEvent.VK_Q) pressingKey_Q = false;
+    }
+
+    public void chargingAnimation() {
+        if(balle.toucheBalle(lastClickX, lastClickY)) {
+            animatedItems.add(new Animated("AnimationTest/flameCircle.png",(int)balle.xInit-50,(int)balle.yInit-55,7,7,8, 30,-1,true));
+        }
     }
 }
