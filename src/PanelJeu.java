@@ -185,8 +185,10 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         if(e.getKeyCode() == KeyEvent.VK_A){
             balle.xInit = clickX;
             balle.yInit = clickY;
-            balle.x = balle.xInit;
-            balle.y = balle.yInit;
+            balle.x = clickX;
+            balle.y = clickY;
+            balle.xCollision = clickX;
+            balle.yCollision = clickY;
             repaint();
         }
         if(e.getKeyCode() == KeyEvent.VK_P) {
