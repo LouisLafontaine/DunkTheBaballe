@@ -121,6 +121,9 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             }
             repaint();
         }
+        if (balle.balleBloquee()){
+            balle.resetPosBalle(true);
+        }
     }
 
     // MouseListener interface methods

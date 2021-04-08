@@ -22,6 +22,7 @@ public class Balle {
     protected boolean moving;
     protected int t; // variable temps pour calcul de la trajectoire
     protected final double g; // constante gravité
+    protected int compteur; // compteur balle bloquée
     Image characterImage;
 
     // Constructeur
@@ -35,6 +36,7 @@ public class Balle {
         this.vy = vy;
         this.d = r;
         this.t = 0;
+        this.compteur = 0;
         xCollision = xInit;
         yCollision = yInit;
         moving = false;
@@ -73,6 +75,7 @@ public class Balle {
         yPrev = yInit;
         xCollision = xInit;
         yCollision = yInit;
+        compteur = 0;
         t = 0;
 
         // Son de reset
@@ -121,7 +124,7 @@ public class Balle {
         impactSound.clip.start();
 
         // Coefficient d'amortissement
-        double amortissement = 0.9;
+        double amortissement = 0.8;
 
         /*
          * Afin de Résoudre une collision on a besoin de calculer le point où celle-ci a eu lieu.
@@ -198,4 +201,15 @@ public class Balle {
             resetPosBalle(true);
         }
     }
+
+    public boolean balleBloquee(){
+        if(distanceBalle((int)xPrev,(int)yPrev) < 5){
+            compteur++;
+        }
+        else {
+            compteur = 0;
+        }
+        return (compteur>500);
+    }
+
 }
