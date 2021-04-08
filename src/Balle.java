@@ -137,14 +137,14 @@ public class Balle {
             double ordonneOrigine = y  - ( (y - yPrev)/(x - xPrev) ) * x;
 
             // face de gauche
-            if (xPrev < o.x && yPrev > o.y && yPrev < o.y+o.hauteur) {
+            if (xPrev < o.x) {
                 xCollision = o.x;
                 yCollision = ( coefficientDirecteur * o.x + ordonneOrigine);
                 vx = -amortissement * (x - xPrev);
                 vy = amortissement * (y - yPrev);
             }
             // face de droite
-            else if (xPrev > o.x + o.largeur && yPrev > o.y && yPrev < o.y+o.hauteur) {
+            else if (xPrev > o.x + o.largeur) {
                 xCollision = o.x + o.largeur;
                 yCollision = ( coefficientDirecteur * (o.x+ o.largeur) + ordonneOrigine);
                 vx = -amortissement * (x - xPrev);
