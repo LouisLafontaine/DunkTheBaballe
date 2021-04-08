@@ -203,7 +203,7 @@ public class Balle {
     }
 
     public boolean balleBloquee(){
-        if(distanceBalle((int)xCollision,(int)yCollision) < 5){
+        if(distanceBalle((int)xCollision,(int)yCollision) < 5 && moving){
             compteur++;
         }
         else {
