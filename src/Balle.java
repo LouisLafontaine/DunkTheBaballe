@@ -203,13 +203,13 @@ public class Balle {
     }
 
     public boolean balleBloquee(){
-        if(distanceBalle((int)xPrev,(int)yPrev) < 5){
+        if(distanceBalle((int)xCollision,(int)yCollision) < 5){
             compteur++;
         }
         else {
             compteur = 0;
         }
-        return (compteur>500);
+        return (compteur>300);
     }
 
 }
