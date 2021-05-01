@@ -22,11 +22,18 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     protected ArrayList<Obstacle> obstacles; // tableau d'obstacle
     protected Panier panier;
     protected boolean pressingKey_Q;
+    protected int resolution;
     LinkedList<Animated> animatedItems;
 
     // Constructeur
     //======================================================================
     public PanelJeu(){
+
+        // Initialisation image de fond
+        setBackgroundImage("FantasyForest.png");
+
+        //Taille panel
+
         // Initialisation de la balle
         balle = new Balle(300,250,25,0, 0, "Character/fireBall.png");
 
@@ -58,11 +65,8 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
 
 
         // Initialisation musique de fond
-        musique = new Son("Music/8bitMegaBattle.wav");
+        musique = new Son("Music/Pokemon.wav");
         musique.clip.loop(Clip.LOOP_CONTINUOUSLY);
-
-        // Initialisation image de fond
-        setBackgroundImage("FantasyForest.png");
 
         // Ajout interface
         addMouseListener(this);

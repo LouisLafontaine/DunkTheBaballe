@@ -3,32 +3,22 @@ import java.awt.*;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 
-public class FenetreJeu extends JFrame implements ComponentListener {
-    // Attributs
-    //======================================================================
-    protected PanelJeu mainPanel;
+public class FenetreMenu extends JFrame implements ComponentListener {
+    //Attributs
+    protected PanelMenu mainPanel;
 
-    // Constructeur
-    //======================================================================
-    public FenetreJeu(boolean playMusic){
-        super("Vise le trou");
-
-        mainPanel = new PanelJeu();
-        mainPanel.setFocusable(true); // Sinon la KeyListener interface ne marche pas
+    public FenetreMenu(){
+        super("Menu jeu");
+        mainPanel = new PanelMenu();
         add(mainPanel);
-        if(!playMusic) mainPanel.musique.clip.stop();
-
         addComponentListener(this);
 
         setSize(1000,1000);
         setLocation(200, 150);
         setVisible(true);
-        //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
-    // ComponentListener interface methods
-    //======================================================================
-    @Override
     public void componentResized(ComponentEvent e) {
         maintainProportion(e);
     }
@@ -45,8 +35,6 @@ public class FenetreJeu extends JFrame implements ComponentListener {
     public void componentHidden(ComponentEvent e) {
     }
 
-    // Méthodes
-    //======================================================================
     public void maintainProportion(ComponentEvent e) {
         int W = mainPanel.background.getWidth(null);
         int H = mainPanel.background.getHeight(null);
