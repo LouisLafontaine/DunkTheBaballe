@@ -40,5 +40,15 @@ public class FenetreMenu extends JFrame implements ComponentListener {
         int H = mainPanel.background.getHeight(null);
         Rectangle r = e.getComponent().getBounds();
         e.getComponent().setBounds(r.x, r.y, r.width, r.width*H/W);
+        System.out.println(mainPanel.getHeight()+" "+mainPanel.getWidth());
+
+        int x = e.getComponent().getWidth();
+        int y = e.getComponent().getHeight();
+        double t = x*x + y*y;
+        int taille = (int)(30.0+t/100000);
+        System.out.println(taille);
+
+        mainPanel.title.setBounds((int)(x/2-50), (int)(y/20), 200,100);
+        mainPanel.title.setFont(new Font("Arial", Font.BOLD, taille));
     }
 }
