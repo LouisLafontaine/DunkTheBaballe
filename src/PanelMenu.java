@@ -19,20 +19,32 @@ public class PanelMenu extends JPanel implements ActionListener{
 
     protected Image background;
 
+    protected FenetreJeu fenetre1;
+    protected FenetreJeu fenetre2;
+    protected FenetreJeu fenetre3;
+    protected FenetreJeu fenetre4;
+    protected FenetreJeu fenetreFree;
+
     public PanelMenu(){
 
-        setBackgroundImage("DarkForest.jpg");
+        setBackgroundImage("ImageMenu.jpg");
+
+        setLayout(null);
 
         title = new JLabel("MENU");
-        title.setFont(new Font("Arial", Font.BOLD, 40));
-        title.setBounds(100,20,100,100);
-        title.setForeground(Color.WHITE);
+        setTitle();
 
         lvl1 = new JButton("NIVEAU 1");
         lvl2 = new JButton("NIVEAU 2");
         lvl3 = new JButton("NIVEAU 3");
         lvl4 = new JButton("NIVEAU 4");
         free = new JButton("EDITER");
+
+        lvl1.addActionListener(this);
+        lvl2.addActionListener(this);
+        lvl3.addActionListener(this);
+        lvl4.addActionListener(this);
+        free.addActionListener(this);
 
         lvl1.setBounds(20,100,80,20);
         lvl2.setBounds(20,120,80,20);
@@ -58,8 +70,6 @@ public class PanelMenu extends JPanel implements ActionListener{
         add(lvl3);
         add(lvl4);
         add(free);
-
-        System.out.println(getHeight()+" "+getWidth());
     }
 
     public void paintComponent(Graphics g) {
@@ -70,6 +80,30 @@ public class PanelMenu extends JPanel implements ActionListener{
     }
 
     public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == lvl1) {
+            fenetre1 = new FenetreJeu(true, 1);
+            fenetre1.setVisible(true);
+        }
+
+        if(e.getSource() == lvl2) {
+            fenetre2 = new FenetreJeu(false, 2);
+            fenetre2.setVisible(true);
+        }
+
+        if(e.getSource() == lvl3) {
+            fenetre3 = new FenetreJeu(false, 3);
+            fenetre3.setVisible(true);
+        }
+
+        if(e.getSource() == lvl4) {
+            fenetre4 = new FenetreJeu(false, 4);
+            fenetre4.setVisible(true);
+        }
+
+        if(e.getSource() == free) {
+            fenetreFree = new FenetreJeu(false, 5);
+            fenetreFree.setVisible(true);
+        }
     }
 
     public void setBackgroundImage(String backgroundFileName){
@@ -79,5 +113,23 @@ public class PanelMenu extends JPanel implements ActionListener{
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setTitle (){
+        int width = getWidth();
+        int height = getHeight();
+
+        title.setForeground(Color.WHITE);
+        title.setBounds((int)(385), 175, 400,100);
+        title.setFont(new Font("Arial", Font.BOLD, 80));
+    }
+
+    public void setButton (JButton lvl, int indice){
+        int width = getWidth();
+        int height = getHeight();
+
+        lvl.setBounds((int)(width/4),100,80,20);
+        lvl.setBackground(Color.GREEN);
+        lvl.setForeground(Color.WHITE);
     }
 }

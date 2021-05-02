@@ -27,7 +27,9 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
 
     // Constructeur
     //======================================================================
-    public PanelJeu(){
+    public PanelJeu(int indice){
+
+        setLayout(null);
 
         // Initialisation image de fond
         setBackgroundImage("FantasyForest.png");
@@ -35,25 +37,14 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         //Taille panel
 
         // Initialisation de la balle
-        balle = new Balle(300,250,25,0, 0, "Character/fireBall.png");
+        balle = new Balle(300,750,25,0, 0, "Character/fireBall.png");
 
         // Initialisation zone d'arrivée
-        panier = new Panier(700, 300, 60);
+        panier = new Panier(1800, 500, 60);
 
         // Initialisation des obstacles
-        Obstacle obstacle1 = new Obstacle(100,50, 300, 20);
-        Obstacle obstacle2 = new Obstacle(380,90, 20, 200);
-        Obstacle obstacle3 = new Obstacle(100,90, 20, 200);
-        Obstacle obstacle4 = new Obstacle(100,310, 300, 20);
-        Obstacle obstacle5 = new Obstacle(200,150, 80, 80);
-
-        // Ajout des obstacles au tableau d'obstacles
         obstacles = new ArrayList<>();
-        obstacles.add(obstacle1);
-        obstacles.add(obstacle2);
-        obstacles.add(obstacle3);
-        obstacles.add(obstacle4);
-        obstacles.add(obstacle5);
+        setLvl(indice);
 
         // Initialisation tableau objets animés
         animatedItems = new LinkedList<>();
@@ -283,5 +274,69 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         if(balle.toucheBalle(lastClickX, lastClickY)) {
             animatedItems.add(new Animated("AnimationTest/flameCircle.png",(int)balle.xInit-50,(int)balle.yInit-55,7,7,8, 30,-1,true));
         }
+    }
+
+    public void setLvl(int indice) {
+        if (indice == 1) {
+            Obstacle obstacle11 = new Obstacle(100,50, 300, 20);
+            Obstacle obstacle12 = new Obstacle(380,90, 20, 200);
+            Obstacle obstacle13 = new Obstacle(100,90, 20, 200);
+            Obstacle obstacle14 = new Obstacle(100,310, 300, 20);
+            Obstacle obstacle15 = new Obstacle(200,150, 80, 80);
+
+            obstacles.add(obstacle11);
+            obstacles.add(obstacle12);
+            obstacles.add(obstacle13);
+            obstacles.add(obstacle14);
+            obstacles.add(obstacle15);
+        }
+
+        if (indice == 2) {
+            Obstacle obstacle21 = new Obstacle(100,50, 300, 20);
+            Obstacle obstacle22 = new Obstacle(380,90, 20, 200);
+            Obstacle obstacle23 = new Obstacle(100,90, 20, 200);
+            Obstacle obstacle24 = new Obstacle(100,310, 300, 20);
+
+            obstacles.add(obstacle21);
+            obstacles.add(obstacle22);
+            obstacles.add(obstacle23);
+            obstacles.add(obstacle24);
+        }
+
+        if (indice == 3) {
+            Obstacle obstacle31 = new Obstacle(100,50, 300, 20);
+            Obstacle obstacle32 = new Obstacle(380,90, 20, 200);
+            Obstacle obstacle33 = new Obstacle(100,90, 20, 200);
+
+            obstacles.add(obstacle31);
+            obstacles.add(obstacle32);
+            obstacles.add(obstacle33);
+        }
+
+        if (indice == 4) {
+            Obstacle obstacle41 = new Obstacle(100,50, 300, 20);
+            Obstacle obstacle42 = new Obstacle(380,90, 20, 200);
+
+            obstacles.add(obstacle41);
+            obstacles.add(obstacle42);
+        }
+
+        if (indice == 5) {
+            JLabel text1 = new JLabel("Placer un obstacle : q");
+            JLabel text2 = new JLabel("Supprimer un obstacle : p");
+            JLabel text3 = new JLabel("Supprimer tous les obstacles : w");
+
+            text1.setBounds(20,500,200,50);
+            text2.setBounds(220,500,200,50);
+            text3.setBounds(440,500,200,50);
+
+            add(text1);
+            add(text2);
+            add(text3);
+        }
+
+        JLabel text4 = new JLabel("Réinitialiser : espace");
+        text4.setBounds(20,500,200,50);
+        add(text4);
     }
 }

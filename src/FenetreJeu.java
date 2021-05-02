@@ -10,20 +10,20 @@ public class FenetreJeu extends JFrame implements ComponentListener {
 
     // Constructeur
     //======================================================================
-    public FenetreJeu(boolean playMusic){
+    public FenetreJeu(boolean playMusic, int indice){
         super("Vise le trou");
 
-        mainPanel = new PanelJeu();
+        mainPanel = new PanelJeu(indice);
         mainPanel.setFocusable(true); // Sinon la KeyListener interface ne marche pas
         add(mainPanel);
         if(!playMusic) mainPanel.musique.clip.stop();
 
         addComponentListener(this);
 
-        setSize(1000,1000);
-        setLocation(200, 150);
+        setSize(2000,1000);
+        setLocation(0, 0);
         setVisible(true);
-        //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     // ComponentListener interface methods
