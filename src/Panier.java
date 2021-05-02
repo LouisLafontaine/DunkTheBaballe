@@ -5,10 +5,10 @@ public class Panier {
     int y; // pos y
     int d ; // rayon
 
-    public Panier(int x, int y, int d) {
+    public Panier(int x, int y) {
         this.x = x;
         this.y = y;
-        this.d = d;
+        this.d = 50;
     }
 
     public void drawPanier(Graphics g) {

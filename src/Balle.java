@@ -21,27 +21,27 @@ public class Balle {
     protected double vy; // vitesse selon y
     protected boolean moving;
     protected int t; // variable temps pour calcul de la trajectoire
-    protected final double g; // constante gravité
+    protected double g; // constante gravité
     protected int compteur; // compteur balle bloquée
     Image characterImage;
 
     // Constructeur
     //======================================================================
-    public Balle(int x, int y, int r, double vx, double vy, String characterImageFileName) {
+    public Balle(int x, int y) {
         this.x = x;
         this.y = y;
         this.xInit = x;
         this.yInit = y;
-        this.vx = vx;
-        this.vy = vy;
-        this.d = r;
+        this.vx = 0;
+        this.vy = 0;
+        this.d = 30;
         this.t = 0;
         this.compteur = 0;
         xCollision = xInit;
         yCollision = yInit;
         moving = false;
-        g = 0.085;
-        initializeCharacterImage(characterImageFileName);
+        g = 0.09;
+        initializeCharacterImage("Character/fireBall.png");
     }
 
     // Méthodes initialisation
@@ -100,7 +100,7 @@ public class Balle {
     }
 
     public void throwBalle(MouseEvent e) {
-        double mouseSensibility = 0.04;
+        double mouseSensibility = 0.025;
         vx = (x - e.getX()) * mouseSensibility;
         vy = (y - e.getY()) * mouseSensibility;
         moving = true;

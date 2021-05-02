@@ -1,5 +1,4 @@
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 
@@ -20,9 +19,10 @@ public class FenetreJeu extends JFrame implements ComponentListener {
 
         addComponentListener(this);
 
-        setSize(2000,1000);
-        setLocation(0, 0);
+        setSize(1500,1000);
+        setLocation(250, 50);
         setVisible(true);
+        setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
@@ -30,7 +30,6 @@ public class FenetreJeu extends JFrame implements ComponentListener {
     //======================================================================
     @Override
     public void componentResized(ComponentEvent e) {
-        maintainProportion(e);
     }
 
     @Override
@@ -43,14 +42,5 @@ public class FenetreJeu extends JFrame implements ComponentListener {
 
     @Override
     public void componentHidden(ComponentEvent e) {
-    }
-
-    // Méthodes
-    //======================================================================
-    public void maintainProportion(ComponentEvent e) {
-        int W = mainPanel.background.getWidth(null);
-        int H = mainPanel.background.getHeight(null);
-        Rectangle r = e.getComponent().getBounds();
-        e.getComponent().setBounds(r.x, r.y, r.width, r.width*H/W);
     }
 }
