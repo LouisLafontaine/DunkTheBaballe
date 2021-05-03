@@ -11,21 +11,21 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     // Attributs
     //======================================================================
     protected  Balle balle;
-    protected Son musique;
-    protected Panier panier;
+    protected Son musique; // Musique de fond
+    protected Panier panier; // Panier de victoire
     protected ArrayList<Obstacle> obstacles; // tableau d'obstacle
     protected Image background; // image de fond
-    LinkedList<Animated> animatedItems;
+    LinkedList<Animated> animatedItems; // Liste des animations
 
-    protected Timer gameLoopTimer;
-    protected Timer timeWinSound;
+    protected Timer gameLoopTimer; // Timer pour indiquer le nombre de repaint par seconde
+    protected Timer timeWinSound; // Timer pour relancer la musique de fond après le son de victoire
 
     protected int lastClickX; // enregistre la pos x du dernier click
     protected int lastClickY; // enregistre la pos y du dernier click
     protected int clickX; // enregistre la pos x actuelle du click quand dragged
     protected int clickY; // enregistre la pos x actuelle du click quand dragged
-    protected int indice;
-    protected int temps;
+    protected int indice; // Indice du niveau sélectionné
+    protected int temps; // Temps s'écoulant durant le son de victoire
 
     protected boolean clicking; // true si en train de clicker
     protected boolean pressingKey_Q;
@@ -293,6 +293,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         }
     }
 
+    // Méthode afin de placer les différents objets sur la fenêtre en fonction du niveau
     public void setLvl() {
         if (indice == 1) { // Niveau 1
 
@@ -351,17 +352,31 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
 
         if (indice == 3) { // Niveau 3
 
-            balle = new Balle(750, 500);
+            balle = new Balle(750, 300);
 
-            panier = new Panier(1400, 800);
+            panier = new Panier(1400, 700);
 
-            Obstacle obstacle31 = new Obstacle(100,50, 300, 20);
-            Obstacle obstacle32 = new Obstacle(380,90, 20, 200);
-            Obstacle obstacle33 = new Obstacle(100,90, 20, 200);
+            int e = 20;
+
+            Obstacle obstacle31 = new Obstacle(625,225, 200, e);
+            Obstacle obstacle32 = new Obstacle(675,225, e, 150);
+            Obstacle obstacle33 = new Obstacle(675,355, 245, e);
+            Obstacle obstacle34 = new Obstacle(805,225, e, 90);
+            Obstacle obstacle35 = new Obstacle(900,165, e, 210);
+            Obstacle obstacle36 = new Obstacle(355,50, e, 600);
+            Obstacle obstacle37 = new Obstacle(355,750, 350, e);
+            Obstacle obstacle38 = new Obstacle(900,550, 150, e);
+            Obstacle obstacle39 = new Obstacle(1200,850, 150, e);
 
             obstacles.add(obstacle31);
             obstacles.add(obstacle32);
             obstacles.add(obstacle33);
+            obstacles.add(obstacle34);
+            obstacles.add(obstacle35);
+            obstacles.add(obstacle36);
+            obstacles.add(obstacle37);
+            obstacles.add(obstacle38);
+            obstacles.add(obstacle39);
         }
 
         if (indice == 4) { // Niveau 4
@@ -406,6 +421,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         reset.setBounds(550,900,400,50);
     }
 
+    // Initialiser les zones de textes dans le panel de jeu
     public void setText (JLabel text){
 
         text.setOpaque(true);

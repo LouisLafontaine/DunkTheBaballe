@@ -1,4 +1,5 @@
 import javax.imageio.ImageIO;
+import javax.naming.InitialContext;
 import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
@@ -15,14 +16,14 @@ public class PanelMenu extends JPanel implements ActionListener{
 
     JLabel title;
 
-    protected Image background;
-
     protected FenetreJeu fenetre1;
     protected FenetreJeu fenetre2;
     protected FenetreJeu fenetre3;
     protected FenetreJeu fenetre4;
     protected FenetreJeu fenetreFree;
+
     protected Son musique;
+    protected Image background;
 
     public PanelMenu(){
 
@@ -34,15 +35,16 @@ public class PanelMenu extends JPanel implements ActionListener{
 
         setLayout(null);
 
+        //Initialisation titre
         title = new JLabel("MENU");
         setTitle();
 
+        //Initialisation des boutons
         lvl1 = new JButton("NIVEAU 1");
         lvl2 = new JButton("NIVEAU 2");
         lvl3 = new JButton("NIVEAU 3");
         lvl4 = new JButton("NIVEAU 4");
         free = new JButton("EDITER");
-
 
         setButton(lvl1,0,0);
         setButton(lvl2,0,150);
@@ -52,6 +54,7 @@ public class PanelMenu extends JPanel implements ActionListener{
 
     }
 
+    // Dessiner image du fond
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
@@ -61,32 +64,37 @@ public class PanelMenu extends JPanel implements ActionListener{
 
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == lvl1) {
+            //Création niveau 1
             musique.clip.stop();
-            fenetre1 = new FenetreJeu(true, 1); //Création niveau 1
+            fenetre1 = new FenetreJeu(true, 1);
             fenetre1.setVisible(true);
         }
 
         if(e.getSource() == lvl2) {
+            //Création niveau 2
             musique.clip.stop();
-            fenetre2 = new FenetreJeu(true, 2); //Création niveau 2
+            fenetre2 = new FenetreJeu(true, 2);
             fenetre2.setVisible(true);
         }
 
         if(e.getSource() == lvl3) {
+            //Création niveau 3
             musique.clip.stop();
-            fenetre3 = new FenetreJeu(true, 3); //Création niveau 3
+            fenetre3 = new FenetreJeu(true, 3);
             fenetre3.setVisible(true);
         }
 
         if(e.getSource() == lvl4) {
+            //Création niveau 4
             musique.clip.stop();
-            fenetre4 = new FenetreJeu(true, 4); //Création niveau 4
+            fenetre4 = new FenetreJeu(true, 4);
             fenetre4.setVisible(true);
         }
 
         if(e.getSource() == free) {
+            //Création niveau édition
             musique.clip.stop();
-            fenetreFree = new FenetreJeu(true, 5); //Création niveau édition
+            fenetreFree = new FenetreJeu(true, 5);
             fenetreFree.setVisible(true);
         }
     }
@@ -100,7 +108,9 @@ public class PanelMenu extends JPanel implements ActionListener{
         }
     }
 
-    public void setTitle (){ //Initialiser le texte du titre
+    //Méthodes d'initialisation du titre et des boutons
+
+    public void setTitle (){
 
         title.setForeground(Color.WHITE);
         title.setBounds((int)(385), 175, 400,100);

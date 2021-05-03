@@ -4,7 +4,7 @@ import java.awt.event.ComponentListener;
 
 public class FenetreMenu extends JFrame implements ComponentListener {
     //Attributs
-    protected PanelMenu mainPanel;
+    protected PanelMenu mainPanel; // Panel du menu
 
     public FenetreMenu(){
 

@@ -16,13 +16,16 @@ public class Balle {
     protected double yPrev; // pos y une étape plus tot
     protected double xCollision; // pos x de la dernière collision
     protected double yCollision; // pos y de la dernière collision
-    protected int d; // diamètre
     protected double vx; // vitesse selon x
     protected double vy; // vitesse selon y
-    protected boolean moving;
-    protected int t; // variable temps pour calcul de la trajectoire
     protected double g; // constante gravité
+
+    protected int d; // diamètre
     protected int compteur; // compteur balle bloquée
+    protected int t; // variable temps pour calcul de la trajectoire
+
+    protected boolean moving;
+
     Image characterImage;
 
     // Constructeur
