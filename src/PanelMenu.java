@@ -115,6 +115,7 @@ public class PanelMenu extends JPanel implements ActionListener{
         title.setForeground(Color.WHITE);
         title.setBounds((int)(385), 175, 400,100);
         title.setFont(new Font("Arial", Font.BOLD, 80));
+        add(title);
     }
 
     public void setButton (JButton button, int indiceX, int indiceY) { //Initialiser les boutons
