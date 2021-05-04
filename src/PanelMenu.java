@@ -1,9 +1,9 @@
 import javax.imageio.ImageIO;
-import javax.naming.InitialContext;
 import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 
 public class PanelMenu extends JPanel implements ActionListener{
@@ -127,7 +127,7 @@ public class PanelMenu extends JPanel implements ActionListener{
     public void setTitle (){
 
         title.setForeground(Color.WHITE);
-        title.setBounds((int)(385), 175, 400,100);
+        title.setBounds(385, 175, 400,100);
         title.setFont(new Font("Arial", Font.BOLD, 80));
         add(title);
     }
