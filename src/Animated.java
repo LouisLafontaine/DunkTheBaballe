@@ -69,6 +69,7 @@ public class Animated implements ActionListener {
     }
 
     public BufferedImage getCurrentFrame(){
+        if(maxPlayCounter <0) return null;
         return spriteSheet.getSubimage(pointerX, pointerY,oneColumn, oneRow);
     }
 }
