@@ -46,6 +46,20 @@ public class PanelMenu extends JPanel implements ActionListener{
         lvl4 = new JButton("NIVEAU 4");
         free = new JButton("EDITER");
 
+
+        lvl1.setOpaque(true);
+        lvl2.setOpaque(true);
+        lvl3.setOpaque(true);
+        lvl4.setOpaque(true);
+        free.setOpaque(true);
+
+        lvl1.setBorderPainted(false);
+        lvl2.setBorderPainted(false);
+        lvl3.setBorderPainted(false);
+        lvl4.setBorderPainted(false);
+        free.setBorderPainted(false);
+
+
         setButton(lvl1,0,0);
         setButton(lvl2,0,150);
         setButton(lvl3,550,0);
