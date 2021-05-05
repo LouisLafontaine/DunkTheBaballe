@@ -47,8 +47,16 @@ public class PanelMenu extends JPanel implements ActionListener{
 
     // Méthodes Initialisation
     //======================================================================
-    public void setTitle (){
+    public void setBackgroundImage(String backgroundFileName){
+        String pathInFolder = "BackgroundImage/";
+        try {
+            background = ImageIO.read(getClass().getResourceAsStream(pathInFolder+backgroundFileName));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
+    public void setTitle (){
         title.setForeground(Color.WHITE);
         title.setBounds(385, 175, 400,100);
         title.setFont(new Font("Arial", Font.BOLD, 80));
@@ -89,12 +97,5 @@ public class PanelMenu extends JPanel implements ActionListener{
 
     // Méthodes
     //======================================================================
-    public void setBackgroundImage(String backgroundFileName){
-        String pathInFolder = "BackgroundImage/";
-        try {
-            background = ImageIO.read(getClass().getResourceAsStream(pathInFolder+backgroundFileName));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+
 }
