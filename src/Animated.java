@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class Animated implements ActionListener {
     int x;
@@ -15,8 +14,9 @@ public class Animated implements ActionListener {
     int H;
     int oneRow;
     int oneColumn;
-    boolean orientation;
+    boolean orientation; // true si horizontale, false si vertical
     int maxPlayCounter;
+    final boolean PLAY_NO_STOP;
     BufferedImage spriteSheet; // image contenant les différentes frames
     Timer animationTimer; // Timer qui permet d'actualiser l'animation de l'objet
 
@@ -34,10 +34,32 @@ public class Animated implements ActionListener {
         oneRow = H/rows;
         oneColumn = W/columns;
         this.orientation  = orientation;
+        this.PLAY_NO_STOP = false;
 
         animationTimer = new Timer(1000/fps,this);
 
         this.maxPlayCounter = (maxPlayCounter * rows * columns) - noFrames;
+
+        animationTimer.start();
+    }
+    public Animated(String fileName, int x, int y, int rows, int columns, int fps, boolean orientation){
+
+        initializeSpritesheet(fileName);
+
+        this.x = x;
+        this.y = y;
+        pointerX = 0;
+        pointerY = 0;
+        W = spriteSheet.getWidth();
+        H = spriteSheet.getHeight();
+        oneRow = H/rows;
+        oneColumn = W/columns;
+        this.orientation  = orientation;
+        this.PLAY_NO_STOP = true;
+
+        animationTimer = new Timer(1000/fps,this);
+
+        this.maxPlayCounter = 1;
 
         animationTimer.start();
     }
@@ -56,7 +78,7 @@ public class Animated implements ActionListener {
                 pointerY %= H;
                 pointerX %= W;
             }
-            maxPlayCounter --;
+            if(!PLAY_NO_STOP) maxPlayCounter --;
         }
     }
 

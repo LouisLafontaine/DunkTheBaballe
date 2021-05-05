@@ -116,7 +116,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
                 checkSolveWin();
                 for(Obstacle o : obstacles){
                     if(balle.hasCollided(o)){
-                        animatedItems.add(new Animated("AnimationTest/explosion2.png",(int)balle.x-32,(int)balle.y-64,1,8,0, 16,1,true));
+                        animatedItems.add(new Animated("Animation/explosion2.png",(int)balle.x-32,(int)balle.y-64,1,8,0, 16,1,true));
                         break;
                     }
                 }
@@ -223,7 +223,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     // Méthodes
     //======================================================================
     public void setBackgroundImage(String backgroundFileName){
-        String pathInFolder = "BackgroundImage/";
+        String pathInFolder = "Background/";
         try {
             background = ImageIO.read(getClass().getResourceAsStream(pathInFolder+backgroundFileName));
         } catch (IOException e) {
@@ -289,7 +289,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
 
     public void chargingAnimation() {
         if(balle.toucheBalle(lastClickX, lastClickY)) {
-            animatedItems.add(new Animated("AnimationTest/flameCircle.png",(int)balle.xInit-50,(int)balle.yInit-55,7,7,8, 30,-1,true));
+            animatedItems.add(new Animated("Animation/flameCircle.png",(int)balle.xInit-50,(int)balle.yInit-55,7,7,8, 30,-1,true));
         }
     }
 
@@ -326,8 +326,8 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             int x = 150;
             int y = 100;
 
-            Obstacle obstacle21 = new Obstacle(x1+0*x,y1+0*y, l, h);
-            Obstacle obstacle22 = new Obstacle(x1+1*x,y1+1*y, l, h);
+            Obstacle obstacle21 = new Obstacle(x1, y1, l, h);
+            Obstacle obstacle22 = new Obstacle(x1+ x,y1+ y, l, h);
             Obstacle obstacle23 = new Obstacle(x1+2*x,y1+2*y, l, h);
             Obstacle obstacle24 = new Obstacle(x1+3*x,y1+3*y, l, h);
             Obstacle obstacle25 = new Obstacle(x1+4*x,y1+4*y, l, h);

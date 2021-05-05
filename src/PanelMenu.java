@@ -1,10 +1,8 @@
-import javax.imageio.ImageIO;
 import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 
 public class PanelMenu extends JPanel implements ActionListener{
     // Attributs
@@ -13,14 +11,17 @@ public class PanelMenu extends JPanel implements ActionListener{
     final JLabel title;
     final JButton[] buttons;
     protected Son musique;
-    protected Image background;
+    Timer animationTimer;
+    Animated background;
 
     // Constructeur
     //======================================================================
     public PanelMenu(FenetreMenu fenetreMenu){
         this.fenetreMenu = fenetreMenu;
 
-        setBackgroundImage("ImageMenu.jpg");
+        // Animated Background
+        background = new Animated("Background/JapanCity.png",0,0,25,5,30, true);
+        animationTimer = new Timer(1000/30, this);
 
         // Initialisation musique de fond
         musique = new Son("Music/8bitMoskau.wav");
@@ -45,22 +46,14 @@ public class PanelMenu extends JPanel implements ActionListener{
         setButton(buttons[3],550,150);
         setButton(buttons[4],275,300);
 
+        animationTimer.start();
     }
 
     // Méthodes Initialisation
     //======================================================================
-    public void setBackgroundImage(String backgroundFileName){
-        String pathInFolder = "BackgroundImage/";
-        try {
-            background = ImageIO.read(getClass().getResourceAsStream(pathInFolder+backgroundFileName));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void setTitle (){
-        title.setForeground(Color.WHITE);
-        title.setBounds(385, 175, 400,100);
+        title.setForeground(Color.white);
+        title.setBounds(555, 100, 400,100);
         title.setFont(new Font("Arial", Font.BOLD, 80));
         add(title);
     }
@@ -73,7 +66,7 @@ public class PanelMenu extends JPanel implements ActionListener{
         button.setForeground(Color.WHITE);
         button.setFont(new Font("Arial", Font.BOLD, 35));
         button.setSize(250, 75);
-        button.setLocation(100+indiceX,400+indiceY);
+        button.setLocation(275+indiceX,250+indiceY);
         add(button);
     }
 
@@ -83,7 +76,7 @@ public class PanelMenu extends JPanel implements ActionListener{
         super.paintComponent(g);
 
         // Image de found
-        g.drawImage(background, 0, 0, this.getWidth(), this.getHeight(), null);
+        g.drawImage(background.getCurrentFrame(), 0, 0, this.getWidth(), this.getHeight(), null);
     }
 
     // Interaction
@@ -96,6 +89,7 @@ public class PanelMenu extends JPanel implements ActionListener{
                 fenetreMenu.setVisible(false);
             }
         }
+        repaint();
     }
 
     // Méthodes
