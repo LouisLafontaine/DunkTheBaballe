@@ -7,24 +7,15 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 
 public class PanelMenu extends JPanel implements ActionListener{
-
-    JButton lvl1;
-    JButton lvl2;
-    JButton lvl3;
-    JButton lvl4;
-    JButton free;
-
-    JLabel title;
-
-    protected FenetreJeu fenetre1;
-    protected FenetreJeu fenetre2;
-    protected FenetreJeu fenetre3;
-    protected FenetreJeu fenetre4;
-    protected FenetreJeu fenetreFree;
-
+    // Attributs
+    //======================================================================
+    final JLabel title;
+    final JButton[] buttons;
     protected Son musique;
     protected Image background;
 
+    // Constructeur
+    //======================================================================
     public PanelMenu(){
 
         setBackgroundImage("ImageMenu.jpg");
@@ -40,76 +31,22 @@ public class PanelMenu extends JPanel implements ActionListener{
         setTitle();
 
         //Initialisation des boutons
-        lvl1 = new JButton("NIVEAU 1");
-        lvl2 = new JButton("NIVEAU 2");
-        lvl3 = new JButton("NIVEAU 3");
-        lvl4 = new JButton("NIVEAU 4");
-        free = new JButton("EDITER");
+        buttons = new JButton[5];
+        for(int i = 0; i <= 4; i++) {
+            buttons[i] = new JButton("NIVEAU " + i);
+        }
+        buttons[4] = new JButton("ÉDITER");
 
-        setButton(lvl1,0,0);
-        setButton(lvl2,0,150);
-        setButton(lvl3,550,0);
-        setButton(lvl4,550,150);
-        setButton(free,275,300);
+        setButton(buttons[0],0,0);
+        setButton(buttons[1],0,150);
+        setButton(buttons[2],550,0);
+        setButton(buttons[3],550,150);
+        setButton(buttons[4],275,300);
 
     }
 
-    // Dessiner image du fond
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-
-        // Image de found
-        g.drawImage(background, 0, 0, this.getWidth(), this.getHeight(), null);
-    }
-
-    public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == lvl1) {
-            //Création niveau 1
-            musique.clip.stop();
-            fenetre1 = new FenetreJeu(true, 1);
-            fenetre1.setVisible(true);
-        }
-
-        if(e.getSource() == lvl2) {
-            //Création niveau 2
-            musique.clip.stop();
-            fenetre2 = new FenetreJeu(true, 2);
-            fenetre2.setVisible(true);
-        }
-
-        if(e.getSource() == lvl3) {
-            //Création niveau 3
-            musique.clip.stop();
-            fenetre3 = new FenetreJeu(true, 3);
-            fenetre3.setVisible(true);
-        }
-
-        if(e.getSource() == lvl4) {
-            //Création niveau 4
-            musique.clip.stop();
-            fenetre4 = new FenetreJeu(true, 4);
-            fenetre4.setVisible(true);
-        }
-
-        if(e.getSource() == free) {
-            //Création niveau édition
-            musique.clip.stop();
-            fenetreFree = new FenetreJeu(true, 5);
-            fenetreFree.setVisible(true);
-        }
-    }
-
-    public void setBackgroundImage(String backgroundFileName){
-        String pathInFolder = "BackgroundImage/";
-        try {
-            background = ImageIO.read(getClass().getResourceAsStream(pathInFolder+backgroundFileName));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    //Méthodes d'initialisation du titre et des boutons
-
+    // Méthodes Initialisation
+    //======================================================================
     public void setTitle (){
 
         title.setForeground(Color.WHITE);
@@ -119,7 +56,6 @@ public class PanelMenu extends JPanel implements ActionListener{
     }
 
     public void setButton (JButton button, int indiceX, int indiceY) { //Initialiser les boutons
-
         button.addActionListener(this);
         button.setOpaque(true);
         button.setBorderPainted(false);
@@ -129,5 +65,36 @@ public class PanelMenu extends JPanel implements ActionListener{
         button.setSize(250, 75);
         button.setLocation(100+indiceX,400+indiceY);
         add(button);
+    }
+
+    // Dessin
+    //======================================================================
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        // Image de found
+        g.drawImage(background, 0, 0, this.getWidth(), this.getHeight(), null);
+    }
+
+    // Interaction
+    //======================================================================
+    public void actionPerformed(ActionEvent e) {
+        for (int i = 0; i < buttons.length; i++) {
+            if (e.getSource() == buttons[i]) {
+                musique.clip.stop();
+                new FenetreJeu(true, i+1);
+            }
+        }
+    }
+
+    // Méthodes
+    //======================================================================
+    public void setBackgroundImage(String backgroundFileName){
+        String pathInFolder = "BackgroundImage/";
+        try {
+            background = ImageIO.read(getClass().getResourceAsStream(pathInFolder+backgroundFileName));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
