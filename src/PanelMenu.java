@@ -92,7 +92,7 @@ public class PanelMenu extends JPanel implements ActionListener{
         for (int i = 0; i < buttons.length; i++) {
             if (e.getSource() == buttons[i]) {
                 musique.clip.stop();
-                new FenetreJeu(true, i+1);
+                new FenetreJeu(fenetreMenu, true, i+1);
                 fenetreMenu.setVisible(false);
             }
         }
