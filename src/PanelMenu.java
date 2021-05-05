@@ -3,6 +3,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.InputStream;
 
 public class PanelMenu extends JPanel implements ActionListener{
     // Attributs
@@ -38,7 +39,7 @@ public class PanelMenu extends JPanel implements ActionListener{
         for(int i = 0; i <= 4; i++) {
             buttons[i] = new JButton("NIVEAU " + i);
         }
-        buttons[4] = new JButton("ÉDITER");
+        buttons[4] = new JButton("EDITER");
 
         setButton(buttons[0],0,0);
         setButton(buttons[1],0,150);
@@ -53,21 +54,37 @@ public class PanelMenu extends JPanel implements ActionListener{
     //======================================================================
     public void setTitle (){
         title.setForeground(Color.white);
-        title.setBounds(555, 100, 400,100);
-        title.setFont(new Font("Arial", Font.BOLD, 80));
+        title.setBounds(530, 120, 400,110);
+        Font font = importFont("Font/PixelFont.ttf", 100);
+        title.setFont(font);
         add(title);
     }
 
     public void setButton (JButton button, int indiceX, int indiceY) { //Initialiser les boutons
+
+        Font font = importFont("Font/PixelFont.ttf", 42);
         button.addActionListener(this);
         button.setOpaque(true);
         button.setBorderPainted(false);
         button.setBackground(new Color (170,0, 100));
         button.setForeground(Color.WHITE);
-        button.setFont(new Font("Arial", Font.BOLD, 35));
-        button.setSize(250, 75);
+        button.setFont(font);
+        button.setSize(250, 70);
         button.setLocation(275+indiceX,250+indiceY);
         add(button);
+    }
+
+    private Font importFont(String filename, int size) {
+        Font maFont;
+        try {
+            InputStream fontstream = getClass().getResourceAsStream(filename);
+            maFont  = Font.createFont(Font.TRUETYPE_FONT, fontstream);
+            return maFont.deriveFont(Font.BOLD,(float)size);
+        } catch (Exception e) {
+            System.out.println("problème Police PixelFont");
+            e.printStackTrace();
+            return new Font("Arial", Font.BOLD, size);
+        }
     }
 
     // Dessin
