@@ -1,5 +1,4 @@
 import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -103,7 +102,7 @@ public class Balle {
     }
 
     public void throwBalle(MouseEvent e) {
-        double mouseSensibility = 0.025;
+        double mouseSensibility = 0.03;
         vx = (x - e.getX()) * mouseSensibility;
         vy = (y - e.getY()) * mouseSensibility;
         moving = true;
