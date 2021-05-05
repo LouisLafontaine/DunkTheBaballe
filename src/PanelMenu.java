@@ -9,6 +9,7 @@ import java.io.IOException;
 public class PanelMenu extends JPanel implements ActionListener{
     // Attributs
     //======================================================================
+    final FenetreMenu fenetreMenu;
     final JLabel title;
     final JButton[] buttons;
     protected Son musique;
@@ -16,7 +17,8 @@ public class PanelMenu extends JPanel implements ActionListener{
 
     // Constructeur
     //======================================================================
-    public PanelMenu(){
+    public PanelMenu(FenetreMenu fenetreMenu){
+        this.fenetreMenu = fenetreMenu;
 
         setBackgroundImage("ImageMenu.jpg");
 
@@ -91,6 +93,7 @@ public class PanelMenu extends JPanel implements ActionListener{
             if (e.getSource() == buttons[i]) {
                 musique.clip.stop();
                 new FenetreJeu(true, i+1);
+                fenetreMenu.setVisible(false);
             }
         }
     }
