@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 
-public class FenetreJeu extends JFrame implements ComponentListener {
+public class FenetreJeu extends JFrame{
     // Attributs
     //======================================================================
     protected PanelJeu mainPanel;
@@ -17,30 +17,11 @@ public class FenetreJeu extends JFrame implements ComponentListener {
         add(mainPanel);
         if(!playMusic) mainPanel.musique.clip.stop();
 
-        addComponentListener(this);
 
         setSize(1500,1000);
         setLocation(250, 50);
         setVisible(true);
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    }
-
-    // ComponentListener interface methods
-    //======================================================================
-    @Override
-    public void componentResized(ComponentEvent e) {
-    }
-
-    @Override
-    public void componentMoved(ComponentEvent e) {
-    }
-
-    @Override
-    public void componentShown(ComponentEvent e) {
-    }
-
-    @Override
-    public void componentHidden(ComponentEvent e) {
     }
 }
