@@ -381,15 +381,26 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
 
         if (indice == 4) { // Niveau 4
 
-            balle = new Balle(250, 500);
+            balle = new Balle(250, 650);
 
-            panier = new Panier(1400, 800);
+            panier = new Panier(1400, 750);
 
-            Obstacle obstacle41 = new Obstacle(100,50, 300, 20);
-            Obstacle obstacle42 = new Obstacle(380,90, 20, 200);
+            int e = 20;
+
+            Obstacle obstacle41 = new Obstacle(350,550, e, 200);
+            Obstacle obstacle42 = new Obstacle(850,300, 475, e);
+            Obstacle obstacle43 = new Obstacle(900,250, 475, e);
+            Obstacle obstacle44 = new Obstacle(1325,300, e, 500);
+            Obstacle obstacle45 = new Obstacle(1375,250, e, 150);
+
+
+
 
             obstacles.add(obstacle41);
             obstacles.add(obstacle42);
+            obstacles.add(obstacle43);
+            obstacles.add(obstacle44);
+            obstacles.add(obstacle45);
         }
 
         if (indice == 5) { // Niveau édition
