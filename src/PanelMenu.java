@@ -9,7 +9,6 @@ public class PanelMenu extends JPanel implements ActionListener{
     // Attributs
     //======================================================================
     final FenetreMenu fenetreMenu;
-    final JLabel title;
     final JButton[] buttons;
     protected Son musique;
     Timer animationTimer;
@@ -31,7 +30,6 @@ public class PanelMenu extends JPanel implements ActionListener{
         setLayout(null);
 
         //Initialisation titre
-        title = new JLabel("MENU");
         setTitle();
 
         //Initialisation des boutons
@@ -53,11 +51,20 @@ public class PanelMenu extends JPanel implements ActionListener{
     // Méthodes Initialisation
     //======================================================================
     public void setTitle (){
-        title.setForeground(Color.white);
-        title.setBounds(530, 120, 400,110);
         Font font = importFont("Font/PixelFont.ttf", 100);
+
+        JLabel title = new JLabel("MENU");
+        title.setForeground(new Color (247,241, 79));
+        title.setBounds(530, 120, 400,110);
         title.setFont(font);
+
+        JLabel titleShadow = new JLabel("MENU");
+        titleShadow.setForeground(Color.black);
+        titleShadow.setBounds(title.getX()+6, title.getY()+6, title.getWidth(), title.getHeight());
+        titleShadow.setFont(font);
+
         add(title);
+        add(titleShadow);
     }
 
     public void setButton (JButton button, int indiceX, int indiceY) { //Initialiser les boutons
@@ -66,8 +73,8 @@ public class PanelMenu extends JPanel implements ActionListener{
         button.addActionListener(this);
         button.setOpaque(true);
         button.setBorderPainted(false);
-        button.setBackground(new Color (170,0, 100));
-        button.setForeground(Color.WHITE);
+        button.setBackground(new Color (230,120, 170));
+        button.setForeground(new Color (237,250, 50));
         button.setFont(font);
         button.setSize(250, 70);
         button.setLocation(275+indiceX,250+indiceY);
@@ -94,6 +101,10 @@ public class PanelMenu extends JPanel implements ActionListener{
 
         // Image de found
         g.drawImage(background.getCurrentFrame(), 0, 0, this.getWidth(), this.getHeight(), null);
+        g.setColor(Color.black);
+        for (JButton b : buttons) {
+            g.fillRect(b.getX() + 6, b.getY() + 6, b.getWidth(), b.getHeight());
+        }
     }
 
     // Interaction
