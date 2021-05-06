@@ -29,6 +29,18 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
 
     protected boolean clicking; // true si en train de clicker
     protected boolean pressingKey_Q;
+    protected boolean modePlacer;
+    protected boolean modePlacerB;
+    protected boolean modePlacerP;
+
+    protected JButton reset;
+    protected JButton place;
+    protected JButton remove;
+    protected JButton removeAll;
+    protected JButton save;
+    protected JButton placeB;
+    protected JButton placeP;
+    protected JButton resetAll;
 
 
 
@@ -65,6 +77,10 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         // Initialisation musique de fond
         musique = new Son("Music/Pokemon.wav");
         musique.clip.loop(Clip.LOOP_CONTINUOUSLY);
+
+        modePlacer =false;
+        modePlacerB = false;
+        modePlacerP = false;
 
         // Ajout interface
         addMouseListener(this);
@@ -156,8 +172,9 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             o.drawObstacle(g);
         }
 
+        if(clicking && modePlacer) drawRectangleFromMouse(g);
+
         g.setColor(Color.black);
-        if(pressingKey_Q && clicking) drawRectangleFromMouse(g);
 
         for(Animated animation : animatedItems){
             g.drawImage(animation.getCurrentFrame(), animation.x, animation.y, null);
@@ -196,6 +213,68 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
                 if(isDisplayable()) musique.clip.loop(Clip.LOOP_CONTINUOUSLY);
             }
         }
+
+        //Boutons
+
+        if (e.getSource() == reset) {
+            balle.resetPosBalle(true);
+            repaint();
+        }
+
+        if (e.getSource() == remove) {
+            obstacles.remove(obstacles.size()-1);
+            repaint();
+        }
+
+        if (e.getSource() == removeAll) {
+            obstacles.clear();
+            repaint();
+        }
+
+        if (e.getSource() == resetAll) {
+
+            obstacles.clear();
+
+            balle.xInit = 200;
+            balle.yInit = 500;
+            balle.resetPosBalle(true);
+
+            panier.x = 1400;
+            panier.y = 500;
+
+            repaint();
+
+            save("editeur.txt");
+        }
+
+        if (e.getSource() == place) {
+            modePlacer = !modePlacer;
+            modePlacerB = false;
+            modePlacerP = false;
+            resetColorBouton();
+
+            if(modePlacer) place.setBackground(new Color (18, 239, 55));
+        }
+
+        if (e.getSource() == placeB) {
+            modePlacerB = !modePlacerB;
+            modePlacer = false;
+            modePlacerP = false;
+            resetColorBouton();
+
+            if(modePlacerB) placeB.setBackground(new Color (162, 109, 224));
+        }
+
+        if (e.getSource() == placeP) {
+            modePlacerP = !modePlacerP;
+            modePlacerB = false;
+            modePlacer = false;
+            resetColorBouton();
+
+            if(modePlacerP) placeP.setBackground(new Color (245, 210, 38));
+        }
+
+        if (e.getSource() == save) save("editeur.txt");
     }
 
     // MouseListener interface methods
@@ -213,8 +292,26 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     @Override
     public void mouseReleased(MouseEvent e) {
         setLastClickOff();
-        if(balle.toucheBalle(lastClickX,lastClickY)) {
+        if(balle.toucheBalle(lastClickX,lastClickY)  && !modePlacer && !modePlacerP && !modePlacerB) {
             balle.throwBalle(e);
+            repaint();
+        }
+
+        if(modePlacer) addNewObstacleFromMouse();
+
+        if(modePlacerB) {
+            balle.xInit = clickX;
+            balle.yInit = clickY;
+            balle.x = clickX;
+            balle.y = clickY;
+            balle.xCollision = clickX;
+            balle.yCollision = clickY;
+            repaint();
+        }
+
+        if(modePlacerP) {
+            panier.x = clickX;
+            panier.y = clickY;
             repaint();
         }
 
@@ -235,6 +332,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         draggingOnBalle();
         clickX = e.getX();
         clickY = e.getY();
+
         repaint();
     }
 
@@ -318,7 +416,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     }
 
     public void tracerSegment(Graphics g) {
-        if(clicking && balle.toucheBalle(lastClickX, lastClickY)) {
+        if(clicking && balle.toucheBalle(lastClickX, lastClickY)  && !modePlacer && !modePlacerP && !modePlacerB) {
             Graphics2D g2d = (Graphics2D) g;
             g2d.setStroke(new BasicStroke(5));
             g2d.setColor(Color.red);
@@ -383,43 +481,73 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
 
     // Méthode afin de placer les différents objets sur la fenêtre en fonction du niveau
     public void setLvl() {
+
+        reset = new JButton("Réessayer");
+        setText(reset);
+        reset.setBackground(new Color (240,190, 0));
+        reset.setBounds(550,20,400,50);
+
+        place = null;
+        remove = null;
+        removeAll = null;
+        save = null;
+        placeB = null;
+        placeP = null;
+        resetAll = null;
+
         if (indice >= 1 && indice <= 4) loadSave("niveau"+indice+".txt");
+
         if (indice == 5) { // Niveau édition
 
-            balle = new Balle(200, 500);
+            loadSave("editeur.txt");
 
-            panier = new Panier(1400, 500);
-
-            JLabel place = new JLabel("Placer un obstacle : Q");
-            JLabel remove = new JLabel("Supprimer : P");
-            JLabel removeAll = new JLabel("Tout supprimer : W");
+            place = new JButton("Placer un obstacle");
+            remove = new JButton("Supprimer");
+            removeAll = new JButton("Tout supprimer");
+            save = new JButton("Sauvegarder");
+            placeB = new JButton("Placer la balle");
+            placeP= new JButton("Placer le panier");
+            resetAll = new JButton("Reset");
 
             setText(place);
             setText(remove);
             setText(removeAll);
+            setText(save);
+            setText(placeB);
+            setText(placeP);
+            setText(resetAll);
 
-            place.setBackground(new Color (0,230, 50));
-            remove.setBackground(new Color (250,0, 0));
-            removeAll.setBackground(new Color (160,0, 0));
+            resetColorBouton();
 
-            place.setBounds(50,700,450,50);
-            remove.setBounds(775,700,200,50);
-            removeAll.setBounds(1000,700,275,50);
+            place.setBounds(50,20,450,50);
+            remove.setBounds(975,20,200,50);
+            removeAll.setBounds(1200,20,275,50);
+            save.setBounds(1200,90,275,50);
+            placeB.setBounds(50,90,450,50);
+            placeP.setBounds(550,90,400,50);
+            resetAll.setBounds(975,90,200,50);
         }
-
-        JLabel reset = new JLabel("Réinitialiser : Espace");
-        setText(reset);
-        reset.setBackground(new Color (240,190, 0));
-        reset.setBounds(550,900,400,50);
     }
 
     // Initialiser les zones de textes dans le panel de jeu
-    public void setText (JLabel text){
+    public void setText (JButton text){
 
         text.setOpaque(true);
         text.setHorizontalAlignment(JLabel.CENTER);
         text.setForeground(Color.WHITE);
         text.setFont(new Font("Arial", Font.BOLD, 25));
+        text.addActionListener(this);
         add(text);
     }
+
+    public void resetColorBouton (){
+        place.setBackground(new Color (31, 109, 10));
+        remove.setBackground(new Color (250,0, 0));
+        removeAll.setBackground(new Color (160,0, 0));
+        save.setBackground(new Color (0,20, 120));
+        placeB.setBackground(new Color (93, 22, 102, 255));
+        placeP.setBackground(new Color (236, 106, 6));
+        resetAll.setBackground(new Color (5,0, 0));
+    }
+
 }
