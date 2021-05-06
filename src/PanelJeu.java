@@ -481,13 +481,18 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
 
     // Méthode afin de placer les différents objets sur la fenêtre en fonction du niveau
     public void setLvl() {
+
+        retry = new JButton("Réessayer");
+        setText(retry);
+        retry.setBounds(450,20,300,50);
+        retry.setBackground(new Color (240,190, 0));
+
         place = null;
         remove = null;
         removeAll = null;
         save = null;
         placeB = null;
         placeP = null;
-        retry = null;
         resetAll = null;
 
         if (indice >= 1 && indice <= 4) loadSave("niveau"+indice+".txt");
@@ -497,7 +502,6 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             loadSave("editeur.txt");
 
             place = new JButton("Placer un obstacle");
-            retry = new JButton("Réessayer");
             remove = new JButton("Supprimer");
             removeAll = new JButton("Tout supprimer");
             save = new JButton("Sauvegarder");
@@ -506,7 +510,6 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             resetAll = new JButton("Reset");
 
             setText(place);
-            setText(retry);
             setText(remove);
             setText(removeAll);
             setText(save);
@@ -517,13 +520,13 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             resetBouton();
 
             place.setBounds(20,20,300,50);
-            retry.setBounds(340,20,300,50);
             remove.setBounds(660,20,200,50);
             removeAll.setBounds(880,20,300,50);
             save.setBounds(880,90,300,50);
             placeB.setBounds(20,90,300,50);
             placeP.setBounds(340,90,300,50);
             resetAll.setBounds(660,90,200,50);
+            retry.setBounds(340,20,300,50);
         }
     }
 
@@ -548,7 +551,6 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         placeB.setBackground(new Color (93, 22, 102, 255));
         placeP.setBackground(new Color (236, 106, 6));
         resetAll.setBackground(new Color (5,0, 0));
-        retry.setBackground(new Color (240,190, 0));
     }
 
 }
