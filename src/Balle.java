@@ -1,9 +1,7 @@
 import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class Balle {
     // Attributs
@@ -16,32 +14,35 @@ public class Balle {
     protected double yPrev; // pos y une étape plus tot
     protected double xCollision; // pos x de la dernière collision
     protected double yCollision; // pos y de la dernière collision
-    protected int d; // diamètre
     protected double vx; // vitesse selon x
     protected double vy; // vitesse selon y
-    protected boolean moving;
-    protected int t; // variable temps pour calcul de la trajectoire
-    protected final double g; // constante gravité
+    protected double g; // constante gravité
+
+    protected int d; // diamètre
     protected int compteur; // compteur balle bloquée
+    protected int t; // variable temps pour calcul de la trajectoire
+
+    protected boolean moving; // true si la balle bouge
+
     Image characterImage;
 
     // Constructeur
     //======================================================================
-    public Balle(int x, int y, int r, double vx, double vy, String characterImageFileName) {
+    public Balle(int x, int y) {
         this.x = x;
         this.y = y;
         this.xInit = x;
         this.yInit = y;
-        this.vx = vx;
-        this.vy = vy;
-        this.d = r;
+        this.vx = 0;
+        this.vy = 0;
+        this.d = 30;
         this.t = 0;
         this.compteur = 0;
         xCollision = xInit;
         yCollision = yInit;
         moving = false;
-        g = 0.085;
-        initializeCharacterImage(characterImageFileName);
+        g = 0.09;
+        initializeCharacterImage("Character/fireBall.png");
     }
 
     // Méthodes initialisation
@@ -85,6 +86,7 @@ public class Balle {
         }
     }
 
+    // Répond true si la balle est en dehors de la fenêtre (ne compte pas si elle est au dessus)
     public boolean notInBounds(int largeurFenetre, int hauteurFenetre) {
         return ((x <= 0) || (x >= largeurFenetre) || (y< - hauteurFenetre/2.0) || (y >= hauteurFenetre));
     }
@@ -100,7 +102,7 @@ public class Balle {
     }
 
     public void throwBalle(MouseEvent e) {
-        double mouseSensibility = 0.03;
+        double mouseSensibility = 0.022;
         vx = (x - e.getX()) * mouseSensibility;
         vy = (y - e.getY()) * mouseSensibility;
         moving = true;
@@ -155,7 +157,7 @@ public class Balle {
 
             }
             // face du haut
-            else if (yPrev < o.y && xPrev > o.x && xPrev < o.x+o.largeur) {
+            else if (yPrev < o.y) {
                 xCollision = (o.y - ordonneOrigine) / coefficientDirecteur;
                 yCollision = o.y-1; // -1 car sinon la balle traverse l'obstacle
                 vx = amortissement * (x - xPrev);
@@ -166,7 +168,7 @@ public class Balle {
                 * vy pointe vers le haut */
             }
             // face du bas
-            else if (yPrev > o.y + o.hauteur && xPrev > o.x && xPrev < o.x+o.largeur) {
+            else if (yPrev > o.y + o.hauteur) {
                 xCollision = (o.y + o.hauteur - ordonneOrigine) / coefficientDirecteur;
                 yCollision = o.y + o.hauteur;
                 vx = amortissement * (x - xPrev);
@@ -187,21 +189,14 @@ public class Balle {
         }
     }
 
-    public void checkSolveCollisions(ArrayList<Obstacle> obstacles) {
-        for (Obstacle o : obstacles){
-            if (hasCollided(o)) {
-                solveCollision(o);
-                break;
-            }
-        }
-    }
-
+    //Réinitialiser la position de la balle si en dehors de la fenêtre
     public void checkSolveNotInBounds(int largueur, int hauteur) {
         if(notInBounds(largueur, hauteur)){
             resetPosBalle(true);
         }
     }
 
+    //Return true si balle bloquée
     public boolean balleBloquee(){
         if(distanceBalle((int)xCollision,(int)yCollision) < 5 && moving){
             compteur++;

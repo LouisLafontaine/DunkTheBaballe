@@ -14,7 +14,8 @@ public class Obstacle {
     }
 
     public void drawObstacle(Graphics g) {
-        g.setColor(Color.black);
+        Color brown = new Color(70,10,0);
+        g.setColor(brown);
         g.fillRect(x,y,largeur,hauteur);
     }
 }

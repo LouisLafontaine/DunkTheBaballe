@@ -3,50 +3,64 @@ import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-public class PanelJeu extends JPanel implements ActionListener, MouseListener, MouseMotionListener, KeyListener{
+public class PanelJeu extends JPanel implements ActionListener, MouseListener, MouseMotionListener{
     // Attributs
     //======================================================================
-    protected final Balle balle;
-    protected Timer gameLoopTimer;
-    protected Son musique;
+    protected  Balle balle;
+    protected Son musique; // Musique de fond
+    protected Panier panier; // Panier de victoire
+    protected ArrayList<Obstacle> obstacles; // tableau d'obstacle
+    protected Image background; // image de fond
+    LinkedList<Animated> animatedItems; // Liste des animations
+
+    protected Timer gameLoopTimer; // Timer pour indiquer le nombre de repaint par seconde
+    protected Timer timeWinSound; // Timer pour relancer la musique de fond après le son de victoire
+
     protected int lastClickX; // enregistre la pos x du dernier click
     protected int lastClickY; // enregistre la pos y du dernier click
     protected int clickX; // enregistre la pos x actuelle du click quand dragged
     protected int clickY; // enregistre la pos x actuelle du click quand dragged
+    protected int indice; // Indice du niveau sélectionné
+    protected int temps; // Temps s'écoulant durant le son de victoire
+
     protected boolean clicking; // true si en train de clicker
-    protected Image background; // image de fond
-    protected ArrayList<Obstacle> obstacles; // tableau d'obstacle
-    protected Panier panier;
-    protected boolean pressingKey_Q;
-    LinkedList<Animated> animatedItems;
+
+    protected boolean modePlacer; // true si Mode placer obstacle
+    protected boolean modePlacerB; // true si Mode placer balle
+    protected boolean modePlacerP; // true si Mode placer panier
+
+    protected JButton retry;
+    protected JButton place;
+    protected JButton remove;
+    protected JButton removeAll;
+    protected JButton save;
+    protected JButton placeB;
+    protected JButton placeP;
+    protected JButton resetAll;
+
+
 
     // Constructeur
     //======================================================================
-    public PanelJeu(){
-        // Initialisation de la balle
-        balle = new Balle(300,250,25,0, 0, "Character/fireBall.png");
+    public PanelJeu(int i){
 
-        // Initialisation zone d'arrivée
-        panier = new Panier(700, 300, 60);
+        setLayout(null);
 
-        // Initialisation des obstacles
-        Obstacle obstacle1 = new Obstacle(100,50, 300, 20);
-        Obstacle obstacle2 = new Obstacle(380,90, 20, 200);
-        Obstacle obstacle3 = new Obstacle(100,90, 20, 200);
-        Obstacle obstacle4 = new Obstacle(100,310, 300, 20);
-        Obstacle obstacle5 = new Obstacle(200,150, 80, 80);
+        //Indice de niveau
+        indice = i;
 
-        // Ajout des obstacles au tableau d'obstacles
+        // Initialisation image de fond
+        setBackgroundImage("FantasyForest.png");
+
+        // Initialisation liste des obstacles
         obstacles = new ArrayList<>();
-        obstacles.add(obstacle1);
-        obstacles.add(obstacle2);
-        obstacles.add(obstacle3);
-        obstacles.add(obstacle4);
-        obstacles.add(obstacle5);
+
+        // Initialisation du niveau choisi
+        setLvl();
 
         // Initialisation tableau objets animés
         animatedItems = new LinkedList<>();
@@ -54,20 +68,87 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         // Initialisation gameLoopTimer pour animation
         int fps = 120;
         gameLoopTimer = new Timer(1000/ fps, this);
-        gameLoopTimer.start();
 
+        //Initialisation TimeWinSound pour relancer la musique à la fin du son de victoire
+        timeWinSound = new Timer(1000, this);
+        temps = 0;
 
         // Initialisation musique de fond
-        musique = new Son("Music/8bitMegaBattle.wav");
+        musique = new Son("Music/PokemonTrimmed.wav");
         musique.clip.loop(Clip.LOOP_CONTINUOUSLY);
 
-        // Initialisation image de fond
-        setBackgroundImage("FantasyForest.png");
+        // Initialisation des modes d'édition
+        modePlacer = false;
+        modePlacerB = false;
+        modePlacerP = false;
 
         // Ajout interface
         addMouseListener(this);
         addMouseMotionListener(this);
-        addKeyListener(this);
+
+        gameLoopTimer.start();
+    }
+
+    // Sauvegarder les paramètres d'un niveau dans un fichier
+    public void save(String filename){
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream("Ressources/Saves/"+filename);
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream);
+            BufferedWriter bufferedWriter = new BufferedWriter(outputStreamWriter);
+
+            bufferedWriter.write("b"+(int)balle.x+","+(int)balle.y);
+            bufferedWriter.newLine();
+
+            bufferedWriter.write("p"+panier.x+","+panier.y);
+            bufferedWriter.newLine();
+
+            for (Obstacle o : obstacles) {
+                bufferedWriter.write("o"+o.x+","+o.y+","+ o.largeur+","+o.hauteur);
+                bufferedWriter.newLine();
+            }
+
+            bufferedWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Charger un niveau sauvegarder dans un fichier
+    public void loadSave(String filename){
+        try {
+            obstacles.clear();
+            InputStream txtStream = getClass().getResourceAsStream("Saves/"+filename);
+            InputStreamReader streamReader = new InputStreamReader(txtStream);
+            BufferedReader bufferedReader = new BufferedReader(streamReader);
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                if (line.startsWith("b")) {
+                    int balleX = Integer.parseInt(line.substring(1, line.indexOf(",")));
+                    line = line.substring(line.indexOf(",")+1);
+                    int balleY = Integer.parseInt(line);
+                    balle = new Balle(balleX, balleY);
+                }
+                if (line.startsWith("p")) {
+                    int panierX = Integer.parseInt(line.substring(1, line.indexOf(",")));
+                    line = line.substring(line.indexOf(",")+1);
+                    int panierY = Integer.parseInt(line);
+                    panier = new Panier(panierX, panierY);
+                }
+                if (line.startsWith("o")) {
+                    int x = Integer.parseInt(line.substring(1, line.indexOf(",")));
+                    line = line.substring(line.indexOf(",")+1);
+                    int y = Integer.parseInt(line.substring(0, line.indexOf(",")));
+                    line = line.substring(line.indexOf(",")+1);
+                    int largeur = Integer.parseInt(line.substring(0, line.indexOf(",")));
+                    line = line.substring(line.indexOf(",")+1);
+                    int hauteur = Integer.parseInt(line);
+                    obstacles.add(new Obstacle(x,y,largeur,hauteur));
+                }
+            }
+            bufferedReader.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     // Dessin
@@ -93,8 +174,10 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             o.drawObstacle(g);
         }
 
+        // Dessin du rectangle qu'on place
+        if(clicking && modePlacer) drawRectangleFromMouse(g);
+
         g.setColor(Color.black);
-        if(pressingKey_Q) g.fillRect(lastClickX, lastClickY, Math.abs(clickX-lastClickX), Math.abs(clickY-lastClickY));
 
         for(Animated animation : animatedItems){
             g.drawImage(animation.getCurrentFrame(), animation.x, animation.y, null);
@@ -110,19 +193,86 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             if(balle.moving){
                 balle.updatePosBalle();
                 balle.checkSolveNotInBounds(getWidth(),getHeight());
-                balle.checkSolveCollisions(obstacles);
-                checkSolveWin();
                 for(Obstacle o : obstacles){
                     if(balle.hasCollided(o)){
-                        animatedItems.add(new Animated("AnimationTest/explosion2.png",(int)balle.x-32,(int)balle.y-64,1,8,0, 16,1,true));
+                        balle.solveCollision(o);
+                        animatedItems.add(new Animated("Animation/explosion2.png",(int)balle.x-32,(int)balle.y-64,1,8,0, 16,1,true));
                         break;
                     }
                 }
+                checkSolveWin();
             }
             repaint();
         }
+
+        //Réinitialisation si balle bloquée
         if (balle.balleBloquee()){
             balle.resetPosBalle(true);
+        }
+
+        if(e.getSource() == timeWinSound){ //temps qui s'écoule après que le son de victoire commence
+            temps++;
+            if (temps > 5){
+                temps = 0;
+                timeWinSound.stop();
+                if(isDisplayable()) musique.clip.loop(Clip.LOOP_CONTINUOUSLY);
+            }
+        }
+
+        //Boutons
+
+        if (e.getSource() == retry) {
+            balle.resetPosBalle(true);
+            repaint();
+        }
+
+        if (e.getSource() == remove) {
+            if (obstacles.size() > 0) obstacles.remove(obstacles.size()-1);
+            repaint();
+        }
+
+        if (e.getSource() == removeAll) {
+            obstacles.clear();
+            repaint();
+        }
+
+        if (e.getSource() == resetAll) {
+            loadSave("editeur.txt");
+        }
+
+        if (e.getSource() == place) {
+            modePlacer = !modePlacer;
+            modePlacerB = false;
+            modePlacerP = false;
+            resetBouton();
+
+            if(modePlacer) place.setBackground(new Color (18, 239, 55));
+        }
+
+        if (e.getSource() == placeB) {
+            modePlacerB = !modePlacerB;
+            modePlacer = false;
+            modePlacerP = false;
+            resetBouton();
+
+            if(modePlacerB) placeB.setBackground(new Color (162, 109, 224));
+        }
+
+        if (e.getSource() == placeP) {
+            modePlacerP = !modePlacerP;
+            modePlacerB = false;
+            modePlacer = false;
+            resetBouton();
+
+            if(modePlacerP) placeP.setBackground(new Color (245, 210, 38));
+        }
+
+        if (e.getSource() == save) {
+            save("editeur.txt");
+            resetBouton();
+
+            save.setBackground(new Color (0, 210, 38));
+            save.setText("Sauvegardé !");
         }
     }
 
@@ -135,17 +285,34 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     @Override
     public void mousePressed(MouseEvent e) {
         setLastClickOn(e.getX(),e.getY());
-        chargingAnimation();
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
         setLastClickOff();
-        if(balle.toucheBalle(lastClickX,lastClickY)) {
+        if(balle.toucheBalle(lastClickX,lastClickY)  && !modePlacer && !modePlacerP && !modePlacerB) {
             balle.throwBalle(e);
             repaint();
         }
-        animatedItems.removeLast();
+
+        if(modePlacer) addNewObstacleFromMouse();
+
+        if(modePlacerB) {
+            balle.xInit = clickX;
+            balle.yInit = clickY;
+            balle.x = clickX;
+            balle.y = clickY;
+            balle.xCollision = clickX;
+            balle.yCollision = clickY;
+            repaint();
+        }
+
+        if(modePlacerP) {
+            panier.x = clickX;
+            panier.y = clickY;
+            repaint();
+        }
+
     }
 
     @Override
@@ -163,56 +330,31 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         draggingOnBalle();
         clickX = e.getX();
         clickY = e.getY();
-        repaint();
-    }
 
-    @Override
-    public void mouseMoved(MouseEvent e) {
-
-    }
-
-    // KeyListener interface methods
-    //======================================================================
-    @Override
-    public void keyTyped(KeyEvent e) {
-
-    }
-    @Override
-    public void keyPressed(KeyEvent e) {
-        pressingSpaceBarToReset(e);
-        ifSetPressingKey_Q_On(e);
-        if(e.getKeyCode() == KeyEvent.VK_W){
-            obstacles.clear();
-            repaint();
-        }
-        if(e.getKeyCode() == KeyEvent.VK_A){
+        if(modePlacerB){
             balle.xInit = clickX;
             balle.yInit = clickY;
             balle.x = clickX;
             balle.y = clickY;
             balle.xCollision = clickX;
             balle.yCollision = clickY;
-            repaint();
         }
-        if(e.getKeyCode() == KeyEvent.VK_P) {
-            obstacles.remove(obstacles.size()-1);
-            repaint();
-        }
-        if(e.getKeyCode() == KeyEvent.VK_R) musique.clip.start();
 
-        if(e.getKeyCode() == KeyEvent.VK_ENTER) animatedItems.clear();
+        if(modePlacerP){
+            panier.x = clickX;
+            panier.y = clickY;
+        }
+        repaint();
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {
-        if(pressingKey_Q) addNewObstacle();
-        ifSetPressingKey_Q_Off(e);
+    public void mouseMoved(MouseEvent e) {
     }
 
     // Méthodes
     //======================================================================
     public void setBackgroundImage(String backgroundFileName){
-        String pathInFolder = "BackgroundImage/";
+        String pathInFolder = "Background/";
         try {
             background = ImageIO.read(getClass().getResourceAsStream(pathInFolder+backgroundFileName));
         } catch (IOException e) {
@@ -221,6 +363,8 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     }
 
     public void setLastClickOn(int x, int y) {
+        clickX = x;
+        clickY = y;
         lastClickX = x;
         lastClickY = y;
         clicking = true;
@@ -244,10 +388,10 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     }
 
     public void tracerSegment(Graphics g) {
-        if(clicking && balle.toucheBalle(lastClickX, lastClickY)) {
+        if(clicking && balle.toucheBalle(lastClickX, lastClickY)  && !modePlacer && !modePlacerP && !modePlacerB) {
             Graphics2D g2d = (Graphics2D) g;
-            g2d.setStroke(new BasicStroke(2));
-            g2d.setColor(Color.green);
+            g2d.setStroke(new BasicStroke(5));
+            g2d.setColor(Color.red);
             g2d.drawLine(clickX, clickY, (int)balle.x, (int)balle.y);
         }
     }
@@ -255,29 +399,121 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     public void checkSolveWin() {
         if(balle.hasCollided(panier)){
             System.out.println("gagné");
-            balle.resetPosBalle(false);
             Son winSound = new Son("Sound/8bitWin.wav");
             musique.clip.stop();
             winSound.clip.start();
+            timeWinSound.start();
+            balle.resetPosBalle(false);
         }
     }
 
-    private void addNewObstacle() {
-        obstacles.add(new Obstacle(lastClickX,lastClickY,Math.abs(clickX - lastClickX),Math.abs(clickY-lastClickY)));
+    public void drawRectangleFromMouse(Graphics g) {
+        g.setColor(new Color(250,250,0));
+        if(clickX>lastClickX && clickY>lastClickY){
+            g.fillRect(lastClickX, lastClickY, multipleOfThick(clickX-lastClickX), multipleOfThick(clickY-lastClickY));
+
+        }else if(clickX<lastClickX && clickY>lastClickY) {
+            g.fillRect(multipleOfThick(clickX), lastClickY, multipleOfThick(lastClickX-multipleOfThick(clickX)), multipleOfThick(clickY-lastClickY));
+
+        }else if(clickX>lastClickX && clickY<lastClickY) {
+            g.fillRect(lastClickX, multipleOfThick(clickY), multipleOfThick(clickX-lastClickX), multipleOfThick(lastClickY-multipleOfThick(clickY)));
+
+        }else if(clickX<lastClickX && clickY<lastClickY)
+            g.fillRect(multipleOfThick(clickX), multipleOfThick(clickY), multipleOfThick(lastClickX-multipleOfThick(clickX)), multipleOfThick(lastClickY-multipleOfThick(clickY)));
     }
 
-    // Key pressed tracking
-    public void ifSetPressingKey_Q_On(KeyEvent e) {
-        if(e.getKeyCode() == KeyEvent.VK_Q) pressingKey_Q = true;
+    private void addNewObstacleFromMouse() {
+        if(clickX>lastClickX && clickY>lastClickY){
+            obstacles.add(new Obstacle(lastClickX, lastClickY, multipleOfThick(clickX-lastClickX), multipleOfThick(clickY-lastClickY)));
+
+        }else if(clickX<lastClickX && clickY>lastClickY) {
+            obstacles.add(new Obstacle(multipleOfThick(clickX), lastClickY, multipleOfThick(lastClickX-multipleOfThick(clickX)), multipleOfThick(clickY-lastClickY)));
+
+        }else if(clickX>lastClickX && clickY<lastClickY) {
+            obstacles.add(new Obstacle(lastClickX, multipleOfThick(clickY), multipleOfThick(clickX-lastClickX), multipleOfThick(lastClickY-multipleOfThick(clickY))));
+
+        }else if(clickX<lastClickX && clickY<lastClickY)
+            obstacles.add(new Obstacle(multipleOfThick(clickX), multipleOfThick(clickY), multipleOfThick(lastClickX-multipleOfThick(clickX)), multipleOfThick(lastClickY-multipleOfThick(clickY))));
     }
 
-    public void ifSetPressingKey_Q_Off(KeyEvent e) {
-        if(e.getKeyCode() == KeyEvent.VK_Q) pressingKey_Q = false;
+    public int multipleOfThick(int number){
+        int thickMin = 20; // Pour que l'obstacle que l'on place ai une épaisseur standard
+        return ((number/thickMin)*thickMin);
     }
 
-    public void chargingAnimation() {
-        if(balle.toucheBalle(lastClickX, lastClickY)) {
-            animatedItems.add(new Animated("AnimationTest/flameCircle.png",(int)balle.xInit-50,(int)balle.yInit-55,7,7,8, 30,-1,true));
+    // Méthode afin de placer les différents objets sur la fenêtre en fonction du niveau
+    public void setLvl() {
+
+        retry = new JButton("Réessayer");
+        setText(retry);
+        retry.setBounds(450,20,300,50);
+        retry.setBackground(new Color (240,190, 0));
+
+        place = null;
+        remove = null;
+        removeAll = null;
+        save = null;
+        placeB = null;
+        placeP = null;
+        resetAll = null;
+
+        if (indice >= 1 && indice <= 4) loadSave("niveau"+indice+".txt");
+
+        if (indice == 5) { // Niveau édition
+
+            loadSave("editeur.txt");
+
+            place = new JButton("Placer un obstacle");
+            remove = new JButton("Supprimer");
+            removeAll = new JButton("Tout supprimer");
+            save = new JButton("Sauvegarder");
+            placeB = new JButton("Placer la balle");
+            placeP = new JButton("Placer le panier");
+            resetAll = new JButton("Reset");
+
+            setText(place);
+            setText(remove);
+            setText(removeAll);
+            setText(save);
+            setText(placeB);
+            setText(placeP);
+            setText(resetAll);
+
+            resetBouton();
+
+            place.setBounds(20,20,300,50);
+            remove.setBounds(660,20,200,50);
+            removeAll.setBounds(880,20,300,50);
+            save.setBounds(880,90,300,50);
+            placeB.setBounds(20,90,300,50);
+            placeP.setBounds(340,90,300,50);
+            resetAll.setBounds(660,90,200,50);
+            retry.setBounds(340,20,300,50);
         }
     }
+
+    // Initialiser les boutons dans le panel de jeu
+    public void setText (JButton text){
+
+        text.setOpaque(true);
+        text.setBorderPainted(false);
+        text.setHorizontalAlignment(JLabel.CENTER);
+        text.setForeground(Color.WHITE);
+        text.setFont(new Font("Arial", Font.BOLD, 25));
+        text.addActionListener(this);
+        add(text);
+    }
+
+    // Réinitialiser la couleur des boutons
+    public void resetBouton(){
+        place.setBackground(new Color (31, 109, 10));
+        remove.setBackground(new Color (250,0, 0));
+        removeAll.setBackground(new Color (160,0, 0));
+        save.setBackground(new Color (0,20, 120));
+        save.setText("Sauvegarder");
+        placeB.setBackground(new Color (93, 22, 102, 255));
+        placeP.setBackground(new Color (236, 106, 6));
+        resetAll.setBackground(new Color (5,0, 0));
+    }
+
 }
