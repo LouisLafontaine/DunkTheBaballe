@@ -33,7 +33,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     protected boolean modePlacerB;
     protected boolean modePlacerP;
 
-    protected JButton reset;
+    protected JButton retry;
     protected JButton place;
     protected JButton remove;
     protected JButton removeAll;
@@ -216,7 +216,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
 
         //Boutons
 
-        if (e.getSource() == reset) {
+        if (e.getSource() == retry) {
             balle.resetPosBalle(true);
             repaint();
         }
@@ -232,19 +232,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         }
 
         if (e.getSource() == resetAll) {
-
-            obstacles.clear();
-
-            balle.xInit = 200;
-            balle.yInit = 500;
-            balle.resetPosBalle(true);
-
-            panier.x = 1400;
-            panier.y = 500;
-
-            repaint();
-
-            save("editeur.txt");
+            loadSave("editeur.txt");
         }
 
         if (e.getSource() == place) {
@@ -274,7 +262,11 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             if(modePlacerP) placeP.setBackground(new Color (245, 210, 38));
         }
 
-        if (e.getSource() == save) save("editeur.txt");
+        if (e.getSource() == save) {
+            resetColorBouton();
+
+            save.setBackground(new Color (245, 210, 38));
+        }
     }
 
     // MouseListener interface methods
@@ -333,6 +325,19 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         clickX = e.getX();
         clickY = e.getY();
 
+        if(modePlacerB){
+            balle.xInit = clickX;
+            balle.yInit = clickY;
+            balle.x = clickX;
+            balle.y = clickY;
+            balle.xCollision = clickX;
+            balle.yCollision = clickY;
+        }
+
+        if(modePlacerP){
+            panier.x = clickX;
+            panier.y = clickY;
+        }
         repaint();
     }
 
@@ -480,18 +485,13 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
 
     // Méthode afin de placer les différents objets sur la fenêtre en fonction du niveau
     public void setLvl() {
-
-        reset = new JButton("Réessayer");
-        setText(reset);
-        reset.setBackground(new Color (240,190, 0));
-        reset.setBounds(550,20,400,50);
-
         place = null;
         remove = null;
         removeAll = null;
         save = null;
         placeB = null;
         placeP = null;
+        retry = null;
         resetAll = null;
 
         if (indice >= 1 && indice <= 4) loadSave("niveau"+indice+".txt");
@@ -501,6 +501,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             loadSave("editeur.txt");
 
             place = new JButton("Placer un obstacle");
+            retry = new JButton("Réessayer");
             remove = new JButton("Supprimer");
             removeAll = new JButton("Tout supprimer");
             save = new JButton("Sauvegarder");
@@ -509,6 +510,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             resetAll = new JButton("Reset");
 
             setText(place);
+            setText(retry);
             setText(remove);
             setText(removeAll);
             setText(save);
@@ -518,13 +520,14 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
 
             resetColorBouton();
 
-            place.setBounds(50,20,450,50);
-            remove.setBounds(975,20,200,50);
-            removeAll.setBounds(1200,20,275,50);
-            save.setBounds(1200,90,275,50);
-            placeB.setBounds(50,90,450,50);
-            placeP.setBounds(550,90,400,50);
-            resetAll.setBounds(975,90,200,50);
+            place.setBounds(20,20,300,50);
+            retry.setBounds(340,20,300,50);
+            remove.setBounds(660,20,200,50);
+            removeAll.setBounds(880,20,300,50);
+            save.setBounds(880,90,300,50);
+            placeB.setBounds(20,90,300,50);
+            placeP.setBounds(340,90,300,50);
+            resetAll.setBounds(660,90,200,50);
         }
     }
 
@@ -548,6 +551,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         placeB.setBackground(new Color (93, 22, 102, 255));
         placeP.setBackground(new Color (236, 106, 6));
         resetAll.setBackground(new Color (5,0, 0));
+        retry.setBackground(new Color (240,190, 0));
     }
 
 }
