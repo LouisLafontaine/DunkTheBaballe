@@ -173,7 +173,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             if (temps > 5){
                 temps = 0;
                 timeWinSound.stop();
-                musique.clip.loop(Clip.LOOP_CONTINUOUSLY);
+                if(isDisplayable()) musique.clip.loop(Clip.LOOP_CONTINUOUSLY);
             }
         }
     }
