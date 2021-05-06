@@ -35,6 +35,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     protected JButton place;
     protected JButton remove;
     protected JButton removeAll;
+    protected JButton save;
 
 
 
@@ -232,6 +233,8 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
                 place.setBackground(new Color (0,230, 50));
             }
         }
+
+        if (e.getSource() == save) save("editeur.txt");
     }
 
     // MouseListener interface methods
@@ -425,6 +428,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         place = null;
         remove = null;
         removeAll = null;
+        save = null;
 
         if (indice >= 1 && indice <= 4) loadSave("niveau"+indice+".txt");
 
@@ -434,21 +438,27 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
 
             panier = new Panier(1400, 500);
 
+            loadSave("editeur.txt");
+
             place = new JButton("Placer un obstacle");
             remove = new JButton("Supprimer");
             removeAll = new JButton("Tout supprimer");
+            save = new JButton("Sauvegarder");
 
             setText(place);
             setText(remove);
             setText(removeAll);
+            setText(save);
 
             place.setBackground(new Color (0,230, 50));
             remove.setBackground(new Color (250,0, 0));
             removeAll.setBackground(new Color (160,0, 0));
+            save.setBackground(new Color (0,20, 120));
 
             place.setBounds(50,20,450,50);
             remove.setBounds(975,20,200,50);
             removeAll.setBounds(1200,20,275,50);
+            save.setBounds(1200,90,275,50);
         }
     }
 
