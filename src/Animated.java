@@ -71,12 +71,12 @@ public class Animated implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         //passer  la frame suivante
         if(e.getSource() == animationTimer){
-            if(orientation){
+            if(orientation){ // organisation horizontale
                 pointerX = (pointerX + (oneColumn));
                 pointerY = pointerY + ( pointerX/(W) ) * (oneRow);
                 pointerX %= W - (pointerY/H)*noFrames*oneColumn;
                 pointerY %= H;
-            }else {
+            }else { // organisation verticale
                 pointerY = (pointerY + (oneRow));
                 pointerX = pointerX + ( pointerY/(W) ) * (oneColumn);
                 pointerY %= H;
