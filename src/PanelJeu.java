@@ -30,6 +30,11 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     protected boolean clicking; // true si en train de clicker
     protected boolean pressingKey_Q;
 
+    protected JButton reset;
+    protected JButton place;
+    protected JButton remove;
+    protected JButton removeAll;
+
 
 
     // Constructeur
@@ -195,6 +200,23 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
                 timeWinSound.stop();
                 if(isDisplayable()) musique.clip.loop(Clip.LOOP_CONTINUOUSLY);
             }
+        }
+
+        //Boutons
+
+        if (e.getSource() == reset) {
+            balle.resetPosBalle(true);
+            repaint();
+        }
+
+        if (e.getSource() == remove) {
+            obstacles.remove(obstacles.size()-1);
+            repaint();
+        }
+
+        if (e.getSource() == removeAll) {
+            obstacles.clear();
+            repaint();
         }
     }
 
@@ -377,16 +399,27 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
 
     // Méthode afin de placer les différents objets sur la fenêtre en fonction du niveau
     public void setLvl() {
+
+        reset = new JButton("Réinitialiser");
+        setText(reset);
+        reset.setBackground(new Color (240,190, 0));
+        reset.setBounds(550,20,400,50);
+
+        place = null;
+        remove = null;
+        removeAll = null;
+
         if (indice >= 1 && indice <= 4) loadSave("niveau"+indice+".txt");
+
         if (indice == 5) { // Niveau édition
 
             balle = new Balle(200, 500);
 
             panier = new Panier(1400, 500);
 
-            JLabel place = new JLabel("Placer un obstacle : Q");
-            JLabel remove = new JLabel("Supprimer : P");
-            JLabel removeAll = new JLabel("Tout supprimer : W");
+            place = new JButton("Placer un obstacle");
+            remove = new JButton("Supprimer");
+            removeAll = new JButton("Tout supprimer");
 
             setText(place);
             setText(remove);
@@ -396,24 +429,20 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             remove.setBackground(new Color (250,0, 0));
             removeAll.setBackground(new Color (160,0, 0));
 
-            place.setBounds(50,700,450,50);
-            remove.setBounds(775,700,200,50);
-            removeAll.setBounds(1000,700,275,50);
+            place.setBounds(50,20,450,50);
+            remove.setBounds(975,20,200,50);
+            removeAll.setBounds(1200,20,275,50);
         }
-
-        JLabel reset = new JLabel("Réinitialiser : Espace");
-        setText(reset);
-        reset.setBackground(new Color (240,190, 0));
-        reset.setBounds(550,900,400,50);
     }
 
     // Initialiser les zones de textes dans le panel de jeu
-    public void setText (JLabel text){
+    public void setText (JButton text){
 
         text.setOpaque(true);
         text.setHorizontalAlignment(JLabel.CENTER);
         text.setForeground(Color.WHITE);
         text.setFont(new Font("Arial", Font.BOLD, 25));
+        text.addActionListener(this);
         add(text);
     }
 }
