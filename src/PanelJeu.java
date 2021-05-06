@@ -3,7 +3,7 @@ import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -70,6 +70,47 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         addMouseListener(this);
         addMouseMotionListener(this);
         addKeyListener(this);
+
+    }
+
+    public void save(String filename){
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream("Ressources/Saves/"+filename);
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream);
+            BufferedWriter bufferedWriter = new BufferedWriter(outputStreamWriter);
+
+            for (Obstacle o : obstacles) {
+                bufferedWriter.write(o.x+","+o.y+","+ o.largeur+","+o.hauteur);
+                bufferedWriter.newLine();
+            }
+
+            bufferedWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadSave(String filename){
+        try {
+            obstacles.clear();
+            InputStream txtStream = getClass().getResourceAsStream("Saves/"+filename);
+            InputStreamReader streamReader = new InputStreamReader(txtStream);
+            BufferedReader bufferedReader = new BufferedReader(streamReader);
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                int x = Integer.parseInt(line.substring(0, line.indexOf(",")));
+                line = line.substring(line.indexOf(",")+1);
+                int y = Integer.parseInt(line.substring(0, line.indexOf(",")));
+                line = line.substring(line.indexOf(",")+1);
+                int largeur = Integer.parseInt(line.substring(0, line.indexOf(",")));
+                line = line.substring(line.indexOf(",")+1);
+                int hauteur = Integer.parseInt(line);
+                obstacles.add(new Obstacle(x,y,largeur,hauteur));
+            }
+            bufferedReader.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     // Dessin
@@ -192,11 +233,11 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     public void keyPressed(KeyEvent e) {
         pressingSpaceBarToReset(e);
         ifSetPressingKey_Q_On(e);
-        if(e.getKeyCode() == KeyEvent.VK_W && indice == 5){
+        if(e.getKeyCode() == KeyEvent.VK_W ){
             obstacles.clear();
             repaint();
         }
-        if(e.getKeyCode() == KeyEvent.VK_A && indice == 5){
+        if(e.getKeyCode() == KeyEvent.VK_A ){
             balle.xInit = clickX;
             balle.yInit = clickY;
             balle.x = clickX;
@@ -205,7 +246,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             balle.yCollision = clickY;
             repaint();
         }
-        if(e.getKeyCode() == KeyEvent.VK_P && indice == 5) {
+        if(e.getKeyCode() == KeyEvent.VK_P ) {
             obstacles.remove(obstacles.size()-1);
             repaint();
         }
@@ -310,6 +351,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             obstacles.add(obstacle12);
             obstacles.add(obstacle13);
             obstacles.add(obstacle14);
+            save("niveau1.txt");
         }
 
         if (indice == 2) { // Niveau 2
@@ -348,6 +390,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             obstacles.add(obstacle28);
             obstacles.add(obstacle29);
             obstacles.add(obstacle210);
+            save("niveau2.txt");
         }
 
         if (indice == 3) { // Niveau 3
@@ -377,6 +420,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             obstacles.add(obstacle37);
             obstacles.add(obstacle38);
             obstacles.add(obstacle39);
+            save("niveau3.txt");
         }
 
         if (indice == 4) { // Niveau 4
@@ -401,6 +445,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             obstacles.add(obstacle43);
             obstacles.add(obstacle44);
             obstacles.add(obstacle45);
+            save("niveau4.txt");
         }
 
         if (indice == 5) { // Niveau édition
@@ -421,9 +466,9 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             remove.setBackground(new Color (250,0, 0));
             removeAll.setBackground(new Color (160,0, 0));
 
-            place.setBounds(50,900,450,50);
-            remove.setBounds(975,900,200,50);
-            removeAll.setBounds(1200,900,275,50);
+            place.setBounds(50,700,450,50);
+            remove.setBounds(775,700,200,50);
+            removeAll.setBounds(1000,700,275,50);
         }
 
         JLabel reset = new JLabel("Réinitialiser : Espace");

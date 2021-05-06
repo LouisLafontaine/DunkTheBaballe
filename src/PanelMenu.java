@@ -37,7 +37,7 @@ public class PanelMenu extends JPanel implements ActionListener{
         //Initialisation des boutons
         buttons = new JButton[5];
         for(int i = 0; i <= 4; i++) {
-            buttons[i] = new JButton("NIVEAU " + i);
+            buttons[i] = new JButton("NIVEAU " + (i+1));
         }
         buttons[4] = new JButton("EDITER");
 
@@ -62,7 +62,7 @@ public class PanelMenu extends JPanel implements ActionListener{
 
     public void setButton (JButton button, int indiceX, int indiceY) { //Initialiser les boutons
 
-        Font font = importFont("Font/PixelFont.ttf", 42);
+        Font font = importFont("Font/PixelFont.ttf", 40);
         button.addActionListener(this);
         button.setOpaque(true);
         button.setBorderPainted(false);
