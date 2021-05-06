@@ -29,6 +29,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
 
     protected boolean clicking; // true si en train de clicker
     protected boolean pressingKey_Q;
+    protected boolean modePlacer;
 
     protected JButton reset;
     protected JButton place;
@@ -70,6 +71,8 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         // Initialisation musique de fond
         musique = new Son("Music/Pokemon.wav");
         musique.clip.loop(Clip.LOOP_CONTINUOUSLY);
+
+        modePlacer =false;
 
         // Ajout interface
         addMouseListener(this);
@@ -161,8 +164,9 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             o.drawObstacle(g);
         }
 
+        if(clicking && modePlacer) drawRectangleFromMouse(g);
+
         g.setColor(Color.black);
-        if(pressingKey_Q && clicking) drawRectangleFromMouse(g);
 
         for(Animated animation : animatedItems){
             g.drawImage(animation.getCurrentFrame(), animation.x, animation.y, null);
@@ -218,6 +222,16 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             obstacles.clear();
             repaint();
         }
+
+        if (e.getSource() == place) {
+            modePlacer = !modePlacer;
+
+            if(modePlacer) {
+                place.setBackground(new Color (0,170,200));
+            } else {
+                place.setBackground(new Color (0,230, 50));
+            }
+        }
     }
 
     // MouseListener interface methods
@@ -235,10 +249,12 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     @Override
     public void mouseReleased(MouseEvent e) {
         setLastClickOff();
-        if(balle.toucheBalle(lastClickX,lastClickY)) {
+        if(balle.toucheBalle(lastClickX,lastClickY)  && !modePlacer) {
             balle.throwBalle(e);
             repaint();
         }
+
+        if(modePlacer) addNewObstacleFromMouse();
 
     }
 
@@ -257,6 +273,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         draggingOnBalle();
         clickX = e.getX();
         clickY = e.getY();
+
         repaint();
     }
 
@@ -340,7 +357,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     }
 
     public void tracerSegment(Graphics g) {
-        if(clicking && balle.toucheBalle(lastClickX, lastClickY)) {
+        if(clicking && balle.toucheBalle(lastClickX, lastClickY)  && !modePlacer) {
             Graphics2D g2d = (Graphics2D) g;
             g2d.setStroke(new BasicStroke(5));
             g2d.setColor(Color.red);
