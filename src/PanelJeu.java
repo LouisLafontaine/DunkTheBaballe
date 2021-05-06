@@ -68,7 +68,6 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         // Initialisation gameLoopTimer pour animation
         int fps = 120;
         gameLoopTimer = new Timer(1000/ fps, this);
-        gameLoopTimer.start();
 
         //Initialisation TimeWinSound pour relancer la musique à la fin du son de victoire
         timeWinSound = new Timer(1000, this);
@@ -87,6 +86,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         addMouseMotionListener(this);
         addKeyListener(this);
 
+        gameLoopTimer.start();
     }
 
     public void save(String filename){
@@ -436,7 +436,6 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     }
 
     public void drawRectangleFromMouse(Graphics g) {
-        int thickMin = 30; // Pour que l'obstacle que l'on place ai une épaisseur standard
         g.setColor(new Color(250,250,0));
         if(clickX>lastClickX && clickY>lastClickY){
             g.fillRect(lastClickX, lastClickY, multipleOfThick(clickX-lastClickX), multipleOfThick(clickY-lastClickY));
@@ -506,7 +505,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             removeAll = new JButton("Tout supprimer");
             save = new JButton("Sauvegarder");
             placeB = new JButton("Placer la balle");
-            placeP= new JButton("Placer le panier");
+            placeP = new JButton("Placer le panier");
             resetAll = new JButton("Reset");
 
             setText(place);
@@ -533,6 +532,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     public void setText (JButton text){
 
         text.setOpaque(true);
+        text.setBorderPainted(false);
         text.setHorizontalAlignment(JLabel.CENTER);
         text.setForeground(Color.WHITE);
         text.setFont(new Font("Arial", Font.BOLD, 25));
