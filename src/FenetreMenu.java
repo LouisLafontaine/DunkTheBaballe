@@ -12,7 +12,7 @@ public class FenetreMenu extends JFrame{
 
         setSize(2*mainPanel.background.getCurrentFrame().getWidth(),2*mainPanel.background.getCurrentFrame().getHeight());
         setResizable(false);
-        setLocation(50, 50);
+        setLocation(350, 150);
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }

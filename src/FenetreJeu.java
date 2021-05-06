@@ -24,10 +24,11 @@ public class FenetreJeu extends JFrame implements WindowListener {
 
         addWindowListener(this);
         setSize(mainPanel.background.getWidth(null),mainPanel.background.getHeight(null));
-        setLocation(50, 50);
+        setLocation(350, 75);
         setVisible(true);
         setResizable(false);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
     }
 
     /**

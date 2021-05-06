@@ -101,7 +101,7 @@ public class Balle {
     }
 
     public void throwBalle(MouseEvent e) {
-        double mouseSensibility = 0.026;
+        double mouseSensibility = 0.022;
         vx = (x - e.getX()) * mouseSensibility;
         vy = (y - e.getY()) * mouseSensibility;
         moving = true;
