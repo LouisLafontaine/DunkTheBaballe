@@ -76,7 +76,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         temps = 0;
 
         // Initialisation musique de fond
-        musique = new Son("Music/Pokemon.wav");
+        musique = new Son("Music/PokemonTrimmed.wav");
         musique.clip.loop(Clip.LOOP_CONTINUOUSLY);
 
         // Initialisation des modes d'édition

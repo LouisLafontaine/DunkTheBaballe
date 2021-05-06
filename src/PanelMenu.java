@@ -24,7 +24,7 @@ public class PanelMenu extends JPanel implements ActionListener{
         animationTimer = new Timer(1000/30, this);
 
         // Initialisation musique de fond
-        musique = new Son("Music/8bitMoskau.wav");
+        musique = new Son("Music/8bitMoskauTrimmed.wav");
         musique.clip.loop(Clip.LOOP_CONTINUOUSLY);
 
         setLayout(null);
