@@ -64,6 +64,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
 
         // Initialisation tableau objets animés
         animatedItems = new LinkedList<>();
+        animatedItems.add(new Animated("Animation/flameCircle.png", panier.x-50, panier.y-55, 7,7,3, 30,true));
 
         // Initialisation gameLoopTimer pour animation
         int fps = 120;
@@ -222,7 +223,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         }
 
         if (e.getSource() == remove) {
-            obstacles.remove(obstacles.size()-1);
+            if (obstacles.size() > 0) obstacles.remove(obstacles.size()-1);
             repaint();
         }
 
@@ -239,7 +240,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             modePlacer = !modePlacer;
             modePlacerB = false;
             modePlacerP = false;
-            resetColorBouton();
+            resetBouton();
 
             if(modePlacer) place.setBackground(new Color (18, 239, 55));
         }
@@ -248,7 +249,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             modePlacerB = !modePlacerB;
             modePlacer = false;
             modePlacerP = false;
-            resetColorBouton();
+            resetBouton();
 
             if(modePlacerB) placeB.setBackground(new Color (162, 109, 224));
         }
@@ -257,15 +258,17 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             modePlacerP = !modePlacerP;
             modePlacerB = false;
             modePlacer = false;
-            resetColorBouton();
+            resetBouton();
 
             if(modePlacerP) placeP.setBackground(new Color (245, 210, 38));
         }
 
         if (e.getSource() == save) {
-            resetColorBouton();
+            save("editeur.txt");
+            resetBouton();
 
-            save.setBackground(new Color (245, 210, 38));
+            save.setBackground(new Color (0, 210, 38));
+            save.setText("Sauvegardé !");
         }
     }
 
@@ -278,7 +281,6 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     @Override
     public void mousePressed(MouseEvent e) {
         setLastClickOn(e.getX(),e.getY());
-//        chargingAnimation();
     }
 
     @Override
@@ -370,7 +372,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             repaint();
         }
         if(e.getKeyCode() == KeyEvent.VK_P ) {
-            obstacles.remove(obstacles.size()-1);
+            if (obstacles.size() > 0) obstacles.remove(obstacles.size()-1);
             repaint();
         }
         if(e.getKeyCode() == KeyEvent.VK_R) musique.clip.start();
@@ -477,12 +479,6 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         if(e.getKeyCode() == KeyEvent.VK_Q) pressingKey_Q = false;
     }
 
-//    public void chargingAnimation() {
-//        if(balle.toucheBalle(lastClickX, lastClickY)) {
-//            animatedItems.add(new Animated("Animation/flameCircle.png",(int)balle.xInit-50,(int)balle.yInit-55,7,7,8, 30,-1,true));
-//        }
-//    }
-
     // Méthode afin de placer les différents objets sur la fenêtre en fonction du niveau
     public void setLvl() {
         place = null;
@@ -518,7 +514,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             setText(placeP);
             setText(resetAll);
 
-            resetColorBouton();
+            resetBouton();
 
             place.setBounds(20,20,300,50);
             retry.setBounds(340,20,300,50);
@@ -543,11 +539,12 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         add(text);
     }
 
-    public void resetColorBouton (){
+    public void resetBouton(){
         place.setBackground(new Color (31, 109, 10));
         remove.setBackground(new Color (250,0, 0));
         removeAll.setBackground(new Color (160,0, 0));
         save.setBackground(new Color (0,20, 120));
+        save.setText("Sauvegarder");
         placeB.setBackground(new Color (93, 22, 102, 255));
         placeP.setBackground(new Color (236, 106, 6));
         resetAll.setBackground(new Color (5,0, 0));
