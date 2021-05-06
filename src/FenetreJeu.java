@@ -60,9 +60,12 @@ public class FenetreJeu extends JFrame implements WindowListener {
      */
     @Override
     public void windowClosed(WindowEvent e) {
+
+        //Arrêt de la musique et de l'animation de la fenêtre jeu
         mainPanel.musique.clip.stop();
         mainPanel.gameLoopTimer.stop();
 
+        //Rendre visible la fenêtre menu, relancer la musique et les animations
         fenetreMenu.setVisible(true);
         fenetreMenu.mainPanel.musique.clip.setMicrosecondPosition(0); // Recommence la musique au début
         fenetreMenu.mainPanel.musique.clip.loop(Clip.LOOP_CONTINUOUSLY);

@@ -9,7 +9,7 @@ public class PanelMenu extends JPanel implements ActionListener{
     // Attributs
     //======================================================================
     final FenetreMenu fenetreMenu;
-    final JButton[] buttons;
+    final JButton[] buttons; // Tableau boutons pour les niveaux
     protected Son musique;
     Timer animationTimer;
     Animated background;
@@ -81,6 +81,7 @@ public class PanelMenu extends JPanel implements ActionListener{
         add(button);
     }
 
+    // Initialisation de la police d'écriture
     private Font importFont(String filename, int size) {
         Font maFont;
         try {
@@ -119,8 +120,4 @@ public class PanelMenu extends JPanel implements ActionListener{
         }
         repaint();
     }
-
-    // Méthodes
-    //======================================================================
-
 }

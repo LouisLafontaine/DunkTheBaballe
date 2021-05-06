@@ -10,7 +10,9 @@ public class FenetreMenu extends JFrame{
         mainPanel = new PanelMenu(this);
         add(mainPanel);
 
+        // taille de la fenêtre identique à celle de l'image
         setSize(2*mainPanel.background.getCurrentFrame().getWidth(),2*mainPanel.background.getCurrentFrame().getHeight());
+
         setResizable(false);
         setLocation(350, 150);
         setVisible(true);

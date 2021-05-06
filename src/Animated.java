@@ -69,6 +69,7 @@ public class Animated implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        //passer  la frame suivante
         if(e.getSource() == animationTimer){
             if(orientation){
                 pointerX = (pointerX + (oneColumn));

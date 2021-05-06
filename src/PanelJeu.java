@@ -29,9 +29,10 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
 
     protected boolean clicking; // true si en train de clicker
     protected boolean pressingKey_Q;
-    protected boolean modePlacer;
-    protected boolean modePlacerB;
-    protected boolean modePlacerP;
+
+    protected boolean modePlacer; // true si Mode placer obstacle
+    protected boolean modePlacerB; // true si Mode placer balle
+    protected boolean modePlacerP; // true si Mode placer panier
 
     protected JButton retry;
     protected JButton place;
@@ -78,6 +79,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         musique = new Son("Music/Pokemon.wav");
         musique.clip.loop(Clip.LOOP_CONTINUOUSLY);
 
+        // Initialisation des modes d'édition
         modePlacer = false;
         modePlacerB = false;
         modePlacerP = false;
@@ -90,6 +92,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         gameLoopTimer.start();
     }
 
+    // Sauvegarder les paramètres d'un niveau dans un fichier
     public void save(String filename){
         try {
             FileOutputStream fileOutputStream = new FileOutputStream("Ressources/Saves/"+filename);
@@ -113,6 +116,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         }
     }
 
+    // Charger un niveau sauvegarder dans un fichier
     public void loadSave(String filename){
         try {
             obstacles.clear();
@@ -173,6 +177,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             o.drawObstacle(g);
         }
 
+        // Dessin du rectangle qu'on place
         if(clicking && modePlacer) drawRectangleFromMouse(g);
 
         g.setColor(Color.black);
@@ -202,6 +207,8 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             }
             repaint();
         }
+
+        //Réinitialisation si balle bloquée
         if (balle.balleBloquee()){
             balle.resetPosBalle(true);
         }
@@ -446,10 +453,13 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         g.setColor(new Color(250,250,0));
         if(clickX>lastClickX && clickY>lastClickY){
             g.fillRect(lastClickX, lastClickY, multipleOfThick(clickX-lastClickX), multipleOfThick(clickY-lastClickY));
+
         }else if(clickX<lastClickX && clickY>lastClickY) {
             g.fillRect(multipleOfThick(clickX), lastClickY, multipleOfThick(lastClickX-multipleOfThick(clickX)), multipleOfThick(clickY-lastClickY));
+
         }else if(clickX>lastClickX && clickY<lastClickY) {
             g.fillRect(lastClickX, multipleOfThick(clickY), multipleOfThick(clickX-lastClickX), multipleOfThick(lastClickY-multipleOfThick(clickY)));
+
         }else if(clickX<lastClickX && clickY<lastClickY)
             g.fillRect(multipleOfThick(clickX), multipleOfThick(clickY), multipleOfThick(lastClickX-multipleOfThick(clickX)), multipleOfThick(lastClickY-multipleOfThick(clickY)));
     }
@@ -457,16 +467,19 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     private void addNewObstacleFromMouse() {
         if(clickX>lastClickX && clickY>lastClickY){
             obstacles.add(new Obstacle(lastClickX, lastClickY, multipleOfThick(clickX-lastClickX), multipleOfThick(clickY-lastClickY)));
+
         }else if(clickX<lastClickX && clickY>lastClickY) {
             obstacles.add(new Obstacle(multipleOfThick(clickX), lastClickY, multipleOfThick(lastClickX-multipleOfThick(clickX)), multipleOfThick(clickY-lastClickY)));
+
         }else if(clickX>lastClickX && clickY<lastClickY) {
             obstacles.add(new Obstacle(lastClickX, multipleOfThick(clickY), multipleOfThick(clickX-lastClickX), multipleOfThick(lastClickY-multipleOfThick(clickY))));
+
         }else if(clickX<lastClickX && clickY<lastClickY)
             obstacles.add(new Obstacle(multipleOfThick(clickX), multipleOfThick(clickY), multipleOfThick(lastClickX-multipleOfThick(clickX)), multipleOfThick(lastClickY-multipleOfThick(clickY))));
     }
 
     public int multipleOfThick(int number){
-        int thickMin = 30; // Pour que l'obstacle que l'on place ai une épaisseur standard
+        int thickMin = 15; // Pour que l'obstacle que l'on place ai une épaisseur standard
         return ((number/thickMin)*thickMin);
     }
 
@@ -530,7 +543,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         }
     }
 
-    // Initialiser les zones de textes dans le panel de jeu
+    // Initialiser les boutons dans le panel de jeu
     public void setText (JButton text){
 
         text.setOpaque(true);
@@ -542,6 +555,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         add(text);
     }
 
+    // Réinitialiser la couleur des boutons
     public void resetBouton(){
         place.setBackground(new Color (31, 109, 10));
         remove.setBackground(new Color (250,0, 0));

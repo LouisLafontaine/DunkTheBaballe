@@ -22,7 +22,7 @@ public class Balle {
     protected int compteur; // compteur balle bloquée
     protected int t; // variable temps pour calcul de la trajectoire
 
-    protected boolean moving;
+    protected boolean moving; // true si la balle bouge
 
     Image characterImage;
 
@@ -86,6 +86,7 @@ public class Balle {
         }
     }
 
+    // Répond true si la balle est en dehors de la fenêtre (ne compte pas si elle est au dessus)
     public boolean notInBounds(int largeurFenetre, int hauteurFenetre) {
         return ((x <= 0) || (x >= largeurFenetre) || (y< - hauteurFenetre/2.0) || (y >= hauteurFenetre));
     }
@@ -188,12 +189,14 @@ public class Balle {
         }
     }
 
+    //Réinitialiser la position de la balle si en dehors de la fenêtre
     public void checkSolveNotInBounds(int largueur, int hauteur) {
         if(notInBounds(largueur, hauteur)){
             resetPosBalle(true);
         }
     }
 
+    //Return true si balle bloquée
     public boolean balleBloquee(){
         if(distanceBalle((int)xCollision,(int)yCollision) < 5 && moving){
             compteur++;
