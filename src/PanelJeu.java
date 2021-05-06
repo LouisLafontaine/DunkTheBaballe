@@ -326,18 +326,6 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         }
     }
 
-    public void drawRectangleFromMouse(Graphics g) {
-        g.setColor(new Color(250,250,0));
-        if(clickX>lastClickX && clickY>lastClickY){
-            g.fillRect(lastClickX, lastClickY, clickX-lastClickX, clickY-lastClickY);
-        }else if(clickX>lastClickX && clickY<lastClickY) {
-            g.fillRect(lastClickX, clickY, clickX-lastClickX, lastClickY-clickY);
-        }else if(clickX<lastClickX && clickY>lastClickY) {
-            g.fillRect(clickX, lastClickY, lastClickX-clickX, clickY-lastClickY);
-        }else if(clickX<lastClickX && clickY<lastClickY)
-            g.fillRect(clickX, clickY, lastClickX-clickX, lastClickY-clickY);
-    }
-
     public void checkSolveWin() {
         if(balle.hasCollided(panier)){
             System.out.println("gagné");
@@ -349,15 +337,33 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         }
     }
 
+    public void drawRectangleFromMouse(Graphics g) {
+        int thickMin = 30; // Pour que l'obstacle que l'on place ai une épaisseur standard
+        g.setColor(new Color(250,250,0));
+        if(clickX>lastClickX && clickY>lastClickY){
+            g.fillRect(lastClickX, lastClickY, multipleOfThick(clickX-lastClickX), multipleOfThick(clickY-lastClickY));
+        }else if(clickX<lastClickX && clickY>lastClickY) {
+            g.fillRect(multipleOfThick(clickX), lastClickY, multipleOfThick(lastClickX-multipleOfThick(clickX)), multipleOfThick(clickY-lastClickY));
+        }else if(clickX>lastClickX && clickY<lastClickY) {
+            g.fillRect(lastClickX, multipleOfThick(clickY), multipleOfThick(clickX-lastClickX), multipleOfThick(lastClickY-multipleOfThick(clickY)));
+        }else if(clickX<lastClickX && clickY<lastClickY)
+            g.fillRect(multipleOfThick(clickX), multipleOfThick(clickY), multipleOfThick(lastClickX-multipleOfThick(clickX)), multipleOfThick(lastClickY-multipleOfThick(clickY)));
+    }
+
     private void addNewObstacleFromMouse() {
         if(clickX>lastClickX && clickY>lastClickY){
-            obstacles.add(new Obstacle(lastClickX, lastClickY, clickX-lastClickX, clickY-lastClickY));
-        }else if(clickX>lastClickX && clickY<lastClickY) {
-            obstacles.add(new Obstacle(lastClickX, clickY, clickX-lastClickX, lastClickY-clickY));
+            obstacles.add(new Obstacle(lastClickX, lastClickY, multipleOfThick(clickX-lastClickX), multipleOfThick(clickY-lastClickY)));
         }else if(clickX<lastClickX && clickY>lastClickY) {
-            obstacles.add(new Obstacle(clickX, lastClickY, lastClickX-clickX, clickY-lastClickY));
+            obstacles.add(new Obstacle(multipleOfThick(clickX), lastClickY, multipleOfThick(lastClickX-multipleOfThick(clickX)), multipleOfThick(clickY-lastClickY)));
+        }else if(clickX>lastClickX && clickY<lastClickY) {
+            obstacles.add(new Obstacle(lastClickX, multipleOfThick(clickY), multipleOfThick(clickX-lastClickX), multipleOfThick(lastClickY-multipleOfThick(clickY))));
         }else if(clickX<lastClickX && clickY<lastClickY)
-            obstacles.add(new Obstacle(clickX, clickY, lastClickX-clickX, lastClickY-clickY));
+            obstacles.add(new Obstacle(multipleOfThick(clickX), multipleOfThick(clickY), multipleOfThick(lastClickX-multipleOfThick(clickX)), multipleOfThick(lastClickY-multipleOfThick(clickY))));
+    }
+
+    public int multipleOfThick(int number){
+        int thickMin = 30; // Pour que l'obstacle que l'on place ai une épaisseur standard
+        return ((number/thickMin)*thickMin);
     }
 
     // Key pressed tracking
