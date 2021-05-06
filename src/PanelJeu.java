@@ -157,7 +157,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         }
 
         g.setColor(Color.black);
-        if(pressingKey_Q) g.fillRect(lastClickX, lastClickY, Math.abs(clickX-lastClickX), Math.abs(clickY-lastClickY));
+        if(pressingKey_Q && clicking) drawRectangleFromMouse(g);
 
         for(Animated animation : animatedItems){
             g.drawImage(animation.getCurrentFrame(), animation.x, animation.y, null);
@@ -207,7 +207,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     @Override
     public void mousePressed(MouseEvent e) {
         setLastClickOn(e.getX(),e.getY());
-        chargingAnimation();
+//        chargingAnimation();
     }
 
     @Override
@@ -217,7 +217,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             balle.throwBalle(e);
             repaint();
         }
-        animatedItems.removeLast();
+
     }
 
     @Override
@@ -277,7 +277,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
 
     @Override
     public void keyReleased(KeyEvent e) {
-        if(pressingKey_Q) addNewObstacle();
+        if(pressingKey_Q) addNewObstacleFromMouse();
         ifSetPressingKey_Q_Off(e);
     }
 
@@ -326,6 +326,18 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         }
     }
 
+    public void drawRectangleFromMouse(Graphics g) {
+        g.setColor(new Color(250,250,0));
+        if(clickX>lastClickX && clickY>lastClickY){
+            g.fillRect(lastClickX, lastClickY, clickX-lastClickX, clickY-lastClickY);
+        }else if(clickX>lastClickX && clickY<lastClickY) {
+            g.fillRect(lastClickX, clickY, clickX-lastClickX, lastClickY-clickY);
+        }else if(clickX<lastClickX && clickY>lastClickY) {
+            g.fillRect(clickX, lastClickY, lastClickX-clickX, clickY-lastClickY);
+        }else if(clickX<lastClickX && clickY<lastClickY)
+            g.fillRect(clickX, clickY, lastClickX-clickX, lastClickY-clickY);
+    }
+
     public void checkSolveWin() {
         if(balle.hasCollided(panier)){
             System.out.println("gagné");
@@ -337,8 +349,15 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         }
     }
 
-    private void addNewObstacle() {
-        obstacles.add(new Obstacle(lastClickX,lastClickY,Math.abs(clickX - lastClickX),Math.abs(clickY-lastClickY)));
+    private void addNewObstacleFromMouse() {
+        if(clickX>lastClickX && clickY>lastClickY){
+            obstacles.add(new Obstacle(lastClickX, lastClickY, clickX-lastClickX, clickY-lastClickY));
+        }else if(clickX>lastClickX && clickY<lastClickY) {
+            obstacles.add(new Obstacle(lastClickX, clickY, clickX-lastClickX, lastClickY-clickY));
+        }else if(clickX<lastClickX && clickY>lastClickY) {
+            obstacles.add(new Obstacle(clickX, lastClickY, lastClickX-clickX, clickY-lastClickY));
+        }else if(clickX<lastClickX && clickY<lastClickY)
+            obstacles.add(new Obstacle(clickX, clickY, lastClickX-clickX, lastClickY-clickY));
     }
 
     // Key pressed tracking
@@ -350,11 +369,11 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         if(e.getKeyCode() == KeyEvent.VK_Q) pressingKey_Q = false;
     }
 
-    public void chargingAnimation() {
-        if(balle.toucheBalle(lastClickX, lastClickY)) {
-            animatedItems.add(new Animated("Animation/flameCircle.png",(int)balle.xInit-50,(int)balle.yInit-55,7,7,8, 30,-1,true));
-        }
-    }
+//    public void chargingAnimation() {
+//        if(balle.toucheBalle(lastClickX, lastClickY)) {
+//            animatedItems.add(new Animated("Animation/flameCircle.png",(int)balle.xInit-50,(int)balle.yInit-55,7,7,8, 30,-1,true));
+//        }
+//    }
 
     // Méthode afin de placer les différents objets sur la fenêtre en fonction du niveau
     public void setLvl() {
