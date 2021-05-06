@@ -20,7 +20,7 @@ public class PanelMenu extends JPanel implements ActionListener{
         this.fenetreMenu = fenetreMenu;
 
         // Animated Background
-        background = new Animated("Background/JapanCity.png",0,0,25,5,30, true);
+        background = new Animated("Background/JapanCity.png",0,0,25,5,0,30, true);
         animationTimer = new Timer(1000/30, this);
 
         // Initialisation musique de fond

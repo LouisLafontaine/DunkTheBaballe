@@ -33,7 +33,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     protected boolean modePlacerB;
     protected boolean modePlacerP;
 
-    protected JButton reset;
+    protected JButton retry;
     protected JButton place;
     protected JButton remove;
     protected JButton removeAll;
@@ -64,6 +64,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
 
         // Initialisation tableau objets animés
         animatedItems = new LinkedList<>();
+        animatedItems.add(new Animated("Animation/flameCircle.png", panier.x-50, panier.y-55, 7,7,3, 30,true));
 
         // Initialisation gameLoopTimer pour animation
         int fps = 120;
@@ -216,13 +217,13 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
 
         //Boutons
 
-        if (e.getSource() == reset) {
+        if (e.getSource() == retry) {
             balle.resetPosBalle(true);
             repaint();
         }
 
         if (e.getSource() == remove) {
-            obstacles.remove(obstacles.size()-1);
+            if (obstacles.size() > 0) obstacles.remove(obstacles.size()-1);
             repaint();
         }
 
@@ -232,26 +233,14 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         }
 
         if (e.getSource() == resetAll) {
-
-            obstacles.clear();
-
-            balle.xInit = 200;
-            balle.yInit = 500;
-            balle.resetPosBalle(true);
-
-            panier.x = 1400;
-            panier.y = 500;
-
-            repaint();
-
-            save("editeur.txt");
+            loadSave("editeur.txt");
         }
 
         if (e.getSource() == place) {
             modePlacer = !modePlacer;
             modePlacerB = false;
             modePlacerP = false;
-            resetColorBouton();
+            resetBouton();
 
             if(modePlacer) place.setBackground(new Color (18, 239, 55));
         }
@@ -260,7 +249,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             modePlacerB = !modePlacerB;
             modePlacer = false;
             modePlacerP = false;
-            resetColorBouton();
+            resetBouton();
 
             if(modePlacerB) placeB.setBackground(new Color (162, 109, 224));
         }
@@ -269,12 +258,18 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             modePlacerP = !modePlacerP;
             modePlacerB = false;
             modePlacer = false;
-            resetColorBouton();
+            resetBouton();
 
             if(modePlacerP) placeP.setBackground(new Color (245, 210, 38));
         }
 
-        if (e.getSource() == save) save("editeur.txt");
+        if (e.getSource() == save) {
+            save("editeur.txt");
+            resetBouton();
+
+            save.setBackground(new Color (0, 210, 38));
+            save.setText("Sauvegardé !");
+        }
     }
 
     // MouseListener interface methods
@@ -286,7 +281,6 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     @Override
     public void mousePressed(MouseEvent e) {
         setLastClickOn(e.getX(),e.getY());
-//        chargingAnimation();
     }
 
     @Override
@@ -333,6 +327,19 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         clickX = e.getX();
         clickY = e.getY();
 
+        if(modePlacerB){
+            balle.xInit = clickX;
+            balle.yInit = clickY;
+            balle.x = clickX;
+            balle.y = clickY;
+            balle.xCollision = clickX;
+            balle.yCollision = clickY;
+        }
+
+        if(modePlacerP){
+            panier.x = clickX;
+            panier.y = clickY;
+        }
         repaint();
     }
 
@@ -365,7 +372,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             repaint();
         }
         if(e.getKeyCode() == KeyEvent.VK_P ) {
-            obstacles.remove(obstacles.size()-1);
+            if (obstacles.size() > 0) obstacles.remove(obstacles.size()-1);
             repaint();
         }
         if(e.getKeyCode() == KeyEvent.VK_R) musique.clip.start();
@@ -472,26 +479,15 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         if(e.getKeyCode() == KeyEvent.VK_Q) pressingKey_Q = false;
     }
 
-//    public void chargingAnimation() {
-//        if(balle.toucheBalle(lastClickX, lastClickY)) {
-//            animatedItems.add(new Animated("Animation/flameCircle.png",(int)balle.xInit-50,(int)balle.yInit-55,7,7,8, 30,-1,true));
-//        }
-//    }
-
     // Méthode afin de placer les différents objets sur la fenêtre en fonction du niveau
     public void setLvl() {
-
-        reset = new JButton("Réessayer");
-        setText(reset);
-        reset.setBackground(new Color (240,190, 0));
-        reset.setBounds(550,20,400,50);
-
         place = null;
         remove = null;
         removeAll = null;
         save = null;
         placeB = null;
         placeP = null;
+        retry = null;
         resetAll = null;
 
         if (indice >= 1 && indice <= 4) loadSave("niveau"+indice+".txt");
@@ -501,6 +497,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             loadSave("editeur.txt");
 
             place = new JButton("Placer un obstacle");
+            retry = new JButton("Réessayer");
             remove = new JButton("Supprimer");
             removeAll = new JButton("Tout supprimer");
             save = new JButton("Sauvegarder");
@@ -509,6 +506,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             resetAll = new JButton("Reset");
 
             setText(place);
+            setText(retry);
             setText(remove);
             setText(removeAll);
             setText(save);
@@ -516,15 +514,16 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             setText(placeP);
             setText(resetAll);
 
-            resetColorBouton();
+            resetBouton();
 
-            place.setBounds(50,20,450,50);
-            remove.setBounds(975,20,200,50);
-            removeAll.setBounds(1200,20,275,50);
-            save.setBounds(1200,90,275,50);
-            placeB.setBounds(50,90,450,50);
-            placeP.setBounds(550,90,400,50);
-            resetAll.setBounds(975,90,200,50);
+            place.setBounds(20,20,300,50);
+            retry.setBounds(340,20,300,50);
+            remove.setBounds(660,20,200,50);
+            removeAll.setBounds(880,20,300,50);
+            save.setBounds(880,90,300,50);
+            placeB.setBounds(20,90,300,50);
+            placeP.setBounds(340,90,300,50);
+            resetAll.setBounds(660,90,200,50);
         }
     }
 
@@ -540,14 +539,16 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         add(text);
     }
 
-    public void resetColorBouton (){
+    public void resetBouton(){
         place.setBackground(new Color (31, 109, 10));
         remove.setBackground(new Color (250,0, 0));
         removeAll.setBackground(new Color (160,0, 0));
         save.setBackground(new Color (0,20, 120));
+        save.setText("Sauvegarder");
         placeB.setBackground(new Color (93, 22, 102, 255));
         placeP.setBackground(new Color (236, 106, 6));
         resetAll.setBackground(new Color (5,0, 0));
+        retry.setBackground(new Color (240,190, 0));
     }
 
 }
