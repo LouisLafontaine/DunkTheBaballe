@@ -23,8 +23,8 @@ public class FenetreJeu extends JFrame implements WindowListener {
         if(!playMusic) mainPanel.musique.clip.stop();
 
         addWindowListener(this);
-        setSize(1500,1000);
-        setLocation(250, 50);
+        setSize(mainPanel.background.getWidth(null),mainPanel.background.getHeight(null));
+        setLocation(50, 50);
         setVisible(true);
         setResizable(false);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

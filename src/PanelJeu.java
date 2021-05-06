@@ -77,7 +77,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         musique = new Son("Music/Pokemon.wav");
         musique.clip.loop(Clip.LOOP_CONTINUOUSLY);
 
-        modePlacer =false;
+        modePlacer = false;
         modePlacerB = false;
         modePlacerP = false;
 
@@ -190,14 +190,14 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             if(balle.moving){
                 balle.updatePosBalle();
                 balle.checkSolveNotInBounds(getWidth(),getHeight());
-                balle.checkSolveCollisions(obstacles);
-                checkSolveWin();
                 for(Obstacle o : obstacles){
                     if(balle.hasCollided(o)){
+                        balle.solveCollision(o);
                         animatedItems.add(new Animated("Animation/explosion2.png",(int)balle.x-32,(int)balle.y-64,1,8,0, 16,1,true));
                         break;
                     }
                 }
+                checkSolveWin();
             }
             repaint();
         }

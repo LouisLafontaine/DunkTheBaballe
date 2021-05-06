@@ -2,7 +2,6 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class Balle {
     // Attributs
@@ -185,15 +184,6 @@ public class Balle {
             else{
                 yCollision = o.y -1 ;
                 vy = -amortissement * Math.abs((y - yPrev)); // meme raison que ci-dessus pour face du haut lorsque x-xPrev != 0
-            }
-        }
-    }
-
-    public void checkSolveCollisions(ArrayList<Obstacle> obstacles) {
-        for (Obstacle o : obstacles){
-            if (hasCollided(o)) {
-                solveCollision(o);
-                break;
             }
         }
     }
