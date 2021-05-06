@@ -7,7 +7,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-public class PanelJeu extends JPanel implements ActionListener, MouseListener, MouseMotionListener, KeyListener{
+public class PanelJeu extends JPanel implements ActionListener, MouseListener, MouseMotionListener{
     // Attributs
     //======================================================================
     protected  Balle balle;
@@ -28,7 +28,6 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     protected int temps; // Temps s'écoulant durant le son de victoire
 
     protected boolean clicking; // true si en train de clicker
-    protected boolean pressingKey_Q;
 
     protected boolean modePlacer; // true si Mode placer obstacle
     protected boolean modePlacerB; // true si Mode placer balle
@@ -65,7 +64,6 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
 
         // Initialisation tableau objets animés
         animatedItems = new LinkedList<>();
-        animatedItems.add(new Animated("Animation/flameCircle.png", panier.x-50, panier.y-55, 7,7,3, 30,true));
 
         // Initialisation gameLoopTimer pour animation
         int fps = 120;
@@ -87,7 +85,6 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
         // Ajout interface
         addMouseListener(this);
         addMouseMotionListener(this);
-        addKeyListener(this);
 
         gameLoopTimer.start();
     }
@@ -352,45 +349,6 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
 
     @Override
     public void mouseMoved(MouseEvent e) {
-
-    }
-
-    // KeyListener interface methods
-    //======================================================================
-    @Override
-    public void keyTyped(KeyEvent e) {
-
-    }
-    @Override
-    public void keyPressed(KeyEvent e) {
-        pressingSpaceBarToReset(e);
-        ifSetPressingKey_Q_On(e);
-        if(e.getKeyCode() == KeyEvent.VK_W ){
-            obstacles.clear();
-            repaint();
-        }
-        if(e.getKeyCode() == KeyEvent.VK_A ){
-            balle.xInit = clickX;
-            balle.yInit = clickY;
-            balle.x = clickX;
-            balle.y = clickY;
-            balle.xCollision = clickX;
-            balle.yCollision = clickY;
-            repaint();
-        }
-        if(e.getKeyCode() == KeyEvent.VK_P ) {
-            if (obstacles.size() > 0) obstacles.remove(obstacles.size()-1);
-            repaint();
-        }
-        if(e.getKeyCode() == KeyEvent.VK_R) musique.clip.start();
-
-        if(e.getKeyCode() == KeyEvent.VK_ENTER) animatedItems.clear();
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-        if(pressingKey_Q) addNewObstacleFromMouse();
-        ifSetPressingKey_Q_Off(e);
     }
 
     // Méthodes
@@ -479,17 +437,8 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     }
 
     public int multipleOfThick(int number){
-        int thickMin = 15; // Pour que l'obstacle que l'on place ai une épaisseur standard
+        int thickMin = 20; // Pour que l'obstacle que l'on place ai une épaisseur standard
         return ((number/thickMin)*thickMin);
-    }
-
-    // Key pressed tracking
-    public void ifSetPressingKey_Q_On(KeyEvent e) {
-        if(e.getKeyCode() == KeyEvent.VK_Q) pressingKey_Q = true;
-    }
-
-    public void ifSetPressingKey_Q_Off(KeyEvent e) {
-        if(e.getKeyCode() == KeyEvent.VK_Q) pressingKey_Q = false;
     }
 
     // Méthode afin de placer les différents objets sur la fenêtre en fonction du niveau
