@@ -79,8 +79,14 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream);
             BufferedWriter bufferedWriter = new BufferedWriter(outputStreamWriter);
 
+            bufferedWriter.write("b"+(int)balle.x+","+(int)balle.y);
+            bufferedWriter.newLine();
+
+            bufferedWriter.write("p"+panier.x+","+panier.y);
+            bufferedWriter.newLine();
+
             for (Obstacle o : obstacles) {
-                bufferedWriter.write(o.x+","+o.y+","+ o.largeur+","+o.hauteur);
+                bufferedWriter.write("o"+o.x+","+o.y+","+ o.largeur+","+o.hauteur);
                 bufferedWriter.newLine();
             }
 
@@ -98,14 +104,28 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
             BufferedReader bufferedReader = new BufferedReader(streamReader);
             String line;
             while ((line = bufferedReader.readLine()) != null) {
-                int x = Integer.parseInt(line.substring(0, line.indexOf(",")));
-                line = line.substring(line.indexOf(",")+1);
-                int y = Integer.parseInt(line.substring(0, line.indexOf(",")));
-                line = line.substring(line.indexOf(",")+1);
-                int largeur = Integer.parseInt(line.substring(0, line.indexOf(",")));
-                line = line.substring(line.indexOf(",")+1);
-                int hauteur = Integer.parseInt(line);
-                obstacles.add(new Obstacle(x,y,largeur,hauteur));
+                if (line.startsWith("b")) {
+                    int balleX = Integer.parseInt(line.substring(1, line.indexOf(",")));
+                    line = line.substring(line.indexOf(",")+1);
+                    int balleY = Integer.parseInt(line);
+                    balle = new Balle(balleX, balleY);
+                }
+                if (line.startsWith("p")) {
+                    int panierX = Integer.parseInt(line.substring(1, line.indexOf(",")));
+                    line = line.substring(line.indexOf(",")+1);
+                    int panierY = Integer.parseInt(line);
+                    panier = new Panier(panierX, panierY);
+                }
+                if (line.startsWith("o")) {
+                    int x = Integer.parseInt(line.substring(1, line.indexOf(",")));
+                    line = line.substring(line.indexOf(",")+1);
+                    int y = Integer.parseInt(line.substring(0, line.indexOf(",")));
+                    line = line.substring(line.indexOf(",")+1);
+                    int largeur = Integer.parseInt(line.substring(0, line.indexOf(",")));
+                    line = line.substring(line.indexOf(",")+1);
+                    int hauteur = Integer.parseInt(line);
+                    obstacles.add(new Obstacle(x,y,largeur,hauteur));
+                }
             }
             bufferedReader.close();
         } catch (Exception e) {
@@ -338,118 +358,7 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
 
     // Méthode afin de placer les différents objets sur la fenêtre en fonction du niveau
     public void setLvl() {
-        if (indice == 1) { // Niveau 1
-
-            balle = new Balle(200, 500);
-
-            panier = new Panier(1400, 500);
-
-            Obstacle obstacle11 = new Obstacle(730,100, 40, 500);
-            Obstacle obstacle12 = new Obstacle(350,750, 800, 40);
-            Obstacle obstacle13 = new Obstacle(770,100, 200, 40);
-            Obstacle obstacle14 = new Obstacle(1075,625, 300, 40);
-
-            obstacles.add(obstacle11);
-            obstacles.add(obstacle12);
-            obstacles.add(obstacle13);
-            obstacles.add(obstacle14);
-            save("niveau1.txt");
-        }
-
-        if (indice == 2) { // Niveau 2
-
-            balle = new Balle(200, 200);
-
-            panier = new Panier(1400, 800);
-
-            int x1 = 175;
-            int y1 = 250;
-            int h = 30;
-            int l = 175;
-
-            int x = 150;
-            int y = 100;
-
-            Obstacle obstacle21 = new Obstacle(x1, y1, l, h);
-            Obstacle obstacle22 = new Obstacle(x1+ x,y1+ y, l, h);
-            Obstacle obstacle23 = new Obstacle(x1+2*x,y1+2*y, l, h);
-            Obstacle obstacle24 = new Obstacle(x1+3*x,y1+3*y, l, h);
-            Obstacle obstacle25 = new Obstacle(x1+4*x,y1+4*y, l, h);
-            Obstacle obstacle26 = new Obstacle(x1+5*x,y1+5*y, l, h);
-            Obstacle obstacle27 = new Obstacle(x1+6*x,y1+6*y, l, h);
-
-            Obstacle obstacle28 = new Obstacle(320,50, 30, 150);
-            Obstacle obstacle29 = new Obstacle(1325,750, 30, 75);
-            Obstacle obstacle210 = new Obstacle(1275,900, 150, 30);
-
-            obstacles.add(obstacle21);
-            obstacles.add(obstacle22);
-            obstacles.add(obstacle23);
-            obstacles.add(obstacle24);
-            obstacles.add(obstacle25);
-            obstacles.add(obstacle26);
-            obstacles.add(obstacle27);
-            obstacles.add(obstacle28);
-            obstacles.add(obstacle29);
-            obstacles.add(obstacle210);
-            save("niveau2.txt");
-        }
-
-        if (indice == 3) { // Niveau 3
-
-            balle = new Balle(750, 300);
-
-            panier = new Panier(1400, 700);
-
-            int e = 20;
-
-            Obstacle obstacle31 = new Obstacle(625,225, 200, e);
-            Obstacle obstacle32 = new Obstacle(675,225, e, 150);
-            Obstacle obstacle33 = new Obstacle(675,355, 245, e);
-            Obstacle obstacle34 = new Obstacle(805,225, e, 90);
-            Obstacle obstacle35 = new Obstacle(900,165, e, 210);
-            Obstacle obstacle36 = new Obstacle(355,50, e, 600);
-            Obstacle obstacle37 = new Obstacle(355,750, 350, e);
-            Obstacle obstacle38 = new Obstacle(900,550, 150, e);
-            Obstacle obstacle39 = new Obstacle(1200,850, 150, e);
-
-            obstacles.add(obstacle31);
-            obstacles.add(obstacle32);
-            obstacles.add(obstacle33);
-            obstacles.add(obstacle34);
-            obstacles.add(obstacle35);
-            obstacles.add(obstacle36);
-            obstacles.add(obstacle37);
-            obstacles.add(obstacle38);
-            obstacles.add(obstacle39);
-            save("niveau3.txt");
-        }
-
-        if (indice == 4) { // Niveau 4
-
-            balle = new Balle(250, 650);
-
-            panier = new Panier(1400, 750);
-
-            int e = 20;
-
-            Obstacle obstacle41 = new Obstacle(350,550, e, 200);
-            Obstacle obstacle42 = new Obstacle(850,300, 475, e);
-            Obstacle obstacle43 = new Obstacle(900,250, 475, e);
-            Obstacle obstacle44 = new Obstacle(1325,300, e, 500);
-            Obstacle obstacle45 = new Obstacle(1375,250, e, 150);
-
-
-
-
-            obstacles.add(obstacle41);
-            obstacles.add(obstacle42);
-            obstacles.add(obstacle43);
-            obstacles.add(obstacle44);
-            obstacles.add(obstacle45);
-            save("niveau4.txt");
-        }
-
+        if (indice >= 1 && indice <= 4) loadSave("niveau"+indice+".txt");
         if (indice == 5) { // Niveau édition
 
             balle = new Balle(200, 500);

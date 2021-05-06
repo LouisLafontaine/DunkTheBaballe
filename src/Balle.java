@@ -102,7 +102,7 @@ public class Balle {
     }
 
     public void throwBalle(MouseEvent e) {
-        double mouseSensibility = 0.03;
+        double mouseSensibility = 0.025;
         vx = (x - e.getX()) * mouseSensibility;
         vy = (y - e.getY()) * mouseSensibility;
         moving = true;
@@ -157,7 +157,7 @@ public class Balle {
 
             }
             // face du haut
-            else if (yPrev < o.y && xPrev > o.x && xPrev < o.x+o.largeur) {
+            else if (yPrev < o.y) {
                 xCollision = (o.y - ordonneOrigine) / coefficientDirecteur;
                 yCollision = o.y-1; // -1 car sinon la balle traverse l'obstacle
                 vx = amortissement * (x - xPrev);
@@ -168,7 +168,7 @@ public class Balle {
                 * vy pointe vers le haut */
             }
             // face du bas
-            else if (yPrev > o.y + o.hauteur && xPrev > o.x && xPrev < o.x+o.largeur) {
+            else if (yPrev > o.y + o.hauteur) {
                 xCollision = (o.y + o.hauteur - ordonneOrigine) / coefficientDirecteur;
                 yCollision = o.y + o.hauteur;
                 vx = amortissement * (x - xPrev);
