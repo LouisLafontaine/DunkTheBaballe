@@ -39,7 +39,7 @@ public class PanelMenu extends JPanel implements ActionListener{
         for(int i = 0; i <= 4; i++) {
             buttons[i] = new JButton("NIVEAU " + (i+1));
         }
-        buttons[4] = new JButton("EDITER");
+        buttons[4] = new JButton("EDITEUR");
 
         setButton(buttons[0],0,0);
         setButton(buttons[1],0,150);

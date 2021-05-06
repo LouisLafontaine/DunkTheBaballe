@@ -273,6 +273,8 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     }
 
     public void setLastClickOn(int x, int y) {
+        clickX = x;
+        clickY = y;
         lastClickX = x;
         lastClickY = y;
         clicking = true;
@@ -298,8 +300,8 @@ public class PanelJeu extends JPanel implements ActionListener, MouseListener, M
     public void tracerSegment(Graphics g) {
         if(clicking && balle.toucheBalle(lastClickX, lastClickY)) {
             Graphics2D g2d = (Graphics2D) g;
-            g2d.setStroke(new BasicStroke(2));
-            g2d.setColor(Color.green);
+            g2d.setStroke(new BasicStroke(5));
+            g2d.setColor(Color.red);
             g2d.drawLine(clickX, clickY, (int)balle.x, (int)balle.y);
         }
     }
